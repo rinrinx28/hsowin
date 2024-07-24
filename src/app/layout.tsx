@@ -8,9 +8,17 @@ import Footer from '@/components/Footer';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-	title: 'HSOWIN CLUB',
+	title: 'Hsowin VIP',
 	description: 'Mini game',
 	icons: 'https://www.hsowin.vip/image/icon.png',
+	openGraph: {
+		type: 'website',
+		description:
+			'HỆ THỐNG MINI GAME, Kiếm Vàng Ngọc Rồng Giao Dịch Tự Động Uy Tín',
+		images: 'https://www.hsowin.vip/image/icon.png',
+		title: 'Hsowin VIP',
+		url: 'https://www.hsowin.vip/',
+	},
 };
 
 export default function RootLayout({
