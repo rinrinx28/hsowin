@@ -3,8 +3,10 @@ import Sun from './icons/sun';
 import Moon from './icons/moon';
 import Link from 'next/link';
 import Image from 'next/image';
+import ImageLoader from '@/lib/ImageLoader';
 
-const NavBar = () => {
+const NavBar = async () => {
+	const logo_hsowin = await ImageLoader({ src: '/image/hsowin_logo.gif' });
 	return (
 		<div className="w-full flex justify-center items-center">
 			<div className="navbar max-w-7xl rounded-md shadow-lg">
@@ -50,7 +52,7 @@ const NavBar = () => {
 						className="btn btn-ghost text-xl">
 						<Image
 							alt="hsowin_logo"
-							src={'/image/hsowin_logo.gif'}
+							src={logo_hsowin}
 							// className="size-52"
 							width={150}
 							height={150}
