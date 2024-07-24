@@ -10,6 +10,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
 	title: 'HSOWIN CLUB',
 	description: 'Mini game',
+	icons: 'https://www.hsowin.vip/image/2566.png',
 };
 
 export default function RootLayout({
