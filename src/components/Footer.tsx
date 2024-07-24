@@ -6,7 +6,7 @@ const Footer = () => {
 			<aside>
 				<p>
 					Copyright © {new Date().getFullYear()} - All right reserved by HSOWIN
-					CLUB
+					VIP
 				</p>
 			</aside>
 		</footer>

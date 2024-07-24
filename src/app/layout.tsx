@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Container from '@/components/Container';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 
@@ -40,7 +39,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={`${inter.className} pt-4`}>
 				<NavBar />
-				<Container>{children}</Container>
+				{children}
 				<Footer />
 			</body>
 		</html>
