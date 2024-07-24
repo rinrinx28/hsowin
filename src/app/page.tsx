@@ -164,13 +164,10 @@ export default function Home() {
 								<p className="font-medium border-l-2">0 Gold</p>
 							</div>
 							<select
+								defaultValue={'CL'}
 								className="select select-error w-full text-red-500 font-medium text-md"
 								onChange={(e) => handleTypeMiniGame(e.target.value)}>
-								<option
-									selected
-									value={'CL'}>
-									Chẳn lẻ - Tài xỉu (10tr được 19tr)
-								</option>
+								<option value={'CL'}>Chẳn lẻ - Tài xỉu (10tr được 19tr)</option>
 								<option value={'XIEN'}>Xiên (10tr được 30tr)</option>
 								<option value={'GUEST'}>Dự đoán kết quả (10tr ăn 700tr)</option>
 							</select>
@@ -206,6 +203,7 @@ export default function Home() {
 									type="number"
 									className="px-4 font-medium border-l-2"
 									placeholder="Nhập số vàng chơi"
+									min={3}
 								/>
 							</div>
 
@@ -349,23 +347,19 @@ export default function Home() {
 						<div className="flex flex-row justify-between w-full">
 							<div className="flex flex-row items-center gap-2">
 								<p className="text-nowrap">Hiển Thị:</p>
-								<select className="select select-bordered w-full">
-									<option
-										selected
-										value={'all'}>
-										Tất cả
-									</option>
+								<select
+									defaultValue={'all'}
+									className="select select-bordered w-full">
+									<option value={'all'}>Tất cả</option>
 									<option value={'only'}>Chỉ mình tôi</option>
 								</select>
 							</div>
 							<div className="flex flex-row items-center gap-2">
 								<p className="text-nowrap">Dòng:</p>
-								<select className="select select-bordered w-full">
-									<option
-										selected
-										value={'10'}>
-										10
-									</option>
+								<select
+									defaultValue={'10'}
+									className="select select-bordered w-full">
+									<option value={'10'}>10</option>
 									<option value={'25'}>25</option>
 									<option value={'50'}>50</option>
 								</select>
