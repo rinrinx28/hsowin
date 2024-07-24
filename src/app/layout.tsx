@@ -19,6 +19,16 @@ export const metadata: Metadata = {
 		title: 'Hsowin VIP',
 		url: 'https://www.hsowin.vip/',
 	},
+	keywords: [
+		'Trò chơi điện tử ngọc rồng',
+		'Mini game kiếm vàng ngọc rồng',
+		'Mini game kiếm vàng hồi sinh ngọc rồng',
+		'trò chơi điện tử hồi sinh ngọc rồng',
+		'Trò chơi cá cược lấy cảm hứng từ hồi sinh ngọc rồng',
+		'Hồi sinh ngọc rồng với các tính năng cá cược hấp dẫn',
+		'Hồi sinh ngọc rồng koioctieu957',
+		'mini game cá cược số 1 hồi sinh ngọc rồng',
+	],
 };
 
 export default function RootLayout({
@@ -28,7 +38,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${inter.className} p-4`}>
+			<body className={`${inter.className} pt-4`}>
 				<NavBar />
 				<Container>{children}</Container>
 				<Footer />

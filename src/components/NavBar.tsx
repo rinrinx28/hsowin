@@ -8,7 +8,7 @@ import ImageLoader from '@/lib/ImageLoader';
 const NavBar = async () => {
 	const logo_hsowin = await ImageLoader('/image/hsowin_logo.gif');
 	return (
-		<div className="w-full flex justify-center items-center">
+		<div className="w-full flex justify-center items-center sticky">
 			<div className="navbar max-w-7xl rounded-md shadow-lg">
 				<div className="navbar-start">
 					<div className="dropdown">
