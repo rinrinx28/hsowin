@@ -6,7 +6,7 @@ import Image from 'next/image';
 import ImageLoader from '@/lib/ImageLoader';
 
 const NavBar = async () => {
-	const logo_hsowin = await ImageLoader({ src: '/image/hsowin_logo.gif' });
+	const logo_hsowin = await ImageLoader('/image/hsowin_logo.gif');
 	return (
 		<div className="w-full flex justify-center items-center">
 			<div className="navbar max-w-7xl rounded-md shadow-lg">
