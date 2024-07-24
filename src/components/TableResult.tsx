@@ -15,10 +15,11 @@ export default function TableResult() {
 						<th>Kết Quả</th>
 						<th>Gold Nhận</th>
 						<th>Tình Trạng</th>
+						<th>Thời gian</th>
 						<th>Thao Tác</th>
 					</tr>
 				</thead>
-				<tbody className="text-sm text-center">
+				<tbody className="text-sm text-center text-nowrap">
 					{/* row 1 */}
 					<tr className="hover">
 						<th>1</th>
@@ -29,6 +30,7 @@ export default function TableResult() {
 						<td>33</td>
 						<td>473,100,000</td>
 						<td>ĐÃ THANH TOÁN</td>
+						<td>Ngáo Ngơ</td>
 						<td></td>
 					</tr>
 					{/* row 2 */}
@@ -41,6 +43,7 @@ export default function TableResult() {
 						<td>33</td>
 						<td>473,100,000</td>
 						<td>ĐÃ THANH TOÁN</td>
+						<td>Ngáo Ngơ</td>
 						<td></td>
 					</tr>
 					{/* row 3 */}
@@ -53,6 +56,7 @@ export default function TableResult() {
 						<td>33</td>
 						<td>473,100,000</td>
 						<td>ĐÃ THANH TOÁN</td>
+						<td>Ngáo Ngơ</td>
 						<td></td>
 					</tr>
 				</tbody>
