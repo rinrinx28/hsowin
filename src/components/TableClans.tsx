@@ -3,7 +3,7 @@ import React from 'react';
 export default function TableClans() {
 	return (
 		<div className="overflow-x-auto">
-			<table className="table table-lg table-zebra">
+			<table className="table table-lg table-pin-rows table-pin-cols">
 				{/* head */}
 				<thead className="bg-accent text-sm text-white text-center">
 					<tr>
@@ -14,10 +14,10 @@ export default function TableClans() {
 						<th>Phần Thưởng/Người</th>
 					</tr>
 				</thead>
-				<tbody className="text-sm text-center">
+				<tbody className="text-sm text-center text-nowrap">
 					{/* row 1 */}
 					<tr className="hover">
-						<th>1</th>
+						<td>1</td>
 						<td>Bugs Ở Đâu</td>
 						<td>249,000,000</td>
 						<td>25/25</td>
@@ -25,7 +25,7 @@ export default function TableClans() {
 					</tr>
 					{/* row 2 */}
 					<tr className="hover">
-						<th>2</th>
+						<td>2</td>
 						<td>Job Dm</td>
 						<td>149,000,000</td>
 						<td>15/25</td>
@@ -33,7 +33,7 @@ export default function TableClans() {
 					</tr>
 					{/* row 3 */}
 					<tr className="hover">
-						<th>3</th>
+						<td>3</td>
 						<td>Đau Lưng, Mỏi Gối</td>
 						<td>109,000,000</td>
 						<td>1/25</td>

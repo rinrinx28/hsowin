@@ -3,7 +3,7 @@ import React from 'react';
 export default function TableResult() {
 	return (
 		<div className="overflow-x-auto">
-			<table className="table table-lg table-zebra">
+			<table className="table table-lg table-pin-rows table-pin-cols">
 				{/* head */}
 				<thead className="bg-info text-sm text-white text-center">
 					<tr>
@@ -22,7 +22,7 @@ export default function TableResult() {
 				<tbody className="text-sm text-center text-nowrap">
 					{/* row 1 */}
 					<tr className="hover">
-						<th>1</th>
+						<td>1</td>
 						<td>Cy Ganderton</td>
 						<td>249,000,000</td>
 						<td>Tài xỉu</td>
@@ -35,7 +35,7 @@ export default function TableResult() {
 					</tr>
 					{/* row 2 */}
 					<tr className="hover">
-						<th>1</th>
+						<td>1</td>
 						<td>Cy Ganderton</td>
 						<td>249,000,000</td>
 						<td>Tài xỉu</td>
@@ -48,7 +48,7 @@ export default function TableResult() {
 					</tr>
 					{/* row 3 */}
 					<tr className="hover">
-						<th>1</th>
+						<td>1</td>
 						<td>Cy Ganderton</td>
 						<td>249,000,000</td>
 						<td>Tài xỉu</td>

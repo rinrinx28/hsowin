@@ -105,8 +105,8 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="flex justify-center">
-				<div className="max-w-6xl grid grid-cols-2 grid-rows-2 gap-4">
-					<div className="col-start-1 row-start-1 card card-side bg-base-100 shadow-xl">
+				<div className="max-w-6xl grid lg:grid-cols-2 lg:grid-rows-2 grid-flow-row gap-4">
+					<div className="lg:col-start-1 lg:row-start-1 card card-side bg-base-100 shadow-xl">
 						<div className="card-body items-start">
 							<div className="flex flex-col gap-2 w-full">
 								<div className="flex flex-row items-center justify-center gap-2">
@@ -148,7 +148,7 @@ export default function Home() {
 							</p>
 						</div>
 					</div>
-					<div className="col-start-1 row-start-2 card card-side bg-base-100 shadow-xl">
+					<div className="lg:col-start-1 lg:row-start-2 card card-side bg-base-100 shadow-xl">
 						<div className="card-body">
 							<div className="flex flex-col gap-2 w-full">
 								<div className="flex flex-row items-center justify-center gap-2">
@@ -210,7 +210,7 @@ export default function Home() {
 							<button className="btn btn-outline btn-primary">Chơi Ngay</button>
 						</div>
 					</div>
-					<div className="col-start-2 row-start-1 row-span-2 bg-base-100 shadow-xl p-4 rounded-2xl">
+					<div className="lg:col-start-2 lg:row-start-1 row-span-2 bg-base-100 shadow-xl p-4 rounded-2xl">
 						<div className="flex flex-col gap-2 w-full">
 							<div className="flex flex-row items-center justify-center gap-2">
 								<Chat />
@@ -339,7 +339,7 @@ export default function Home() {
 			</div>
 			<div className="flex justify-center">
 				<div className="max-w-6xl grid grid-rows-3 gap-40">
-					<div className="flex flex-col gap-1">
+					<div className="lg:flex lg:flex-col grid gap-1">
 						<div className="w-full p-4 flex justify-center bg-info items-center text-white text-md font-semibold uppercase">
 							Lịch Sử Kết Quả
 						</div>
@@ -366,13 +366,13 @@ export default function Home() {
 							</div>
 						</div>
 					</div>
-					<div className="flex flex-col gap-1">
+					<div className="lg:flex lg:flex-col grid gap-1">
 						<div className="w-full p-4 flex justify-center bg-accent items-center text-white text-md font-semibold uppercase">
 							Bang Hội Cái Bang
 						</div>
 						<TableClans />
 					</div>
-					<div className="flex flex-col gap-1">
+					<div className="lg:flex lg:flex-col grid gap-1">
 						<div className="w-full p-4 flex justify-center bg-error items-center text-white text-md font-semibold uppercase">
 							Bảng Xếp Hạng Ngày
 						</div>
