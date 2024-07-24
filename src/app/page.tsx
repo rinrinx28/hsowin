@@ -78,25 +78,25 @@ export default function Home() {
 								</button>
 							</div>
 							<div className="flex flex-wrap lg:flex-row gap-4 justify-center">
-								<button className="btn btn-secondary btn-outline rounded-btn">
+								<button className="btn btn-outline rounded-btn">
 									Server 1
 								</button>
-								<button className="btn btn-secondary btn-outline rounded-btn">
+								<button className="btn btn-outline rounded-btn">
 									Server 2
 								</button>
-								<button className="btn btn-secondary btn-outline rounded-btn">
+								<button className="btn btn-outline rounded-btn">
 									Server 3
 								</button>
-								<button className="btn btn-secondary btn-outline rounded-btn">
+								<button className="btn btn-outline rounded-btn">
 									Map Boss Sv1
 								</button>
-								<button className="btn btn-secondary btn-outline rounded-btn">
+								<button className="btn btn-outline rounded-btn">
 									Map Boss Sv2
 								</button>
-								<button className="btn btn-secondary btn-outline rounded-btn">
+								<button className="btn btn-outline rounded-btn">
 									Map Boss Sv3
 								</button>
-								<button className="btn btn-secondary btn-outline rounded-btn">
+								<button className="btn btn-outline rounded-btn">
 									Server 24/24
 								</button>
 							</div>
@@ -159,7 +159,7 @@ export default function Home() {
 								</div>
 								<hr className="w-full bg-black" />
 							</div>
-							<div className="btn btn-secondary btn-outline flex items-center gap-2">
+							<div className="btn btn-outline flex items-center gap-2">
 								<Gold className="" />
 								<p className="font-medium border-l-2">0 Gold</p>
 							</div>
@@ -197,8 +197,8 @@ export default function Home() {
 								</button>
 							</div>
 
-							<div className="input input-bordered input-secondary flex items-center gap-2">
-								<Gold className="stroke-secondary" />
+							<div className="input input-bordered flex items-center gap-2">
+								<Gold className="" />
 								<input
 									type="number"
 									className="px-4 font-medium border-l-2"

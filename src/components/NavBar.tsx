@@ -87,12 +87,12 @@ const NavBar = async () => {
 					</label>
 					<Link
 						href="/login"
-						className="btn btn-outline btn-primary">
+						className="btn btn-outline ">
 						Đăng Nhập
 					</Link>
 					<Link
 						href="/resgiter"
-						className="btn btn-outline btn-primary hidden lg:inline-flex">
+						className="btn btn-outline  hidden lg:inline-flex">
 						Đăng Ký
 					</Link>
 				</div>
