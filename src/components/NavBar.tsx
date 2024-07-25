@@ -11,41 +11,20 @@ const NavBar = async () => {
 		<div className="w-full flex justify-center items-center sticky">
 			<div className="navbar max-w-7xl rounded-md shadow-lg">
 				<div className="navbar-start">
-					<div className="dropdown">
-						<div
-							tabIndex={0}
-							role="button"
-							className="btn btn-ghost lg:hidden">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								className="h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor">
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth="2"
-									d="M4 6h16M4 12h8m-8 6h16"
-								/>
-							</svg>
-						</div>
-						<ul
-							tabIndex={0}
-							className="menu menu-sm dropdown-content  rounded-box z-[1] mt-3 w-52 p-2 shadow">
-							<li>
-								<a>Trang Chủ</a>
-							</li>
-							<li>
-								<a>Mua Vàng</a>
-							</li>
-							<li>
-								<a>Nạp Vàng</a>
-							</li>
-							<li>
-								<a>Rút Vàng</a>
-							</li>
-						</ul>
+					<div className="lg:hidden">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-5 w-5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M4 6h16M4 12h8m-8 6h16"
+							/>
+						</svg>
 					</div>
 					<Link
 						href={'/'}
@@ -87,8 +66,25 @@ const NavBar = async () => {
 					</label>
 					<Link
 						href="/login"
-						className="btn btn-outline ">
+						className="btn btn-outline lg:inline-flex hidden">
 						Đăng Nhập
+					</Link>
+					<Link
+						href={'/login'}
+						className="lg:hidden btn btn-outline">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							strokeWidth={1.5}
+							stroke="currentColor"
+							className="size-6">
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
+							/>
+						</svg>
 					</Link>
 					<Link
 						href="/resgiter"
