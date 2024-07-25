@@ -1,12 +1,13 @@
 import axios from 'axios';
 
 const urlConfig = {
-	dev: 'localhost',
-	vps: '144.126.145.81',
+	dev: 'http://localhost:3031',
+	vps: 'http://144.126.145.81:3031',
+	https: 'https://api.hsowin.vip',
 };
 
 const apiClient = axios.create({
-	baseURL: `http://${urlConfig.vps}:3031`,
+	baseURL: urlConfig.https,
 	// timeout: 1000,
 	headers: { 'Content-Type': 'application/json' },
 });
