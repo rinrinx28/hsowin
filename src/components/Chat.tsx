@@ -4,7 +4,7 @@ import Chat from './icons/chat';
 
 export default function ChatBox() {
 	return (
-		<div className="lg:col-start-2 lg:row-start-1 row-span-2 bg-base-100 flex flex-col gap-2 border border-current shadow-xl p-4 rounded-2xl">
+		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col gap-2 border border-current shadow-xl p-4 rounded-2xl">
 			<div className="flex flex-col gap-2 w-full border-b border-current">
 				<div className="flex flex-row items-center justify-center gap-2">
 					<Chat />

@@ -65,37 +65,51 @@ export default function Home() {
 							<div className="flex flex-wrap lg:flex-row gap-4 justify-center">
 								<button
 									onClick={() => setServer('1-mini')}
-									className="btn btn-outline rounded-btn">
+									className={`${
+										server === '1-mini' ? '' : 'btn-outline'
+									} btn rounded-btn`}>
 									Server 1
 								</button>
 								<button
 									onClick={() => setServer('2-mini')}
-									className="btn btn-outline rounded-btn">
+									className={`${
+										server === '2-mini' ? '' : 'btn-outline'
+									} btn rounded-btn`}>
 									Server 2
 								</button>
 								<button
 									onClick={() => setServer('3-mini')}
-									className="btn btn-outline rounded-btn">
+									className={`${
+										server === '3-mini' ? '' : 'btn-outline'
+									} btn rounded-btn`}>
 									Server 3
 								</button>
 								<button
 									onClick={() => setServer('1')}
-									className="btn btn-outline rounded-btn">
+									className={`${
+										server === '1' ? '' : 'btn-outline'
+									} btn rounded-btn`}>
 									Map Boss Sv1
 								</button>
 								<button
 									onClick={() => setServer('2')}
-									className="btn btn-outline rounded-btn">
+									className={`${
+										server === '2' ? '' : 'btn-outline'
+									} btn rounded-btn`}>
 									Map Boss Sv2
 								</button>
 								<button
 									onClick={() => setServer('3')}
-									className="btn btn-outline rounded-btn">
+									className={`${
+										server === '3' ? '' : 'btn-outline'
+									} btn rounded-btn`}>
 									Map Boss Sv3
 								</button>
 								<button
 									onClick={() => setServer('24')}
-									className="btn btn-outline rounded-btn">
+									className={`${
+										server === '24' ? '' : 'btn-outline'
+									} btn rounded-btn`}>
 									Server 24/24
 								</button>
 							</div>
@@ -104,14 +118,14 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="flex justify-center">
-				<div className="max-w-6xl grid lg:grid-cols-2 lg:grid-rows-2 grid-flow-row gap-4">
+				<div className="max-w-7xl grid lg:grid-cols-2 lg:grid-rows-5 grid-flow-row gap-4">
 					<Minigame server={server} />
 					<BetMinigame server={server} />
 					<ChatBox />
 				</div>
 			</div>
 			<div className="flex justify-center">
-				<div className="max-w-6xl grid grid-rows-3 gap-40">
+				<div className="max-w-7xl grid grid-rows-3 gap-40">
 					<TableResult />
 					<TableClans />
 					<TableUser />
