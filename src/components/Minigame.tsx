@@ -130,17 +130,17 @@ export const Minigame = () => {
 					</div>
 				</div>
 				<div className="flex flex-col gap-3">
-					<p className="flex gap-2 items-center">
+					<div className="flex gap-2 items-center">
 						Mã Phiên:{' '}
-						<span className="text-red-500 font-medium">
+						<div className="text-red-500 font-medium">
 							{mainBet?._id ?? (
 								<p className="flex flex-row gap-2 items-end">
 									Đang đợi phiên mới
 									<span className="loading loading-dots loading-sm"></span>
 								</p>
 							)}
-						</span>
-					</p>
+						</div>
+					</div>
 					<p className="flex gap-2 items-center">
 						Máy Chủ:{' '}
 						<span className="text-red-500 font-medium">
