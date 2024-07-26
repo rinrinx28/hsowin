@@ -130,19 +130,25 @@ export const Minigame = () => {
 					</div>
 				</div>
 				<div className="flex flex-col gap-3">
-					<p>
+					<p className="flex gap-2 items-center">
 						Mã Phiên:{' '}
 						<span className="text-red-500 font-medium">
-							{mainBet?._id ?? 'Đang đợi phiên mới ...'}
+							{mainBet?._id ?? (
+								<p className="flex flex-row gap-2 items-end">
+									Đang đợi phiên mới
+									<span className="loading loading-dots loading-sm"></span>
+								</p>
+							)}
 						</span>
 					</p>
-					<p>
+					<p className="flex gap-2 items-center">
 						Máy Chủ:{' '}
 						<span className="text-red-500 font-medium">
 							{userGame.replace('-mini', ' Sao') ?? '1 Sao'}
 						</span>
 					</p>
-					<p>
+
+					<p className="flex gap-2 items-center">
 						Kết quả giải trước:{' '}
 						<span className="text-red-500 font-medium">
 							{userGame.endsWith('mini') || userGame === '24'
@@ -152,15 +158,15 @@ export const Minigame = () => {
 								: 'Đen'}
 						</span>
 					</p>
-					<p>
+					<p className="flex gap-2 items-center">
 						Thời gian còn lại:{' '}
-						<span className="countdown">
+						<div className="countdown">
 							{counter > 0 ? (
 								`${counter}`
 							) : (
-								<span className="loading loading-spinner"></span>
+								<span className="loading loading-dots loading-sm"></span>
 							)}
-						</span>
+						</div>
 					</p>
 					<p>
 						Chẳn: <span className="text-red-500 font-medium">0</span> - Lẻ:{' '}
