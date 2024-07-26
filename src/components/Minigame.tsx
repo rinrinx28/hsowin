@@ -1,19 +1,37 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Clock from './icons/clock';
 import Gold from './icons/gold';
 import Ligh from './icons/ligh';
 import Hand from './icons/hand';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import apiClient from '@/lib/apiClient';
 import moment from 'moment';
-import { BetLog, Status24, StatusBoss, StatusSv } from './dto/dto';
+import {
+	BetLog,
+	CreateUserBet,
+	Status24,
+	StatusBoss,
+	StatusSv,
+	userBet,
+} from './dto/dto';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { useSocket } from '@/lib/socket';
 import { count } from '@/lib/redux/features/Minigame/countDownTimeSlice';
 import { updateMainBet } from '@/lib/redux/features/Minigame/MainBetGameSlice';
 import { updateLogBet } from '@/lib/redux/features/Minigame/LogBetGameSlice';
+import { change, game } from '@/lib/redux/features/Minigame/typeGame';
 moment().format();
+import { PiPokerChip } from '@/lib/icon';
+import {
+	changeAmount,
+	changeType,
+	resetBet,
+	typeBet,
+} from '@/lib/redux/features/Minigame/betInfo';
+import Link from 'next/link';
+import { updateUser } from '@/lib/redux/features/auth/user';
+import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 
 export const Minigame = () => {
 	const socket = useSocket();
@@ -158,16 +176,14 @@ export const Minigame = () => {
 								: 'Đen'}
 						</span>
 					</p>
-					<p className="flex gap-2 items-center">
+					<div className="flex gap-2 items-center">
 						Thời gian còn lại:{' '}
-						<div className="countdown">
-							{counter > 0 ? (
-								`${counter}`
-							) : (
-								<span className="loading loading-dots loading-sm"></span>
-							)}
-						</div>
-					</p>
+						{counter > 0 ? (
+							counter
+						) : (
+							<span className="loading loading-dots loading-sm"></span>
+						)}
+					</div>
 					<p>
 						Chẳn: <span className="text-red-500 font-medium">0</span> - Lẻ:{' '}
 						<span className="text-red-500 font-medium">0</span>
@@ -254,14 +270,211 @@ export const Minigame = () => {
 };
 
 export const BetMinigame = () => {
-	const [type, setType] = useState('CL');
+	const socket = useSocket();
+	const type = useAppSelector((state) => state.typeGame.type);
+	const userGame = useAppSelector((state) => state.userGame.value);
+	const betInfo = useAppSelector((state) => state.betInfo);
+	const user = useAppSelector((state) => state.user);
+	const counter = useAppSelector((state) => state.countDownTime.value);
+	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
+	const userBetLog = useAppSelector((state) => state.userBetLog);
+	const [msg, setMsg] = useState('');
+	const dispatch = useAppDispatch();
 
-	const handleTypeMiniserver = (value: string) => {
-		setType(value);
+	const handleTypeMiniserver = (value: game) => {
+		dispatch(change({ type: value }));
+		dispatch(resetBet());
 	};
+
+	//TODO ———————————————[Handler Bet Info]———————————————
+
+	const handlerBetType = (type: typeBet) => {
+		dispatch(changeType(type));
+	};
+
+	const handlerBetAmount = (amount: number) => {
+		dispatch(changeAmount(amount));
+	};
+
+	const handlerBetUser = () => {
+		console.log(user, betInfo);
+		if (!user.isLogin) {
+			showModelLogin();
+			return;
+		}
+		if (betInfo.amount < 1 && betInfo.type.length < 1) {
+			showModelBet('Xin vui lòng kiểm tra dự đoán và đặt tiền cược!');
+			return;
+		}
+
+		if (betInfo.amount < 3) {
+			showModelBet('Tiền cược tối thiểu là 3 thỏi vàng');
+			return;
+		}
+
+		if (type === 'BOSS') {
+			const data: CreateUserBet = {
+				amount: betInfo.amount,
+				betId: mainBet?._id,
+				result: betInfo.type,
+				server: userGame,
+				uid: user._id,
+			};
+			socket.emit('bet-user-ce-boss', data);
+		} else {
+			const data: CreateUserBet = {
+				amount: betInfo.amount,
+				betId: mainBet?._id,
+				result: betInfo.type,
+				server: userGame,
+				uid: user._id,
+			};
+			socket.emit('bet-user-ce-sv', data);
+		}
+	};
+
+	const showModelLogin = () => {
+		const modal = document.getElementById(
+			'error_login',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			modal.showModal();
+		}
+	};
+
+	const showModelBet = (message: string) => {
+		const modal = document.getElementById(
+			'error_bet',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			setMsg(message);
+			modal.showModal();
+		}
+	};
+
+	useEffect(() => {
+		switch (userGame) {
+			case '1':
+				dispatch(change({ type: 'BOSS' }));
+			case '2':
+				dispatch(change({ type: 'BOSS' }));
+			case '3':
+				dispatch(change({ type: 'BOSS' }));
+			default:
+				dispatch(change({ type: 'CL' }));
+		}
+		dispatch(resetBet());
+	}, [userGame, dispatch]);
+
+	useEffect(() => {
+		console.log(betInfo, user);
+	}, [betInfo, user]);
+
+	useEffect(() => {
+		socket.on('re-bet-user-ce-sv', (data) => {
+			showModelBet(data?.message);
+			if (data?.status) {
+				if (data?.data[0]?.uid === user._id) {
+					const { gold = 0, ...rs } = user;
+					dispatch(updateUser({ ...rs, gold: gold - betInfo.amount }));
+					dispatch(resetBet());
+				}
+				// Update Table User BetLog
+				const list_notEnd = userBetLog.filter((b) => !b.isEnd);
+				const list_isEnd = userBetLog.filter((b) => b.isEnd);
+				dispatch(
+					updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
+				);
+			} else {
+				if (data?.data[0]?.uid === user._id) {
+					showModelBet(data?.message);
+					dispatch(resetBet());
+				}
+			}
+		});
+
+		socket.on('re-bet-user-ce-boss', (data) => {
+			showModelBet(data?.message);
+			if (data?.status) {
+				if (data?.data[0]?.uid === user._id) {
+					const { gold = 0, ...rs } = user;
+					dispatch(updateUser({ ...rs, gold: gold - betInfo.amount }));
+					dispatch(resetBet());
+				}
+				// Update Table User BetLog
+				const list_notEnd = userBetLog.filter((b) => !b.isEnd);
+				const list_isEnd = userBetLog.filter((b) => b.isEnd);
+				dispatch(
+					updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
+				);
+			} else {
+				if (data?.data[0]?.uid === user._id) {
+					showModelBet(data?.message);
+					dispatch(resetBet());
+				}
+			}
+		});
+
+		//TODO ———————————————[Event Res Reuslt]———————————————
+		socket.on('re-bet-user-res-sv', (data) => {
+			const userBets: userBet[] = data?.data;
+			const target = userBets.filter((bet) => bet.uid === user?._id);
+			let amount = 0;
+			for (const bet of target) {
+				amount += bet.receive;
+			}
+			const { gold = 0, totalBet = 0, ...rs } = user;
+			dispatch(
+				updateUser({ ...rs, gold: gold + amount, totalBet: totalBet + amount }),
+			);
+			// Update Table UserBetLog
+			const new_userBetLog = userBetLog.map((bet) => {
+				let target = userBets.find((b) => b._id === bet._id);
+				if (target) {
+					target.isEnd = true;
+					return target;
+				}
+
+				return bet;
+			});
+			dispatch(updateAll(new_userBetLog));
+		});
+
+		socket.on('re-bet-user-res-boss', (data) => {
+			const userBets: userBet[] = data?.data;
+			const target = userBets.filter((bet) => bet.uid === user?._id);
+			let amount = 0;
+			for (const bet of target) {
+				amount += bet.receive;
+			}
+			const { gold = 0, totalBet = 0, ...rs } = user;
+			dispatch(
+				updateUser({ ...rs, gold: gold + amount, totalBet: totalBet + amount }),
+			);
+			// Update Table UserBetLog
+			const new_userBetLog = userBetLog.map((bet) => {
+				let target = userBets.find((b) => b._id === bet._id);
+				if (target) {
+					target.isEnd = true;
+					return target;
+				}
+
+				return bet;
+			});
+			dispatch(updateAll(new_userBetLog));
+		});
+
+		return () => {
+			socket.off('re-bet-user-ce-sv');
+			socket.off('re-bet-user-ce-boss');
+			socket.off('re-bet-user-res-sv');
+			socket.off('re-bet-user-res-boss');
+		};
+	}, [socket, dispatch, user, betInfo]);
+
 	return (
-		<div className="lg:col-start-1 lg:row-start-3 row-span-3 card card-side justify-center items-center bg-base-100 shadow-xl border border-current">
-			<div className="card-body">
+		<div className="lg:col-start-1 lg:row-start-3 row-span-3 card card-side justify-center items-center shadow-xl border border-current">
+			<div className="card-body gap-6">
 				<div className="flex flex-col gap-2 w-full border-b border-current">
 					<div className="flex flex-row items-center justify-center gap-2">
 						<Ligh />
@@ -270,12 +483,16 @@ export const BetMinigame = () => {
 				</div>
 				<div className="btn btn-outline flex items-center gap-2">
 					<Gold className="" />
-					<p className="font-medium border-l-2">0 Gold</p>
+					<p className="font-medium border-l-2">
+						{new Intl.NumberFormat('vi').format(user?.gold ?? 0)} Thỏi Vàng
+					</p>
 				</div>
 				<select
 					defaultValue={'CL'}
-					className="select select-error w-full text-red-500 font-medium text-md"
-					onChange={(e) => handleTypeMiniserver(e.target.value)}>
+					className={`select select-error w-full text-red-500 font-medium text-md ${
+						type === 'BOSS' ? 'hidden' : ''
+					}`}
+					onChange={(e) => handleTypeMiniserver(e.target.value as game)}>
 					<option value={'CL'}>Chẳn lẻ - Tài xỉu (10tr được 19tr)</option>
 					<option value={'XIEN'}>Xiên (10tr được 30tr)</option>
 					<option value={'GUEST'}>Dự đoán kết quả (10tr ăn 700tr)</option>
@@ -286,35 +503,170 @@ export const BetMinigame = () => {
 						<h5 className="text-center font-semibold text-1xl">Dự Đoán</h5>
 					</div>
 				</div>
+
+				{/* Select with Sv Mini and 24/24 */}
 				<div
 					className={`grid grid-cols-2 gap-4 ${
-						type === 'GUEST' ? 'hidden' : ''
+						type === 'GUEST' || type === 'BOSS' ? 'hidden' : ''
 					}`}>
-					<button className="btn btn-info btn-outline uppercase">
+					<button
+						className={`btn btn-info uppercase ${
+							betInfo?.type === 'C' || betInfo?.type === 'CT'
+								? ''
+								: 'btn-outline'
+						}`}
+						onClick={() => handlerBetType(type === 'CL' ? 'C' : 'CT')}>
 						{`${type === 'CL' ? 'Chẵn' : 'Chẵn Tài'}`}
 					</button>
-					<button className="btn btn-success btn-outline uppercase">
+					<button
+						className={`btn btn-success uppercase ${
+							betInfo?.type === 'L' || betInfo?.type === 'CX'
+								? ''
+								: 'btn-outline'
+						}`}
+						onClick={() => handlerBetType(type === 'CL' ? 'L' : 'CX')}>
 						{`${type === 'CL' ? 'Lẻ' : 'Chẵn Xĩu'}`}
 					</button>
-					<button className="btn btn-warning btn-outline uppercase">
+					<button
+						className={`btn btn-warning uppercase ${
+							betInfo?.type === 'T' || betInfo?.type === 'LT'
+								? ''
+								: 'btn-outline'
+						}`}
+						onClick={() => handlerBetType(type === 'CL' ? 'T' : 'LT')}>
 						{`${type === 'CL' ? 'Tài' : 'Lẻ Tài'}`}
 					</button>
-					<button className="btn btn-error btn-outline uppercase">
+					<button
+						className={`btn btn-error uppercase ${
+							betInfo?.type === 'X' || betInfo?.type === 'LX'
+								? ''
+								: 'btn-outline'
+						}`}
+						onClick={() => handlerBetType(type === 'CL' ? 'X' : 'LX')}>
 						{`${type === 'CL' ? 'Xỉu' : 'Lẻ Xỉu'}`}
 					</button>
 				</div>
+				{/* Select with Type bet for guest number */}
+				<label
+					className={`input input-bordered flex items-center gap-2 ${
+						type === 'GUEST' ? '' : 'hidden'
+					}`}>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						className="size-6">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672ZM12 2.25V4.5m5.834.166-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243-1.59-1.59"
+						/>
+					</svg>
+
+					<input
+						type="text"
+						className="grow border-l-2 px-4"
+						placeholder="Nhập số dự đoán. Ví dụ: 11,28,23"
+						onChange={(e) => dispatch(changeType(e.target.value))}
+					/>
+				</label>
+
+				{/* Select with Type bet for boss respawn */}
+				<div
+					className={`grid grid-cols-2 gap-4 ${
+						type === 'BOSS' ? '' : 'hidden'
+					}`}>
+					<button
+						className={`btn uppercase ${
+							betInfo.type === '1' ? '' : 'btn-outline'
+						}`}
+						onClick={() => handlerBetType('1')}>
+						Núi Khỉ Đen
+					</button>
+					<button
+						className={`btn btn-error uppercase ${
+							betInfo.type === '0' ? '' : 'btn-outline'
+						}`}
+						onClick={() => handlerBetType('0')}>
+						Núi Khỉ Đỏ
+					</button>
+				</div>
+				{/* Select amount */}
+				<ul className="flex flex-wrap gap-4 items-center">
+					{[50, 100, 200, 500, 1000, 2000].map((value) => {
+						return (
+							<li key={value}>
+								<button
+									className="btn btn-outline btn-sm"
+									onClick={() => handlerBetAmount(value)}>
+									<PiPokerChip />
+									{value}
+								</button>
+							</li>
+						);
+					})}
+				</ul>
 
 				<div className="input input-bordered flex items-center gap-2">
-					<Gold className="" />
+					<button
+						className="btn btn-error btn-sm"
+						onClick={() => dispatch(resetBet())}>
+						<Gold className="" />
+					</button>
 					<input
-						type="number"
+						type="text"
 						className="px-4 font-medium border-l-2"
 						placeholder="Nhập số vàng chơi"
-						min={3}
+						value={betInfo.amount ?? 0}
+						// disabled
 					/>
 				</div>
 
-				<button className="btn btn-outline ">Chơi Ngay</button>
+				<button
+					className="btn btn-outline"
+					onClick={handlerBetUser}>
+					Chơi Ngay
+				</button>
+
+				<dialog
+					id="error_login"
+					className="modal">
+					<div className="modal-box">
+						<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+						<p className="py-4">
+							Có vẻ bạn chưa đăng nhập, xin vui lòng{' '}
+							<Link
+								href={'/login'}
+								className="link link-hover link-primary">
+								đăng nhập
+							</Link>{' '}
+							để tiếp tục!
+						</p>
+						<div className="modal-action">
+							<form method="dialog">
+								{/* if there is a button in form, it will close the modal */}
+								<button className="btn">Đóng</button>
+							</form>
+						</div>
+					</div>
+				</dialog>
+
+				<dialog
+					id="error_bet"
+					className="modal">
+					<div className="modal-box">
+						<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+						<p className="py-4">{msg}</p>
+						<div className="modal-action">
+							<form method="dialog">
+								{/* if there is a button in form, it will close the modal */}
+								<button className="btn">Đóng</button>
+							</form>
+						</div>
+					</div>
+				</dialog>
 			</div>
 		</div>
 	);

@@ -1,13 +1,32 @@
 'use client';
-import React from 'react';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
+import React, { useEffect } from 'react';
+import moment from 'moment';
+import apiClient from '@/lib/apiClient';
+import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 
 export default function TableResult() {
+	const userBetLog = useAppSelector((state) => state.userBetLog);
+	const user = useAppSelector((state) => state.user);
+	const dispatch = useAppDispatch();
+
+	const changeRowTable = async (value: any) => {
+		try {
+			const res = await apiClient.get(`/user/log-bet/all?limit=${value}`);
+			const data = res.data;
+			dispatch(updateAll(data?.data));
+		} catch (err) {}
+	};
+
+	// useEffect(() => {
+	// 	console.log(userBetLog);
+	// }, [userBetLog]);
 	return (
 		<div className="lg:flex lg:flex-col grid gap-1">
 			<div className="border-current border rounded-box grid h-20 place-items-center">
 				Lịch Sử Kết Quả
 			</div>
-			<div className="overflow-x-auto border border-current">
+			<div className="overflow-auto border border-current max-h-[600px]">
 				<table className="table table-lg table-pin-rows table-pin-cols">
 					{/* head */}
 					<thead className="text-sm  text-center">
@@ -15,7 +34,6 @@ export default function TableResult() {
 							<th>Server</th>
 							<th>Nhân Vật</th>
 							<th>Gold Cược</th>
-							<th>Loại</th>
 							<th>Dự Đoán</th>
 							<th>Kết Quả</th>
 							<th>Gold Nhận</th>
@@ -26,44 +44,34 @@ export default function TableResult() {
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
 						{/* row 1 */}
-						<tr className="hover">
-							<td>1</td>
-							<td>Cy Ganderton</td>
-							<td>249,000,000</td>
-							<td>Tài xỉu</td>
-							<td>Xỉu</td>
-							<td>33</td>
-							<td>473,100,000</td>
-							<td>ĐÃ THANH TOÁN</td>
-							<td>Ngáo Ngơ</td>
-							<td></td>
-						</tr>
-						{/* row 2 */}
-						<tr className="hover">
-							<td>1</td>
-							<td>Cy Ganderton</td>
-							<td>249,000,000</td>
-							<td>Tài xỉu</td>
-							<td>Xỉu</td>
-							<td>33</td>
-							<td>473,100,000</td>
-							<td>ĐÃ THANH TOÁN</td>
-							<td>Ngáo Ngơ</td>
-							<td></td>
-						</tr>
-						{/* row 3 */}
-						<tr className="hover">
-							<td>1</td>
-							<td>Cy Ganderton</td>
-							<td>249,000,000</td>
-							<td>Tài xỉu</td>
-							<td>Xỉu</td>
-							<td>33</td>
-							<td>473,100,000</td>
-							<td>ĐÃ THANH TOÁN</td>
-							<td>Ngáo Ngơ</td>
-							<td></td>
-						</tr>
+						{userBetLog?.map((userBet) => {
+							const {
+								amount,
+								isEnd,
+								result,
+								resultBet,
+								server,
+								uid,
+								receive,
+								createdAt = new Date(),
+							} = userBet;
+							const shortUID = shortenString(uid, 4, 3);
+							return (
+								<tr
+									className="hover"
+									key={userBet._id}>
+									<td>{server.replace('-mini', ' Sao')}</td>
+									<td>{uid === user?._id ? user?.username : shortUID}</td>
+									<td>{new Intl.NumberFormat('vi').format(amount)}</td>
+									<td>{result}</td>
+									<td>{resultBet}</td>
+									<td>{new Intl.NumberFormat('vi').format(receive)}</td>
+									<td>{isEnd ? 'Đã Thanh Toán' : '...'}</td>
+									<td>{moment(createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+									<td>{isEnd ? 'null' : 'Cancel'}</td>
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>
@@ -82,7 +90,8 @@ export default function TableResult() {
 					<p className="text-nowrap">Dòng:</p>
 					<select
 						defaultValue={'10'}
-						className="select select-bordered w-full">
+						className="select select-bordered w-full"
+						onChange={(e) => changeRowTable(e.target.value)}>
 						<option value={'10'}>10</option>
 						<option value={'25'}>25</option>
 						<option value={'50'}>50</option>
@@ -91,4 +100,14 @@ export default function TableResult() {
 			</div>
 		</div>
 	);
+}
+
+function shortenString(str: string, startLength: number, endLength: number) {
+	if (str.length <= startLength + endLength) {
+		return str; // Trả về chuỗi gốc nếu nó ngắn hơn hoặc bằng tổng chiều dài của phần đầu và phần cuối
+	}
+
+	const start = str.substring(0, startLength);
+	const end = str.substring(str.length - endLength, str.length);
+	return `${start}...${end}`;
 }

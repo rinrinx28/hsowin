@@ -30,3 +30,26 @@ export interface BetLog {
 	updatedAt: Date;
 	__v: number;
 }
+
+export interface CreateUserBet {
+	betId: any;
+	uid: any;
+	amount: number;
+	result: string;
+	server: string;
+}
+
+export interface userBet {
+	_id: string;
+	__v: number;
+	uid: string;
+	betId: string;
+	amount: number;
+	result: string;
+	resultBet: string;
+	server: string;
+	receive: number;
+	isEnd: boolean;
+	createdAt?: Date;
+	updatedAt?: Date;
+}

@@ -1,8 +1,23 @@
 import React from 'react';
 import Send from './icons/send';
 import Chat from './icons/chat';
+import Link from 'next/link';
+import { useAppSelector } from '@/lib/redux/hook';
 
 export default function ChatBox() {
+	const user = useAppSelector((state) => state.user);
+
+	const handlerBetUser = () => {
+		if (!user.isLogin) {
+			const modal = document.getElementById(
+				'my_modal_1',
+			) as HTMLDialogElement | null;
+			if (modal) {
+				modal.showModal();
+			}
+			return;
+		}
+	};
 	return (
 		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col gap-2 border border-current shadow-xl p-4 rounded-2xl">
 			<div className="flex flex-col gap-2 w-full border-b border-current">
@@ -103,10 +118,34 @@ export default function ChatBox() {
 					className="grow w-full input input-bordered"
 					placeholder="Nhập nội dung trò chuyện"
 				/>
-				<button className="btn  btn-outline">
+				<button
+					onClick={handlerBetUser}
+					className="btn  btn-outline">
 					<Send />
 				</button>
 			</div>
+			<dialog
+				id="my_modal_1"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<p className="py-4">
+						Có vẻ bạn chưa đăng nhập, xin vui lòng{' '}
+						<Link
+							href={'/login'}
+							className="link link-hover link-primary">
+							đăng nhập
+						</Link>{' '}
+						để tiếp tục!
+					</p>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
 		</div>
 	);
 }
