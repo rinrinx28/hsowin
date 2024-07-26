@@ -59,7 +59,7 @@ const NavBar = async () => {
 						<input
 							type="checkbox"
 							className="theme-controller"
-							value="lofi"
+							value="acid"
 						/>
 						<Sun />
 						<Moon />

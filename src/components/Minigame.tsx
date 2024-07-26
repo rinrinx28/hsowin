@@ -1,22 +1,29 @@
+'use client';
 import React from 'react';
 import Clock from './icons/clock';
 import Gold from './icons/gold';
 import Ligh from './icons/ligh';
 import Hand from './icons/hand';
-import { useState, useEffect, useId } from 'react';
+import { useState, useEffect } from 'react';
 import apiClient from '@/lib/apiClient';
 import moment from 'moment';
-import socket from '@/lib/socket';
 import { BetLog, Status24, StatusBoss, StatusSv } from './dto/dto';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
+import { useSocket } from '@/lib/socket';
+import { count } from '@/lib/redux/features/Minigame/countDownTimeSlice';
+import { updateMainBet } from '@/lib/redux/features/Minigame/MainBetGameSlice';
+import { updateLogBet } from '@/lib/redux/features/Minigame/LogBetGameSlice';
 moment().format();
 
-export const Minigame = ({ server }: { server: string }) => {
-	const [logBet, setLogBet] = useState<BetLog[]>([]);
-	const [mainBet, setMainBet] = useState<BetLog | null>(null);
-	const [counter, setCount] = useState<number>(0);
+export const Minigame = () => {
+	const socket = useSocket();
+	const dispatch = useAppDispatch();
+	const userGame = useAppSelector((state) => state.userGame.value);
+	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
+	const logBet = useAppSelector((state) => state.logBetGame);
+	const counter = useAppSelector((state) => state.countDownTime.value);
 
 	useEffect(() => {
-		console.log(server);
 		const getDataMiniserver = async (server: string) => {
 			try {
 				const response = await apiClient.post<BetLog[]>(
@@ -32,98 +39,86 @@ export const Minigame = ({ server }: { server: string }) => {
 				let data_mainBet = data_isEnd.length === 10 ? data[0] : null;
 				let data_logBet =
 					data_isEnd.length === 10 ? data.slice(1) : data.slice(0, -1);
-				setLogBet(data_logBet);
-				setMainBet(data_mainBet);
-				setCount(0);
+				// console.log(data_mainBet, data_logBet);
+				dispatch(updateLogBet(data_logBet));
+				dispatch(updateMainBet(data_mainBet));
+				dispatch(count(0));
 			} catch (error) {
 				console.error('Error fetching bet logs:', error);
 			}
 		};
 
-		if (server) {
-			getDataMiniserver(server);
+		if (userGame) {
+			getDataMiniserver(userGame);
 		}
-
-		// Cleanup function is unnecessary here
 		return () => {};
-	}, [server]);
+	}, [userGame, dispatch]);
 
 	useEffect(() => {
 		const loop = setInterval(() => {
 			let now = moment().unix();
 			let timeEnd = moment(mainBet?.timeEnd).unix();
 			let time = Math.floor(timeEnd - now);
-			setCount(time);
+			dispatch(count(time));
 		}, 1e3);
 
 		return () => {
 			clearInterval(loop);
 		};
-	}, [mainBet]);
+	}, [mainBet, dispatch]);
 
 	useEffect(() => {
-		socket.connect();
-
-		socket.on('status-boss', (data: StatusBoss) => {
-			console.log(data, server, data?.server === server);
-			if (data?.type === 'old' && data?.server === server) {
-				console.log('let update data realtime', server);
-				let new_mainBet = data?.boss;
-				let old_logbet = logBet;
-				let old_bet = old_logbet.slice(0, -1);
-				old_bet.push(new_mainBet);
-				let sort_bet = old_bet.sort(
+		const handleStatusBoss = (data: StatusBoss) => {
+			if (data?.type === 'old' && data?.server === userGame) {
+				const new_mainBet = data?.boss;
+				const old_bet = [...logBet.slice(0, -1), new_mainBet];
+				const sort_bet = old_bet.sort(
 					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
 				);
-				setLogBet(sort_bet);
-				setMainBet(null);
-				console.log('ok', new_mainBet, server);
+				dispatch(updateMainBet(null));
+				dispatch(updateLogBet(sort_bet));
 			}
-			if (data?.type === 'new' && data?.server === server) {
-				setMainBet(data?.boss);
+			if (data?.type === 'new' && data?.server === userGame) {
+				dispatch(updateMainBet(data?.boss));
 			}
-		});
-
-		socket.on('status-sv', (data: StatusSv) => {
-			console.log(data, server, data?.server === server);
-			if (data?.type === 'old' && data?.server === server) {
-				console.log('let update data realtime', server);
-				let new_mainBet = data?.sv;
-				let old_logbet = logBet;
-				let old_bet = old_logbet.slice(0, -1);
-				old_bet.push(new_mainBet);
-				let sort_bet = old_bet.sort(
-					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-				);
-				setLogBet(sort_bet);
-				setMainBet(null);
-				console.log('ok', new_mainBet, server);
-			}
-			if (data?.type === 'new' && data?.server === server) {
-				setMainBet(data?.sv);
-			}
-		});
-		socket.on('status-24/24', (data: Status24) => {
-			console.log(data, server, data?.server === server);
-			if (data?.server === server) {
-				let old_logbet = logBet;
-				let old_bet = old_logbet.slice(0, -1);
-				old_bet.push(data?.old_bet);
-				let sort_bet = old_bet.sort(
-					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-				);
-				console.log(sort_bet, logBet.length, logBet);
-				setLogBet(sort_bet);
-				setMainBet(data?.new_bet);
-			}
-		});
-		return () => {
-			socket.off('status-boss');
-			socket.off('status-sv');
-			socket.off('status-24/24');
-			socket.disconnect();
 		};
-	}, []);
+
+		const handleStatusSv = (data: StatusSv) => {
+			if (data?.type === 'old' && data?.server === userGame) {
+				const new_mainBet = data?.sv;
+				const old_bet = [...logBet.slice(0, -1), new_mainBet];
+				const sort_bet = old_bet.sort(
+					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
+				);
+				dispatch(updateMainBet(null));
+				dispatch(updateLogBet(sort_bet));
+			}
+			if (data?.type === 'new' && data?.server === userGame) {
+				dispatch(updateMainBet(data?.sv));
+			}
+		};
+
+		const handleStatus24 = (data: Status24) => {
+			if (data?.server === userGame) {
+				const old_bet = [...logBet.slice(0, -1), data?.old_bet];
+				const sort_bet = old_bet.sort(
+					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
+				);
+				dispatch(updateLogBet(sort_bet));
+				dispatch(updateMainBet(data?.new_bet));
+			}
+		};
+
+		socket.on('status-boss', handleStatusBoss);
+		socket.on('status-sv', handleStatusSv);
+		socket.on('status-24/24', handleStatus24);
+
+		return () => {
+			socket.off('status-boss', handleStatusBoss);
+			socket.off('status-sv', handleStatusSv);
+			socket.off('status-24/24', handleStatus24);
+		};
+	}, [socket, userGame, logBet, dispatch]);
 
 	return (
 		<div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 card card-side bg-base-100 shadow-xl border border-current">
@@ -144,13 +139,13 @@ export const Minigame = ({ server }: { server: string }) => {
 					<p>
 						Máy Chủ:{' '}
 						<span className="text-red-500 font-medium">
-							{server.replace('-mini', ' Sao') ?? '1 Sao'}
+							{userGame.replace('-mini', ' Sao') ?? '1 Sao'}
 						</span>
 					</p>
 					<p>
 						Kết quả giải trước:{' '}
 						<span className="text-red-500 font-medium">
-							{server.endsWith('mini') || server === '24'
+							{userGame.endsWith('mini') || userGame === '24'
 								? logBet[0]?.result.split('-')[1]
 								: logBet[0]?.result === '0'
 								? 'Đỏ'
@@ -160,8 +155,8 @@ export const Minigame = ({ server }: { server: string }) => {
 					<p>
 						Thời gian còn lại:{' '}
 						<span className="countdown">
-							{!mainBet?.isEnd || counter > 0 ? (
-								counter
+							{counter > 0 ? (
+								`${counter}`
 							) : (
 								<span className="loading loading-spinner"></span>
 							)}
@@ -177,7 +172,7 @@ export const Minigame = ({ server }: { server: string }) => {
 					</p>
 					<p>Thời gian hoạt động: 24/24</p>
 				</div>
-				{server.endsWith('mini') || server === '24' ? (
+				{userGame.endsWith('mini') || userGame === '24' ? (
 					<>
 						<div className="flex flex-row gap-2 items-center">
 							<p>CL:</p>
@@ -252,7 +247,7 @@ export const Minigame = ({ server }: { server: string }) => {
 	);
 };
 
-export const BetMinigame = ({ server }: { server: string }) => {
+export const BetMinigame = () => {
 	const [type, setType] = useState('CL');
 
 	const handleTypeMiniserver = (value: string) => {

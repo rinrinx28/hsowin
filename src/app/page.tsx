@@ -5,9 +5,13 @@ import { BetMinigame, Minigame } from '@/components/Minigame';
 import TableClans from '@/components/TableClans';
 import TableResult from '@/components/TableResult';
 import TableUser from '@/components/TableUser';
-import { useState } from 'react';
+import { useAppSelector, useAppDispatch } from '@/lib/redux/hook';
+import { update } from '@/lib/redux/features/Minigame/userGameSlice';
+
 export default function Home() {
-	const [server, setServer] = useState('24');
+	const userGame = useAppSelector((state) => state.userGame.value);
+	const dispatch = useAppDispatch();
+
 	return (
 		<div className="min-w-[300px] flex flex-col gap-5 py-5 transition-all">
 			<div className="flex justify-center">
@@ -64,51 +68,51 @@ export default function Home() {
 							</div>
 							<div className="flex flex-wrap lg:flex-row gap-4 justify-center">
 								<button
-									onClick={() => setServer('1-mini')}
+									onClick={() => dispatch(update('1-mini'))}
 									className={`${
-										server === '1-mini' ? '' : 'btn-outline'
+										userGame === '1-mini' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 1
 								</button>
 								<button
-									onClick={() => setServer('2-mini')}
+									onClick={() => dispatch(update('2-mini'))}
 									className={`${
-										server === '2-mini' ? '' : 'btn-outline'
+										userGame === '2-mini' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 2
 								</button>
 								<button
-									onClick={() => setServer('3-mini')}
+									onClick={() => dispatch(update('3-mini'))}
 									className={`${
-										server === '3-mini' ? '' : 'btn-outline'
+										userGame === '3-mini' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 3
 								</button>
 								<button
-									onClick={() => setServer('1')}
+									onClick={() => dispatch(update('1'))}
 									className={`${
-										server === '1' ? '' : 'btn-outline'
+										userGame === '1' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv1
 								</button>
 								<button
-									onClick={() => setServer('2')}
+									onClick={() => dispatch(update('2'))}
 									className={`${
-										server === '2' ? '' : 'btn-outline'
+										userGame === '2' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv2
 								</button>
 								<button
-									onClick={() => setServer('3')}
+									onClick={() => dispatch(update('3'))}
 									className={`${
-										server === '3' ? '' : 'btn-outline'
+										userGame === '3' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv3
 								</button>
 								<button
-									onClick={() => setServer('24')}
+									onClick={() => dispatch(update('24'))}
 									className={`${
-										server === '24' ? '' : 'btn-outline'
+										userGame === '24' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 24/24
 								</button>
@@ -119,8 +123,8 @@ export default function Home() {
 			</div>
 			<div className="flex justify-center">
 				<div className="max-w-7xl grid lg:grid-cols-2 lg:grid-rows-5 grid-flow-row gap-4">
-					<Minigame server={server} />
-					<BetMinigame server={server} />
+					<Minigame />
+					<BetMinigame />
 					<ChatBox />
 				</div>
 			</div>
