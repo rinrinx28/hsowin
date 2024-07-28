@@ -16,6 +16,7 @@ function UserPage() {
 	useEffect(() => {
 		const id = searchParams.get('id');
 		const status = searchParams.get('status');
+		const type = searchParams.get('type');
 		if (status === 'CANCELLED') {
 			try {
 				apiClient.post(
@@ -28,6 +29,9 @@ function UserPage() {
 					},
 				);
 			} catch (err) {}
+		}
+		if (type === 'NAPBANKING') {
+			setMenu('NAPBANKING');
 		}
 	}, [searchParams]);
 

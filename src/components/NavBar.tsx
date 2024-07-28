@@ -40,19 +40,23 @@ const NavBar = () => {
 							height={150}
 						/>
 					</Link>
-				</div>
-				<div className="navbar-center hidden lg:flex">
-					<ul className="menu menu-horizontal px-1">
-						<li>
-							<Link href={'/'}>Trang Chủ</Link>
-						</li>
-						<li>
-							<Link href={'/user/napvang'}>Nạp Vàng</Link>
-						</li>
-						<li>
-							<Link href={'/user/rutvang'}>Rút Vàng</Link>
-						</li>
-					</ul>
+
+					<div className="navbar-center hidden lg:flex">
+						<ul className="menu menu-horizontal px-1 text-lg">
+							<li>
+								<Link href={'/'}>Trang Chủ</Link>
+							</li>
+							<li>
+								<Link href={'/user?type=NAPBANKING'}>Mua Vàng</Link>
+							</li>
+							<li>
+								<Link href={'/napvang'}>Nạp Vàng</Link>
+							</li>
+							<li>
+								<Link href={'/rutvang'}>Rút Vàng</Link>
+							</li>
+						</ul>
+					</div>
 				</div>
 				{user?.isLogin ? (
 					<div className="navbar-end gap-4">
