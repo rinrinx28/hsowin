@@ -1,11 +1,12 @@
 'use client';
-import React, { use } from 'react';
+import React from 'react';
 import Sun from './icons/sun';
 import Moon from './icons/moon';
 import Link from 'next/link';
 import Image from 'next/image';
 import ImageLoader from '@/lib/ImageLoader';
 import { useAppSelector } from '@/lib/redux/hook';
+import Gold from './icons/gold';
 
 const NavBar = () => {
 	const user = useAppSelector((state) => state.user);
@@ -82,6 +83,7 @@ const NavBar = () => {
 							{`${user?.username} - ${new Intl.NumberFormat('vi').format(
 								user?.gold ?? 0,
 							)}`}
+							<Gold className="" />
 						</Link>
 						<button className="btn btn-outline items-center">
 							<svg
