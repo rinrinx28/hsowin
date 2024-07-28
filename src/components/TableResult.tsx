@@ -4,8 +4,12 @@ import React, { useEffect } from 'react';
 import moment from 'moment';
 import apiClient from '@/lib/apiClient';
 import { updateAll } from '@/lib/redux/features/logs/userBetLog';
+import { TranslateKey } from '@/lib/unit/translateKey';
+import { useSocket } from '@/lib/socket';
+import { updateUser } from '@/lib/redux/features/auth/user';
 
 export default function TableResult() {
+	const socket = useSocket();
 	const userBetLog = useAppSelector((state) => state.userBetLog);
 	const user = useAppSelector((state) => state.user);
 	const dispatch = useAppDispatch();
@@ -18,9 +22,52 @@ export default function TableResult() {
 		} catch (err) {}
 	};
 
-	// useEffect(() => {
-	// 	console.log(userBetLog);
-	// }, [userBetLog]);
+	const handleCancelUserBet = (
+		uid: any,
+		betId: any,
+		userBetId: any,
+		server: string,
+	) => {
+		if (uid !== user._id) return;
+		if (!uid || !betId || !userBetId) return;
+		if (['1', '2', '3'].includes(server)) {
+			socket.emit('bet-user-del-boss', { uid, betId, userBetId });
+		} else {
+			socket.emit('bet-user-del-sv', { uid, betId, userBetId });
+		}
+	};
+
+	useEffect(() => {
+		socket.on('bet-user-del-boss-re', (data) => {
+			if (data?.status) {
+				if (data?.data?.user?._id === user?._id) {
+					dispatch(updateUser({ ...user, ...data?.data?.user }));
+				}
+				dispatch(
+					updateAll([
+						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
+					]),
+				);
+			}
+		});
+		socket.on('bet-user-del-sv-re', (data) => {
+			if (data?.status) {
+				if (data?.data?.user?._id === user?._id) {
+					dispatch(updateUser({ ...user, ...data?.data?.user }));
+				}
+				dispatch(
+					updateAll([
+						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
+					]),
+				);
+			}
+		});
+		return () => {
+			socket.off('bet-user-del-boss');
+			socket.off('bet-user-del-sv');
+		};
+	}, [socket, user, userBetLog, dispatch]);
+
 	return (
 		<div className="lg:flex lg:flex-col grid gap-1">
 			<div className="border-current border rounded-box grid h-20 place-items-center">
@@ -48,14 +95,25 @@ export default function TableResult() {
 							const {
 								amount,
 								isEnd,
-								result,
-								resultBet,
+								receive,
 								server,
 								uid,
-								receive,
 								createdAt = new Date(),
+								betId,
+								_id,
 							} = userBet;
+							const result = userBet.result;
+							let resultBet = userBet.resultBet?.split('-');
 							const shortUID = shortenString(uid, 4, 3);
+							let new_result =
+								result in TranslateKey ? TranslateKey[`${result}`] : result;
+							let new_resultBet =
+								resultBet[0] in TranslateKey
+									? TranslateKey[`${resultBet[0]}`]
+									: resultBet[0];
+							let new_resultBet_concat = [new_resultBet, resultBet[1]].join(
+								'-',
+							);
 							return (
 								<tr
 									className="hover"
@@ -63,12 +121,32 @@ export default function TableResult() {
 									<td>{server.replace('-mini', ' Sao')}</td>
 									<td>{uid === user?._id ? user?.username : shortUID}</td>
 									<td>{new Intl.NumberFormat('vi').format(amount)}</td>
-									<td>{result}</td>
-									<td>{resultBet}</td>
+									<td>{new_result}</td>
+									<td>{new_resultBet_concat}</td>
 									<td>{new Intl.NumberFormat('vi').format(receive)}</td>
-									<td>{isEnd ? 'Đã Thanh Toán' : '...'}</td>
+									<td>
+										{isEnd && receive > 0 ? (
+											'Đã Thanh Toán'
+										) : !isEnd ? (
+											<span className="loading loading-dots loading-sm"></span>
+										) : (
+											'Đã Thua'
+										)}
+									</td>
 									<td>{moment(createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
-									<td>{isEnd ? 'null' : 'Cancel'}</td>
+									<td>
+										{isEnd ? (
+											''
+										) : (
+											<button
+												className="btn btn-error btn-sm"
+												onClick={() =>
+													handleCancelUserBet(uid, betId, _id, server)
+												}>
+												Hủy
+											</button>
+										)}
+									</td>
 								</tr>
 							);
 						})}

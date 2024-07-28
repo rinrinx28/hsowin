@@ -1,8 +1,53 @@
+'use client';
+import apiClient from '@/lib/apiClient';
 import ImageLoader from '@/lib/ImageLoader';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-async function Resigter() {
-	const logo_hsowin = await ImageLoader('/image/hsowin_logo.gif');
+interface InfoResgiter {
+	username?: string;
+	pwd_h?: string;
+	email?: string;
+	server?: string;
+	name?: string;
+}
+
+function Resigter() {
+	const logo_hsowin = ImageLoader('/image/hsowin_logo.gif');
+	const [info, setInfo] = useState<InfoResgiter>({ server: '1' });
+	const [msg, setMsg] = useState('');
+	const router = useRouter();
+	const handleResgiter = async () => {
+		try {
+			if (
+				!info.username ||
+				!info.pwd_h ||
+				!info.name ||
+				!info.email ||
+				!info.server
+			) {
+				const modal = document.getElementById(
+					'lock',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg('Xin vui lòng điền đầy đủ thông tin ở các ô');
+					return modal.showModal();
+				}
+			}
+			const res = await apiClient.post('/auth/resgiter', info);
+			if (res.data) {
+				router.push('/login');
+			}
+		} catch (err) {
+			const modal = document.getElementById('lock') as HTMLDialogElement | null;
+			if (modal) {
+				setMsg('Xin lỗi đã xảy ra lỗi!');
+				return modal.showModal();
+			}
+		}
+	};
 	return (
 		<div className="min-h-screen flex justify-center items-center">
 			<div className="card bg-base-100 w-1/3 shadow-xl border border-current">
@@ -16,7 +61,7 @@ async function Resigter() {
 					/>
 				</figure>
 				<div className="card-body gap-6">
-					<h2 className="card-title justify-center">Đăng Ký</h2>
+					<h2 className="card-title justify-center">Đăng Ký Tài Khoản</h2>
 					<div className="flex flex-col gap-2 w-full justify-start">
 						<label className="input input-bordered flex items-center gap-2">
 							<svg
@@ -29,7 +74,27 @@ async function Resigter() {
 							<input
 								type="text"
 								className="grow"
-								placeholder="Username"
+								placeholder="Nhập tài khoản"
+								onChange={(e) =>
+									setInfo((i) => ({ ...i, username: e.target.value }))
+								}
+							/>
+						</label>
+						<label className="input input-bordered flex items-center gap-2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+								fill="currentColor"
+								className="h-4 w-4 opacity-70">
+								<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+							</svg>
+							<input
+								type="text"
+								className="grow"
+								placeholder="Tên Hiển Thị"
+								onChange={(e) =>
+									setInfo((i) => ({ ...i, name: e.target.value }))
+								}
 							/>
 						</label>
 						<label className="input input-bordered flex items-center gap-2">
@@ -45,6 +110,9 @@ async function Resigter() {
 								type="text"
 								className="grow"
 								placeholder="Email"
+								onChange={(e) =>
+									setInfo((i) => ({ ...i, email: e.target.value }))
+								}
 							/>
 						</label>
 						<label className="input input-bordered flex items-center gap-2">
@@ -62,16 +130,57 @@ async function Resigter() {
 							<input
 								type="password"
 								className="grow"
-								value="password"
+								placeholder="Nhập mật khẩu"
+								onChange={(e) =>
+									setInfo((i) => ({ ...i, pwd_h: e.target.value }))
+								}
 							/>
+						</label>
+						<label className="label w-full justify-center">
+							<select
+								defaultValue={'1'}
+								className="select select-bordered w-full max-w-md select-md"
+								onChange={(e) =>
+									setInfo((i) => ({ ...i, server: e.target.value }))
+								}>
+								<option value="1">Server 1</option>
+								<option value={'2'}>Server 2</option>
+								<option
+									selected
+									value={'3'}>
+									Server 3
+								</option>
+							</select>
 						</label>
 					</div>
 					<div className="card-actions justify-around">
-						<button className="btn">Đăng Nhập</button>
-						<button className="btn">Đăng Ký</button>
+						<button
+							className="btn"
+							onClick={handleResgiter}>
+							Đăng Ký Ngay
+						</button>
+						<Link
+							href={'/login'}
+							className="btn">
+							Đăng Nhập
+						</Link>
 					</div>
 				</div>
 			</div>
+			<dialog
+				id="lock"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<p className="py-4">{msg}</p>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
 		</div>
 	);
 }

@@ -1,27 +1,20 @@
-import { BetLog } from '@/components/dto/dto';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type game = 'CL' | 'XIEN' | 'GUEST' | 'BOSS';
 
-interface tpyeGameState {
-	type: game;
-}
-
 // Define the initial state using that type
-const initialState: tpyeGameState = {
-	type: 'CL',
-};
+const initialState: game = 'CL';
 
 export const typeGame = createSlice({
 	name: 'typeGame',
-	initialState,
+	initialState: initialState as game,
 	reducers: {
-		change: (state, action: PayloadAction<tpyeGameState>) => {
-			state.type = action.payload.type;
+		changeTypeGame: (state, action: PayloadAction<game>) => {
+			return action.payload;
 		},
 	},
 });
 
-export const { change } = typeGame.actions;
+export const { changeTypeGame } = typeGame.actions;
 
 export default typeGame.reducer;

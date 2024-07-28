@@ -6,11 +6,20 @@ import TableClans from '@/components/TableClans';
 import TableResult from '@/components/TableResult';
 import TableUser from '@/components/TableUser';
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hook';
-import { update } from '@/lib/redux/features/Minigame/userGameSlice';
+import { updateUserGame } from '@/lib/redux/features/Minigame/userGameSlice';
 
 export default function Home() {
-	const userGame = useAppSelector((state) => state.userGame.value);
+	const userGame = useAppSelector((state) => state.userGame);
 	const dispatch = useAppDispatch();
+
+	const showTutorial = () => {
+		const modal = document.getElementById(
+			'huongdan',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			modal.showModal();
+		}
+	};
 
 	return (
 		<div className="min-w-[300px] flex flex-col gap-5 py-5 transition-all">
@@ -56,7 +65,9 @@ export default function Home() {
 										</li>
 									</ul>
 								</div>
-								<button className="btn btn-primary btn-outline rounded-btn">
+								<button
+									onClick={showTutorial}
+									className="btn btn-primary btn-outline rounded-btn">
 									Hướng Dẫn
 								</button>
 								<button className="btn btn-primary btn-outline rounded-btn">
@@ -68,49 +79,49 @@ export default function Home() {
 							</div>
 							<div className="flex flex-wrap lg:flex-row gap-4 justify-center">
 								<button
-									onClick={() => dispatch(update('1-mini'))}
+									onClick={() => dispatch(updateUserGame('1-mini'))}
 									className={`${
 										userGame === '1-mini' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 1
 								</button>
 								<button
-									onClick={() => dispatch(update('2-mini'))}
+									onClick={() => dispatch(updateUserGame('2-mini'))}
 									className={`${
 										userGame === '2-mini' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 2
 								</button>
 								<button
-									onClick={() => dispatch(update('3-mini'))}
+									onClick={() => dispatch(updateUserGame('3-mini'))}
 									className={`${
 										userGame === '3-mini' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 3
 								</button>
 								<button
-									onClick={() => dispatch(update('1'))}
+									onClick={() => dispatch(updateUserGame('1'))}
 									className={`${
 										userGame === '1' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv1
 								</button>
 								<button
-									onClick={() => dispatch(update('2'))}
+									onClick={() => dispatch(updateUserGame('2'))}
 									className={`${
 										userGame === '2' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv2
 								</button>
 								<button
-									onClick={() => dispatch(update('3'))}
+									onClick={() => dispatch(updateUserGame('3'))}
 									className={`${
 										userGame === '3' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv3
 								</button>
 								<button
-									onClick={() => dispatch(update('24'))}
+									onClick={() => dispatch(updateUserGame('24'))}
 									className={`${
 										userGame === '24' ? '' : 'btn-outline'
 									} btn rounded-btn`}>
@@ -129,12 +140,47 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="flex justify-center">
-				<div className="max-w-7xl grid grid-rows-3 gap-40">
+				<div className="max-w-7xl grid grid-rows-2 gap-10">
 					<TableResult />
-					<TableClans />
+					{/* <TableClans /> */}
 					<TableUser />
 				</div>
 			</div>
+			<dialog
+				id="huongdan"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Hướng dẫn</h3>
+					<h3 className="font-semibold">
+						{`Hệ thống chẳn lẻ Game Ngọc Rồng Online
+					Lấy chức năng "Con số may mắn" trong game làm kết quả
+					Bạn đều có thể đặt cược, lấy kết quả ở Server tùy thích`}
+					</h3>
+					<div className="py-4 flex flex-col gap-2">
+						<p>Thể lệ gồm các trò chơi:</p>
+						<p>- Dự đoán chẵn lẻ: kết quả số chẵn hoặc số lẻ</p>
+						<p>Tỷ lệ: x1.9 (đặt 10tr được 19tr vàng)</p>
+						<p>{`Ví dụ con số may mắn là 1 số chẵn như 0, 2, 4, 6, 8, 10, 12... 
+						thì đặt bên Chẵn thắng, ngược lại con số may mắn là số lẻ như 1, 3, 5, 7, 9, 11...
+						thì đặt bên Lẻ thắng`}</p>
+						<p>{`- Dự đoán tài xỉu: kết quả từ 50-99 là tài còn từ 0-49 là xỉu`}</p>
+						<p>Tỷ lệ: x1.9 (đặt 10tr được 19tr vàng)</p>
+						<p>{`
+						Ví dụ con số may mắn là 1 số từ 0-49 như 0, 1, 2, 35, 48, 49...
+						thì đặt bên Xỉu thắng, ngược lại con số may mắn là
+						1 số từ 50-99 như 50, 51, 52, 67, 87, 98, 99 thì đặt bên Tài thắng`}</p>
+						<p>- Dự đoán kết quả: kết quả là con số may mắn từ 0 tới 99</p>
+						<p>Tỷ lệ: x70 (đặt 10tr được 700tr vàng)</p>
+						<p>Liên kết: Nạp vàng | Rút vàng</p>
+					</div>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
 		</div>
 	);
 }

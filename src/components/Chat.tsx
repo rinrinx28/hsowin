@@ -1,11 +1,19 @@
-import React from 'react';
+'use client';
+import React, { useEffect, useRef } from 'react';
 import Send from './icons/send';
 import Chat from './icons/chat';
 import Link from 'next/link';
-import { useAppSelector } from '@/lib/redux/hook';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
+import { useSocket } from '@/lib/socket';
+import { updateMsgOne } from '@/lib/redux/features/logs/messageLog';
 
 export default function ChatBox() {
+	const socket = useSocket();
 	const user = useAppSelector((state) => state.user);
+	const messageLog = useAppSelector((state) => state.messageLog);
+	const dispatch = useAppDispatch();
+
+	const chatEndRef = useRef<HTMLDivElement | null>(null);
 
 	const handlerBetUser = () => {
 		if (!user.isLogin) {
@@ -18,6 +26,22 @@ export default function ChatBox() {
 			return;
 		}
 	};
+
+	useEffect(() => {
+		if (chatEndRef.current) {
+			chatEndRef.current.scrollTop = chatEndRef.current.scrollHeight;
+		}
+		console.log(messageLog, 'Message Log');
+	}, [messageLog]);
+
+	useEffect(() => {
+		socket.on('noti-bet', (data) => {
+			dispatch(updateMsgOne({ content: data, uid: '' }));
+		});
+		return () => {
+			socket.off('noti-bet');
+		};
+	}, [socket, dispatch]);
 	return (
 		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col gap-2 border border-current shadow-xl p-4 rounded-2xl">
 			<div className="flex flex-col gap-2 w-full border-b border-current">
@@ -26,91 +50,37 @@ export default function ChatBox() {
 					<h2 className="text-center font-semibold text-2xl">Trò Chuyện</h2>
 				</div>
 			</div>
-			<div className="overflow-auto max-h-[900px] bg-base-200 h-full rounded-lg p-4">
-				<div className="chat chat-start">
-					<div className="chat-header">Hệ thống</div>
-					<div className="chat-bubble chat-bubble-primary">
-						BOSS Tiểu đội trưởng vừa xuất hiện tại Núi khỉ đen - Server: 3
-					</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-primary">I loved you.</div>
-				</div>
-				<div className="chat chat-end">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-info">I loved you.</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Hệ thống</div>
-					<div className="chat-bubble chat-bubble-primary">
-						BOSS Tiểu đội trưởng vừa xuất hiện tại Núi khỉ đen - Server: 3
-					</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-primary">I loved you.</div>
-				</div>
-				<div className="chat chat-end">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-info">I loved you.</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Hệ thống</div>
-					<div className="chat-bubble chat-bubble-primary">
-						BOSS Tiểu đội trưởng vừa xuất hiện tại Núi khỉ đen - Server: 3
-					</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-primary">I loved you.</div>
-				</div>
-				<div className="chat chat-end">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-info">I loved you.</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Hệ thống</div>
-					<div className="chat-bubble chat-bubble-primary">
-						BOSS Tiểu đội trưởng vừa xuất hiện tại Núi khỉ đen - Server: 3
-					</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-primary">I loved you.</div>
-				</div>
-				<div className="chat chat-end">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-info">I loved you.</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Hệ thống</div>
-					<div className="chat-bubble chat-bubble-primary">
-						BOSS Tiểu đội trưởng vừa xuất hiện tại Núi khỉ đen - Server: 3
-					</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-primary">I loved you.</div>
-				</div>
-				<div className="chat chat-end">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-info">I loved you.</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Hệ thống</div>
-					<div className="chat-bubble chat-bubble-primary">
-						BOSS Tiểu đội trưởng vừa xuất hiện tại Núi khỉ đen - Server: 3
-					</div>
-				</div>
-				<div className="chat chat-start">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-primary">I loved you.</div>
-				</div>
-				<div className="chat chat-end">
-					<div className="chat-header">Obi-Wan Kenobi</div>
-					<div className="chat-bubble chat-bubble-info">I loved you.</div>
-				</div>
+			<div
+				className="overflow-auto max-h-[900px] bg-base-200 h-full rounded-lg p-4"
+				ref={chatEndRef}>
+				{messageLog?.map((msg, i) => {
+					const { uid, content, username } = msg;
+					return (
+						<div
+							className="chat chat-start"
+							key={`${i}-msg-log`}>
+							{uid === '' ? (
+								<div className="chat-image avatar">
+									<div className="avatar online  placeholder">
+										<div className="bg-neutral text-neutral-content w-12 rounded-full">
+											<span className="text-sm">BOT</span>
+										</div>
+									</div>
+								</div>
+							) : (
+								<div className="chat-image avatar">
+									<div className="avatar online  placeholder">
+										<div className="bg-neutral text-neutral-content w-12 rounded-full"></div>
+									</div>
+								</div>
+							)}
+							<div className="chat-header">{username ?? 'Hệ thống'}</div>
+							<div className="chat-bubble text-sm chat-bubble-primary">
+								{content}
+							</div>
+						</div>
+					);
+				})}
 			</div>
 			<div className="flex flex-row w-full py-2 gap-2">
 				<input

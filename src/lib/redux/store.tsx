@@ -8,6 +8,7 @@ import typeGame from './features/Minigame/typeGame';
 import betInfo from './features/Minigame/betInfo';
 import userBetLog from './features/logs/userBetLog';
 import userRanks from './features/rank/userRanks';
+import messageLog from './features/logs/messageLog';
 
 export const makeStore = () => {
 	return configureStore({
@@ -21,6 +22,7 @@ export const makeStore = () => {
 			betInfo: betInfo,
 			userBetLog: userBetLog,
 			userRanks: userRanks,
+			messageLog: messageLog,
 		},
 	});
 };

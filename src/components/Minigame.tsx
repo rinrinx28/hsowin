@@ -20,7 +20,7 @@ import { useSocket } from '@/lib/socket';
 import { count } from '@/lib/redux/features/Minigame/countDownTimeSlice';
 import { updateMainBet } from '@/lib/redux/features/Minigame/MainBetGameSlice';
 import { updateLogBet } from '@/lib/redux/features/Minigame/LogBetGameSlice';
-import { change, game } from '@/lib/redux/features/Minigame/typeGame';
+import { changeTypeGame } from '@/lib/redux/features/Minigame/typeGame';
 moment().format();
 import { PiPokerChip } from '@/lib/icon';
 import {
@@ -36,7 +36,7 @@ import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 export const Minigame = () => {
 	const socket = useSocket();
 	const dispatch = useAppDispatch();
-	const userGame = useAppSelector((state) => state.userGame.value);
+	const userGame = useAppSelector((state) => state.userGame);
 	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
 	const logBet = useAppSelector((state) => state.logBetGame);
 	const counter = useAppSelector((state) => state.countDownTime.value);
@@ -271,18 +271,17 @@ export const Minigame = () => {
 
 export const BetMinigame = () => {
 	const socket = useSocket();
-	const type = useAppSelector((state) => state.typeGame.type);
-	const userGame = useAppSelector((state) => state.userGame.value);
+	const type = useAppSelector((state) => state.typeGame);
+	const userGame = useAppSelector((state) => state.userGame);
 	const betInfo = useAppSelector((state) => state.betInfo);
 	const user = useAppSelector((state) => state.user);
-	const counter = useAppSelector((state) => state.countDownTime.value);
 	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
 	const userBetLog = useAppSelector((state) => state.userBetLog);
 	const [msg, setMsg] = useState('');
 	const dispatch = useAppDispatch();
 
-	const handleTypeMiniserver = (value: game) => {
-		dispatch(change({ type: value }));
+	const handleTypeMiniserver = (e: any) => {
+		dispatch(changeTypeGame(e.target.value));
 		dispatch(resetBet());
 	};
 
@@ -297,15 +296,16 @@ export const BetMinigame = () => {
 	};
 
 	const handlerBetUser = () => {
-		console.log(user, betInfo);
+		// console.log(user, betInfo);
 		if (!user.isLogin) {
 			showModelLogin();
 			return;
 		}
-		if (betInfo.amount < 1 && betInfo.type.length < 1) {
-			showModelBet('Xin vui lòng kiểm tra dự đoán và đặt tiền cược!');
-			return;
-		}
+		if (user)
+			if (betInfo.amount < 1 && betInfo.type.length < 1) {
+				showModelBet('Xin vui lòng kiểm tra dự đoán và đặt tiền cược!');
+				return;
+			}
 
 		if (betInfo.amount < 3) {
 			showModelBet('Tiền cược tối thiểu là 3 thỏi vàng');
@@ -353,26 +353,23 @@ export const BetMinigame = () => {
 	};
 
 	useEffect(() => {
-		switch (userGame) {
-			case '1':
-				dispatch(change({ type: 'BOSS' }));
-			case '2':
-				dispatch(change({ type: 'BOSS' }));
-			case '3':
-				dispatch(change({ type: 'BOSS' }));
-			default:
-				dispatch(change({ type: 'CL' }));
+		if (['1', '2', '3'].includes(userGame)) {
+			dispatch(changeTypeGame('BOSS'));
+		} else {
+			dispatch(changeTypeGame('CL'));
 		}
 		dispatch(resetBet());
 	}, [userGame, dispatch]);
 
 	useEffect(() => {
-		console.log(betInfo, user);
-	}, [betInfo, user]);
+		// console.log(betInfo, userGame, type, user);
+	}, [betInfo, userGame, type, user]);
 
 	useEffect(() => {
 		socket.on('re-bet-user-ce-sv', (data) => {
-			showModelBet(data?.message);
+			if (user?.isLogin && user?._id === data?.data[0]?.uid) {
+				showModelBet(data?.message);
+			}
 			if (data?.status) {
 				if (data?.data[0]?.uid === user._id) {
 					const { gold = 0, ...rs } = user;
@@ -394,7 +391,9 @@ export const BetMinigame = () => {
 		});
 
 		socket.on('re-bet-user-ce-boss', (data) => {
-			showModelBet(data?.message);
+			if (user?.isLogin && user?._id === data?.data[0]?.uid) {
+				showModelBet(data?.message);
+			}
 			if (data?.status) {
 				if (data?.data[0]?.uid === user._id) {
 					const { gold = 0, ...rs } = user;
@@ -470,7 +469,7 @@ export const BetMinigame = () => {
 			socket.off('re-bet-user-res-sv');
 			socket.off('re-bet-user-res-boss');
 		};
-	}, [socket, dispatch, user, betInfo]);
+	}, [socket, dispatch, user, betInfo, userBetLog]);
 
 	return (
 		<div className="lg:col-start-1 lg:row-start-3 row-span-3 card card-side justify-center items-center shadow-xl border border-current">
@@ -489,13 +488,29 @@ export const BetMinigame = () => {
 				</div>
 				<select
 					defaultValue={'CL'}
-					className={`select select-error w-full text-red-500 font-medium text-md ${
-						type === 'BOSS' ? 'hidden' : ''
-					}`}
-					onChange={(e) => handleTypeMiniserver(e.target.value as game)}>
-					<option value={'CL'}>Chẳn lẻ - Tài xỉu (10tr được 19tr)</option>
-					<option value={'XIEN'}>Xiên (10tr được 30tr)</option>
-					<option value={'GUEST'}>Dự đoán kết quả (10tr ăn 700tr)</option>
+					className={`select select-error w-full text-red-500 font-medium text-md`}
+					onChange={handleTypeMiniserver}>
+					<option
+						value={'CL'}
+						disabled={['1', '2', '3'].includes(userGame)}>
+						Chẳn lẻ - Tài xỉu (10tr được 19tr)
+					</option>
+					<option
+						value={'XIEN'}
+						disabled={['1', '2', '3'].includes(userGame)}>
+						Xiên (10tr được 30tr)
+					</option>
+					<option
+						value={'GUEST'}
+						disabled={['1', '2', '3'].includes(userGame)}>
+						Dự đoán kết quả (10tr ăn 700tr)
+					</option>
+					<option
+						value={'BOSS'}
+						disabled={!['1', '2', '3'].includes(userGame)}
+						selected={['1', '2', '3'].includes(userGame)}>
+						Dự Đoán BOSS
+					</option>
 				</select>
 				<div className="flex flex-col gap-2 w-full py-4">
 					<div className="flex flex-row items-center justify-center gap-2">
@@ -507,40 +522,32 @@ export const BetMinigame = () => {
 				{/* Select with Sv Mini and 24/24 */}
 				<div
 					className={`grid grid-cols-2 gap-4 ${
-						type === 'GUEST' || type === 'BOSS' ? 'hidden' : ''
+						['GUEST', 'BOSS'].includes(type) ? 'hidden' : ''
 					}`}>
 					<button
 						className={`btn btn-info uppercase ${
-							betInfo?.type === 'C' || betInfo?.type === 'CT'
-								? ''
-								: 'btn-outline'
+							['C', 'CT'].includes(betInfo?.type) ? '' : 'btn-outline'
 						}`}
 						onClick={() => handlerBetType(type === 'CL' ? 'C' : 'CT')}>
 						{`${type === 'CL' ? 'Chẵn' : 'Chẵn Tài'}`}
 					</button>
 					<button
 						className={`btn btn-success uppercase ${
-							betInfo?.type === 'L' || betInfo?.type === 'CX'
-								? ''
-								: 'btn-outline'
+							['L', 'CX'].includes(betInfo?.type) ? '' : 'btn-outline'
 						}`}
 						onClick={() => handlerBetType(type === 'CL' ? 'L' : 'CX')}>
 						{`${type === 'CL' ? 'Lẻ' : 'Chẵn Xĩu'}`}
 					</button>
 					<button
 						className={`btn btn-warning uppercase ${
-							betInfo?.type === 'T' || betInfo?.type === 'LT'
-								? ''
-								: 'btn-outline'
+							['T', 'LT'].includes(betInfo?.type) ? '' : 'btn-outline'
 						}`}
 						onClick={() => handlerBetType(type === 'CL' ? 'T' : 'LT')}>
 						{`${type === 'CL' ? 'Tài' : 'Lẻ Tài'}`}
 					</button>
 					<button
 						className={`btn btn-error uppercase ${
-							betInfo?.type === 'X' || betInfo?.type === 'LX'
-								? ''
-								: 'btn-outline'
+							['X', 'LX'].includes(betInfo?.type) ? '' : 'btn-outline'
 						}`}
 						onClick={() => handlerBetType(type === 'CL' ? 'X' : 'LX')}>
 						{`${type === 'CL' ? 'Xỉu' : 'Lẻ Xỉu'}`}

@@ -1,25 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // Define a type for the slice state
-export interface userGameState {
-	value: string;
-}
+
+type userTypeGame = '1' | '2' | '3' | '1-mini' | '2-mini' | '3-mini' | '24';
 
 // Define the initial state using that type
-const initialState: userGameState = {
-	value: '24',
-};
+const initialState: userTypeGame = '24';
 
 export const userGame = createSlice({
 	name: 'userGame',
 	// `createSlice` will infer the state type from the `initialState` argument
-	initialState,
+	initialState: initialState as userTypeGame,
 	reducers: {
-		update: (state, actions: PayloadAction<string>) => {
-			state.value = actions.payload;
+		updateUserGame: (state, actions: PayloadAction<userTypeGame>) => {
+			return actions.payload;
 		},
 	},
 });
 
-export const { update } = userGame.actions;
+export const { updateUserGame } = userGame.actions;
 
 export default userGame.reducer;

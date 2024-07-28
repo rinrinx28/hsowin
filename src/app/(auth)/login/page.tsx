@@ -104,7 +104,6 @@ function LoginPage() {
 							<input
 								type="password"
 								className="grow"
-								defaultValue="password"
 								onChange={(e) =>
 									setLogin((l) => ({ ...l, password: e.target.value }))
 								}
