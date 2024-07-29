@@ -378,6 +378,15 @@ function NapBanking() {
 					return modal.showModal();
 				}
 			}
+			if (Number(amount) < 10000) {
+				const modal = document.getElementById(
+					'err-bank',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg('Xin vui lòng nạp trên 10.000 VND');
+					return modal.showModal();
+				}
+			}
 			const res = await apiClient.post(
 				'/session/banking/create',
 				{
