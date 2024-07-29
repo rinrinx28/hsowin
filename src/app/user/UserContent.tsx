@@ -36,14 +36,9 @@ const UserContent = () => {
 	}, [searchParams]);
 
 	useEffect(() => {
-		let timeOutRedic = setTimeout(() => {
-			if (!user.isLogin) {
-				router.push('/');
-			}
-		}, 1e3 * 5);
-		return () => {
-			clearTimeout(timeOutRedic);
-		};
+		if (!user.isLogin) {
+			router.push('/');
+		}
 	}, [user, router]);
 
 	return (

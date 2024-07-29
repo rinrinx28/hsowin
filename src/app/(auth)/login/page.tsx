@@ -105,6 +105,7 @@ function LoginPage() {
 							</svg>
 							<input
 								type="password"
+								placeholder="Nhập password"
 								className="grow"
 								onChange={(e) =>
 									setLogin((l) => ({ ...l, password: e.target.value }))
