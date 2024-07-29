@@ -7,8 +7,10 @@ import TableUser from '@/components/TableUser';
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hook';
 import { updateUserGame } from '@/lib/redux/features/Minigame/userGameSlice';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Home() {
+	const user = useAppSelector((state) => state.user);
 	const userGame = useAppSelector((state) => state.userGame);
 	const dispatch = useAppDispatch();
 
@@ -20,6 +22,17 @@ export default function Home() {
 			modal.showModal();
 		}
 	};
+
+	useEffect(() => {
+		if (!user.isLogin) {
+			const modal = document.getElementById(
+				'wellcome',
+			) as HTMLDialogElement | null;
+			if (modal) {
+				modal.showModal();
+			}
+		}
+	}, [user]);
 
 	return (
 		<div className="min-w-[300px] flex flex-col gap-5 py-5 transition-all">
@@ -148,26 +161,55 @@ export default function Home() {
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Hướng dẫn</h3>
 					<h3 className="font-semibold">
-						{`Hệ thống chẳn lẻ Game Ngọc Rồng Online
-					Lấy chức năng "Con số may mắn" trong game làm kết quả
-					Bạn đều có thể đặt cược, lấy kết quả ở Server tùy thích`}
+						{`Hệ thống chẵn lẻ game Hồi Sinh Ngọc Rồng: https://hsowin.vip/
+						Lấy chức năng thông báo  xuất hiện boss " Tiểu Đội Sát Thủ " trong game làm kết quả
+						Bạn đều có thể đặt cược, lấy kết quả ở server tùy thích `}
 					</h3>
 					<div className="py-4 flex flex-col gap-2">
 						<p>Thể lệ gồm các trò chơi:</p>
-						<p>- Dự đoán chẵn lẻ: kết quả số chẵn hoặc số lẻ</p>
-						<p>Tỷ lệ: x1.9 (đặt 10tr được 19tr vàng)</p>
-						<p>{`Ví dụ con số may mắn là 1 số chẵn như 0, 2, 4, 6, 8, 10, 12... 
-						thì đặt bên Chẵn thắng, ngược lại con số may mắn là số lẻ như 1, 3, 5, 7, 9, 11...
-						thì đặt bên Lẻ thắng`}</p>
-						<p>{`- Dự đoán tài xỉu: kết quả từ 50-99 là tài còn từ 0-49 là xỉu`}</p>
-						<p>Tỷ lệ: x1.9 (đặt 10tr được 19tr vàng)</p>
+						<p>- - Dự đoán chẵn-lẻ: kết quả số chẵn hoặc số lẻ</p>
+						<p>Tỷ lệ 1.9 (Đặt cược 10 thỏi vàng được 19 thỏi vàng)</p>
+						<p>{`Ví dụ con số may mắn là 1 số chẵn như 0, 2, 4, 6, 8, 10, 12... thì đặt bên Chẵn thắng, ngược lại con số may mắn là số lẻ như 1, 3, 5, 7, 9, 11... thì đặt bên Lẻ thắng`}</p>
+						<p>{`- Dự đoán tài xỉu: kết quả được tính là 1 số cuối 5-->9 là tài 0-->4 là xỉu`}</p>
+						<p>Tỷ lệ: x1.9 (Đặt cược 10 thỏi vàng được 19 thỏi vàng)</p>
 						<p>{`
-						Ví dụ con số may mắn là 1 số từ 0-49 như 0, 1, 2, 35, 48, 49...
-						thì đặt bên Xỉu thắng, ngược lại con số may mắn là
-						1 số từ 50-99 như 50, 51, 52, 67, 87, 98, 99 thì đặt bên Tài thắng`}</p>
+						Ví dụ kết quả của con số là 35,16,27,58,09 thì kết quả được tính  là 1 số cuối tương tự lần lượt là: 5,6,7,8,9  là bên Tài thắng, ngược lại số cuối từ 0-->4 sẽ là Xỉu thắng`}</p>
 						<p>- Dự đoán kết quả: kết quả là con số may mắn từ 0 tới 99</p>
-						<p>Tỷ lệ: x70 (đặt 10tr được 700tr vàng)</p>
-						<p>Liên kết: Nạp vàng | Rút vàng</p>
+						<p>Tỷ lệ: x70 (đặt 10 thỏi vàng được 700 thỏi vàng)</p>
+						<p>
+							Liên kết:{' '}
+							<Link
+								href={'/napvang'}
+								className="link link-hover">
+								Nạp vàng
+							</Link>{' '}
+							|{' '}
+							<Link
+								href={'/rutvang'}
+								className="link link-hover">
+								Rút vàng
+							</Link>
+						</p>
+					</div>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="wellcome"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Hướng dẫn</h3>
+					<div className="py-4 flex flex-col gap-2">
+						<p>Nhận ngay 20tv khi tạo tài khoản trên web </p>
+						<p>Cập nhật gift code</p>
+						<p>Tặng thỏi vàng miễn phí mỗi ngày</p>
+						<p>Ra mắt vòng quay nhận vàng miễn phí</p>
+						<p>Vàng khuyễn mãi lên đến x0,48% qua ví/atm</p>
 					</div>
 					<div className="modal-action">
 						<form method="dialog">

@@ -59,7 +59,17 @@ const UserContent = () => {
 						</li>
 						<li
 							className="text-xl btn btn-ghost"
-							onClick={() => setMenu('NAPTHE')}>
+							onClick={() => {
+								const modal = document.getElementById(
+									'lock',
+								) as HTMLDialogElement | null;
+								if (modal) {
+									setMsg(
+										'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
+									);
+									return modal.showModal();
+								}
+							}}>
 							Nạp Thẻ Cào
 						</li>
 						<li
@@ -79,7 +89,17 @@ const UserContent = () => {
 						</li>
 						<li
 							className="text-xl btn btn-ghost"
-							onClick={() => setMenu('CHUYENVANG')}>
+							onClick={() => {
+								const modal = document.getElementById(
+									'lock',
+								) as HTMLDialogElement | null;
+								if (modal) {
+									setMsg(
+										'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
+									);
+									return modal.showModal();
+								}
+							}}>
 							Chuyển Vàng Cho Người Chơi
 						</li>
 						<li
@@ -107,7 +127,7 @@ const UserContent = () => {
 				{menu === 'CHUYENVANG' && <TradeOtherUser />}
 			</div>
 			<dialog
-				id="lock"
+				id="lock_user"
 				className="modal">
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
