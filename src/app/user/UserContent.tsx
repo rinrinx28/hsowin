@@ -40,7 +40,7 @@ const UserContent = () => {
 
 	useEffect(() => {
 		let token = localStorage.getItem('access_token');
-		if (!token || !user.isLogin) {
+		if (!token) {
 			router.push('/');
 		}
 	}, [user, router]);
