@@ -62,30 +62,35 @@ export default function PageRutVang() {
 	};
 
 	useEffect(() => {
-		const getBotLog = async () => {
-			const res = await apiClient.get('/bot/all', {
-				headers: {
-					Authorization: 'Bearer ' + user?.token,
-				},
-			});
-			const data = res.data;
-			setBot(data);
+		let timeOutRedic = setTimeout(() => {
+			const getBotLog = async () => {
+				const res = await apiClient.get('/bot/all', {
+					headers: {
+						Authorization: 'Bearer ' + user?.token,
+					},
+				});
+				const data = res.data;
+				setBot(data);
+			};
+			const getSessionLog = async () => {
+				const res = await apiClient.get('/session/all', {
+					headers: {
+						Authorization: 'Bearer ' + user?.token,
+					},
+				});
+				const data = res.data;
+				setSession(data);
+			};
+			if (user?.isLogin) {
+				getBotLog();
+				getSessionLog();
+			} else {
+				router.push('/login');
+			}
+		}, 1e3 * 2.5);
+		return () => {
+			clearTimeout(timeOutRedic);
 		};
-		const getSessionLog = async () => {
-			const res = await apiClient.get('/session/all', {
-				headers: {
-					Authorization: 'Bearer ' + user?.token,
-				},
-			});
-			const data = res.data;
-			setSession(data);
-		};
-		if (user?.isLogin) {
-			getBotLog();
-			getSessionLog();
-		} else {
-			router.push('/login');
-		}
 	}, [user, router]);
 
 	return (
