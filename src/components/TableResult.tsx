@@ -166,9 +166,9 @@ export default function TableResult() {
 										</td>
 										<td>{moment(createdAt).format('DD/MM/YYYY')}</td>
 										<td>
-											{isEnd ? (
+											{uid !== user?._id ? (
 												''
-											) : (
+											) : !isEnd ? (
 												<>
 													<button
 														className="btn btn-error btn-sm"
@@ -207,6 +207,8 @@ export default function TableResult() {
 														</div>
 													</dialog>
 												</>
+											) : (
+												''
 											)}
 										</td>
 									</tr>
