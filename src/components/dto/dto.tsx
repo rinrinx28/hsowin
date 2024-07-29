@@ -9,6 +9,7 @@ export interface StatusSv {
 	type: string;
 	sv: BetLog;
 	server: string;
+	timeBoss?: string;
 }
 
 export interface StatusBoss {
@@ -18,17 +19,19 @@ export interface StatusBoss {
 }
 
 export interface BetLog {
-	_id: string;
-	total: number;
-	sendIn: number;
-	sendOut: number;
-	result: string;
-	isEnd: boolean;
-	server: string;
-	timeEnd: Date;
-	createdAt: Date;
-	updatedAt: Date;
-	__v: number;
+	_id?: string;
+	total?: number;
+	sendIn?: number;
+	sendOut?: number;
+	result?: string;
+	isEnd?: boolean;
+	server?: string;
+	timeEnd?: Date;
+	createdAt?: Date;
+	updatedAt?: Date;
+	__v?: number;
+	timeBoss?: string;
+	random?: string;
 }
 
 export interface CreateUserBet {

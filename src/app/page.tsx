@@ -6,6 +6,7 @@ import TableResult from '@/components/TableResult';
 import TableUser from '@/components/TableUser';
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hook';
 import { updateUserGame } from '@/lib/redux/features/Minigame/userGameSlice';
+import Link from 'next/link';
 
 export default function Home() {
 	const userGame = useAppSelector((state) => state.userGame);
@@ -25,9 +26,11 @@ export default function Home() {
 			<div className="flex justify-center">
 				<div className="max-w-6xl">
 					<div className="flex flex-col justify-center items-center text-center">
-						<h1 className="text-4xl font-bold">HỆ THỐNG MINI GAME</h1>
-						<p className="py-6 mb-4 border-b border-current">
-							Kiếm Vàng <br /> Hồi Sinh Ngọc Rồng Giao Dịch Tự Động Uy Tín
+						<h1 className="text-3xl font-bold">Hệ Thống HSOWIN</h1>
+						<p className="py-6 mb-4 text-xl border-b border-current">
+							Hồi Sinh Ngọc Rồng - MiniGame Kiếm Vàng
+							<br />
+							Giao Dịch - Tự Động - Uy Tín - Chất Lượng
 						</p>
 						<div className="flex flex-col gap-4">
 							<div className="flex flex-wrap lg:flex-row gap-4 justify-center">
@@ -35,32 +38,26 @@ export default function Home() {
 									<div
 										tabIndex={0}
 										role="button"
-										className="btn  btn-neutral">
+										className="btn  btn-primary btn-outline rounded-btn">
 										Chức Năng
 									</div>
 									<ul
 										tabIndex={0}
 										className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
 										<li>
-											<p>Mua Vàng</p>
+											<Link href={'/user?type=NAPBANKING'}>Mua Vàng</Link>
 										</li>
 										<li>
-											<p>Nạp Vàng</p>
+											<Link href={'/napvang'}>Nạp Vàng</Link>
 										</li>
 										<li>
-											<p>Nhiệm Vụ Hàng Ngày</p>
+											<Link href={'/rutvang'}>Rút Vàng</Link>
 										</li>
 										<li>
-											<p>Nhập Giftcode</p>
+											<Link href={'/user'}>Thông Tin Cá Nhân</Link>
 										</li>
 										<li>
-											<p>Thông Tin Cá Nhân</p>
-										</li>
-										<li>
-											<p>Chuyển Vàng</p>
-										</li>
-										<li>
-											<p>Rút Về Bank</p>
+											<Link href={'/user?type=RUTBANKING'}>Rút Về Bank</Link>
 										</li>
 									</ul>
 								</div>
@@ -80,49 +77,49 @@ export default function Home() {
 								<button
 									onClick={() => dispatch(updateUserGame('1-mini'))}
 									className={`${
-										userGame === '1-mini' ? '' : 'btn-outline'
+										userGame === '1-mini' ? 'btn-success' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 1
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('2-mini'))}
 									className={`${
-										userGame === '2-mini' ? '' : 'btn-outline'
+										userGame === '2-mini' ? 'btn-success' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 2
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('3-mini'))}
 									className={`${
-										userGame === '3-mini' ? '' : 'btn-outline'
+										userGame === '3-mini' ? 'btn-success' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 3
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('1'))}
 									className={`${
-										userGame === '1' ? '' : 'btn-outline'
+										userGame === '1' ? 'btn-success' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv1
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('2'))}
 									className={`${
-										userGame === '2' ? '' : 'btn-outline'
+										userGame === '2' ? 'btn-success' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv2
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('3'))}
 									className={`${
-										userGame === '3' ? '' : 'btn-outline'
+										userGame === '3' ? 'btn-success' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv3
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('24'))}
 									className={`${
-										userGame === '24' ? '' : 'btn-outline'
+										userGame === '24' ? 'btn-success' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 24/24
 								</button>

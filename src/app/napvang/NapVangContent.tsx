@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { updateUser } from '@/lib/redux/features/auth/user';
 import Gold from '@/components/icons/gold';
+import { useSocket } from '@/lib/socket';
 
 interface InfoNapVang {
 	server?: string;
@@ -16,11 +17,10 @@ interface InfoNapVang {
 }
 
 export default function PageNapVang() {
+	const socket = useSocket();
 	const user = useAppSelector((state) => state.user);
 	const [info, setInfo] = useState<InfoNapVang>({
 		type: '0',
-		server: user?.server,
-		uid: user?._id,
 	});
 	const [bot, setBot] = useState([]);
 	const [session, setSession] = useState<any[]>([]);
@@ -29,12 +29,13 @@ export default function PageNapVang() {
 
 	const handleNapVang = async () => {
 		try {
+			console.log(info);
 			if (!user.isLogin) {
 				const modal = document.getElementById(
 					'noti',
 				) as HTMLDialogElement | null;
 				if (modal) {
-					setMsg('Xin vui lòng điền đầy đủ thông tin ở các ô');
+					setMsg('Bạn chưa đăng nhập!');
 					return modal.showModal();
 				}
 			}
@@ -53,11 +54,18 @@ export default function PageNapVang() {
 					return modal.showModal();
 				}
 			}
-			await apiClient.post('/session/create', info, {
+			const res = await apiClient.post('/session/create', info, {
 				headers: {
 					Authorization: 'Bearer ' + user?.token,
 				},
 			});
+
+			setSession((e) =>
+				[...e, res?.data].sort(
+					(a: any, b: any) =>
+						moment(b.createdAt).unix() - moment(a.createdAt).unix(),
+				),
+			);
 		} catch (err: any) {
 			const modal = document.getElementById('lock') as HTMLDialogElement | null;
 			if (modal) {
@@ -65,6 +73,27 @@ export default function PageNapVang() {
 				return modal.showModal();
 			}
 		}
+	};
+
+	const handleCancelNap = async (sessionId: any, uid: any) => {
+		try {
+			const res = await apiClient.post(
+				'/session/cancel',
+				{
+					sessionId,
+					uid,
+				},
+				{
+					headers: {
+						Authorization: 'Bearer ' + user?.token,
+					},
+				},
+			);
+			setSession((e: any) => [
+				...e?.filter((i: any) => i?._id !== sessionId),
+				res.data,
+			]);
+		} catch (err) {}
 	};
 
 	useEffect(() => {
@@ -84,9 +113,15 @@ export default function PageNapVang() {
 				},
 			});
 			const data = res.data;
-			setSession(data);
+			setSession(
+				data.sort(
+					(a: any, b: any) =>
+						moment(b.createdAt).unix() - moment(a.createdAt).unix(),
+				),
+			);
 		};
 		if (user?.isLogin) {
+			setInfo((e) => ({ ...e, uid: user?._id, server: user?.server }));
 			getBotLog();
 			getSessionLog();
 			const modal = document.getElementById('noti') as HTMLDialogElement | null;
@@ -100,6 +135,16 @@ export default function PageNapVang() {
 			}
 		}
 	}, [user, router]);
+
+	useEffect(() => {
+		socket.on('session-res', (data) => {
+			console.log(data);
+		});
+
+		return () => {
+			socket.off('session-res');
+		};
+	}, [user, socket]);
 
 	return (
 		<div>
@@ -116,7 +161,7 @@ export default function PageNapVang() {
 							Sau khi giao dịch thành công bạn sẽ được cộng vàng trên website
 							sau 3 giây
 						</p>
-						<p>- Tỷ lệ nạp 100%, nạp 100tr được 100tr</p>
+						<p>- Tỷ lệ nạp 100%, nạp 100 thỏi vàng được 100 thỏi vàng</p>
 						<p>
 							Hệ thống tự động hủy đơn sau 15 phút nếu chưa giao dịch thành công
 						</p>
@@ -233,6 +278,7 @@ export default function PageNapVang() {
 											<th>Server</th>
 											<th>Nhân vật</th>
 											<th>Số vàng</th>
+											<th>Đã Nhận</th>
 											<th>Tình trạng</th>
 											<th>Thời gian</th>
 											<th>Điều khiển</th>
@@ -244,8 +290,8 @@ export default function PageNapVang() {
 											?.filter(
 												(b: any) =>
 													b?.server === user?.server &&
-													b?.type === '1' &&
-													b?._id === user?._id,
+													b?.type === '0' &&
+													b?.uid === user?._id,
 											)
 											.map((userBet: any) => {
 												const {
@@ -256,6 +302,8 @@ export default function PageNapVang() {
 													status,
 													createdAt,
 													type,
+													uid,
+													recive,
 												} = userBet;
 												return (
 													<tr
@@ -269,6 +317,11 @@ export default function PageNapVang() {
 															)}
 														</td>
 														<td>
+															{new Intl.NumberFormat('vi').format(
+																Number(recive ?? 0),
+															)}
+														</td>
+														<td>
 															{status === '0'
 																? 'Chờ Thanh Toán'
 																: status === '2'
@@ -278,7 +331,15 @@ export default function PageNapVang() {
 														<td>
 															{moment(createdAt).format('DD/MM/YYYY HH:mm:ss')}
 														</td>
-														<td></td>
+														<td>
+															{status === '0' && (
+																<button
+																	onClick={() => handleCancelNap(_id, uid)}
+																	className="btn btn-error btn-sm">
+																	Hủy
+																</button>
+															)}
+														</td>
 													</tr>
 												);
 											})}

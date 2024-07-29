@@ -35,6 +35,9 @@ export const betInfo = createSlice({
 		changeAmount: (state, action: PayloadAction<number>) => {
 			state.amount += action.payload;
 		},
+		changeAmountInput: (state, action: PayloadAction<number>) => {
+			state.amount = action.payload;
+		},
 		resetBet: (state) => {
 			state.type = '';
 			state.amount = 0;
@@ -42,6 +45,7 @@ export const betInfo = createSlice({
 	},
 });
 
-export const { changeType, changeAmount, resetBet } = betInfo.actions;
+export const { changeType, changeAmount, resetBet, changeAmountInput } =
+	betInfo.actions;
 
 export default betInfo.reducer;

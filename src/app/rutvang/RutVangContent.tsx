@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { updateUser } from '@/lib/redux/features/auth/user';
 import Gold from '@/components/icons/gold';
+import { useSocket } from '@/lib/socket';
 
 interface InfoRutVang {
 	server?: string;
@@ -16,11 +17,10 @@ interface InfoRutVang {
 }
 
 export default function PageRutVang() {
+	const socket = useSocket();
 	const user = useAppSelector((state) => state.user);
 	const [info, setInfo] = useState<InfoRutVang>({
 		type: '1',
-		server: user?.server,
-		uid: user?._id,
 	});
 	const [bot, setBot] = useState([]);
 	const [session, setSession] = useState<any[]>([]);
@@ -54,11 +54,18 @@ export default function PageRutVang() {
 					return modal.showModal();
 				}
 			}
-			await apiClient.post('/session/create', info, {
+			const res = await apiClient.post('/session/create', info, {
 				headers: {
 					Authorization: 'Bearer ' + user?.token,
 				},
 			});
+
+			setSession((e) =>
+				[...e, res?.data].sort(
+					(a: any, b: any) =>
+						moment(b.createdAt).unix() - moment(a.createdAt).unix(),
+				),
+			);
 			dispatch(
 				updateUser({ ...user, gold: (user.gold ?? 0) - Number(info.amount) }),
 			);
@@ -88,11 +95,17 @@ export default function PageRutVang() {
 				},
 			});
 			const data = res.data;
-			setSession(data);
+			setSession(
+				data.sort(
+					(a: any, b: any) =>
+						moment(b.createdAt).unix() - moment(a.createdAt).unix(),
+				),
+			);
 		};
 		if (user?.isLogin) {
 			getBotLog();
 			getSessionLog();
+			setInfo((e) => ({ ...e, uid: user?._id, server: user?.server }));
 		} else {
 			const modal = document.getElementById('noti') as HTMLDialogElement | null;
 			if (modal) {
@@ -101,6 +114,16 @@ export default function PageRutVang() {
 			}
 		}
 	}, [user, router]);
+
+	useEffect(() => {
+		socket.on('session-res', (data) => {
+			console.log(data);
+		});
+
+		return () => {
+			socket.off('session-res');
+		};
+	}, [user, socket]);
 
 	return (
 		<div>
@@ -117,7 +140,7 @@ export default function PageRutVang() {
 							Sau khi giao dịch thành công bạn sẽ được cộng vàng trên website
 							sau 3 giây
 						</p>
-						<p>- Tỷ lệ rút 100%, rút 100tr được 100tr</p>
+						<p>- Tỷ lệ rút 100%, rút 100 thỏi vàng được 100 thỏi vàng</p>
 						<p>
 							Hệ thống tự động hủy đơn sau 10 phút nếu chưa giao dịch thành công
 						</p>
@@ -181,6 +204,24 @@ export default function PageRutVang() {
 								onClick={handleRutVang}>
 								Rút Ngay
 							</button>
+
+							<div className="flex flex-col">
+								<p>Hạn mức hôm nay (0h00p sẽ reset): {user?.totalBet}</p>
+								<p>
+									Đã sử dụng:{' '}
+									{session
+										?.filter(
+											(b: any) =>
+												b?.server === user?.server &&
+												b?.type === '1' &&
+												b?.uid === user?._id &&
+												moment(b?.createdAt).format('DD/MM/YYYY') ===
+													moment().format('DD/MM/YYYY'),
+										)
+										?.reduce((a, b) => a + b?.recive, 0)}
+								</p>
+								<p>Vui lòng chơi để nâng thêm hạn mức !</p>
+							</div>
 						</div>
 						<div className="flex flex-col gap-2 border border-current p-8 rounded-lg max-w-2xl w-full">
 							<h2 className="text-center border-b border-current pb-2">
@@ -234,6 +275,7 @@ export default function PageRutVang() {
 											<th>Server</th>
 											<th>Nhân vật</th>
 											<th>Số vàng</th>
+											<th>Đã Giao</th>
 											<th>Tình trạng</th>
 											<th>Thời gian</th>
 										</tr>
@@ -245,7 +287,7 @@ export default function PageRutVang() {
 												(b: any) =>
 													b?.server === user?.server &&
 													b?.type === '1' &&
-													b?._id === user?._id,
+													b?.uid === user?._id,
 											)
 											.map((userBet: any) => {
 												const {
@@ -254,6 +296,7 @@ export default function PageRutVang() {
 													playerName,
 													amount,
 													status,
+													recive,
 													createdAt,
 												} = userBet;
 												return (
@@ -265,6 +308,11 @@ export default function PageRutVang() {
 														<td>
 															{new Intl.NumberFormat('vi').format(
 																Number(amount),
+															)}
+														</td>
+														<td>
+															{new Intl.NumberFormat('vi').format(
+																Number(recive ?? 0),
 															)}
 														</td>
 														<td>

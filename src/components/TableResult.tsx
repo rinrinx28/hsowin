@@ -24,6 +24,15 @@ export default function TableResult() {
 		} catch (err) {}
 	};
 
+	const showDialogCancelUserBet = () => {
+		const modal = document.getElementById(
+			'error_bet_2',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			modal.showModal();
+		}
+	};
+
 	const handleCancelUserBet = (
 		uid: any,
 		betId: any,
@@ -72,8 +81,12 @@ export default function TableResult() {
 		};
 	}, [dispatch, socket, user, userBetLog]);
 
+	useEffect(() => {
+		setShow(userGame);
+	}, [userGame]);
+
 	return (
-		<div className="lg:flex lg:flex-col grid gap-1">
+		<div className="lg:flex lg:flex-col grid">
 			<div className="border-current border rounded-box grid h-20 place-items-center">
 				Lịch Sử Kết Quả
 			</div>
@@ -100,8 +113,8 @@ export default function TableResult() {
 								showType === 'all'
 									? userBet
 									: showType === 'only'
-									? userBet.uid === user?._id
-									: userBet.server === showType,
+									? userBet.server === showType
+									: userBet.uid === user?._id && userBet.server === userGame,
 							)
 							?.map((userBet) => {
 								const {
@@ -154,13 +167,44 @@ export default function TableResult() {
 											{isEnd ? (
 												''
 											) : (
-												<button
-													className="btn btn-error btn-sm"
-													onClick={() =>
-														handleCancelUserBet(uid, betId, _id, server)
-													}>
-													Hủy
-												</button>
+												<>
+													<button
+														className="btn btn-error btn-sm"
+														onClick={showDialogCancelUserBet}>
+														Hủy
+													</button>
+													<dialog
+														id="error_bet_2"
+														className="modal">
+														<div className="modal-box">
+															<h3 className="font-bold text-lg">
+																Thông Báo Người Chơi
+															</h3>
+															<p className="py-4">
+																Bạn có muốn hủy ván cược này hay không?
+															</p>
+															<div className="modal-action">
+																<form
+																	method="dialog"
+																	className="flex flex-row gap-2">
+																	<button
+																		className="btn"
+																		onClick={() =>
+																			handleCancelUserBet(
+																				uid,
+																				betId,
+																				_id,
+																				server,
+																			)
+																		}>
+																		Có
+																	</button>
+																	<button className="btn">Không</button>
+																</form>
+															</div>
+														</div>
+													</dialog>
+												</>
 											)}
 										</td>
 									</tr>
@@ -174,7 +218,7 @@ export default function TableResult() {
 				<div className="flex flex-row items-center gap-2">
 					<p className="text-nowrap">Hiển Thị:</p>
 					<select
-						defaultValue={showType}
+						value={showType}
 						onChange={(e) => setShow(e.target.value)}
 						className="select select-bordered w-full">
 						{[

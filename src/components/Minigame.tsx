@@ -25,6 +25,7 @@ moment().format();
 import { PiPokerChip } from 'react-icons/pi';
 import {
 	changeAmount,
+	changeAmountInput,
 	changeType,
 	resetBet,
 	typeBet,
@@ -105,7 +106,7 @@ export const Minigame = () => {
 				dispatch(updateLogBet(sort_bet));
 			}
 			if (data?.type === 'new' && data?.server === userGame) {
-				dispatch(updateMainBet(data?.sv));
+				dispatch(updateMainBet({ ...data?.sv, timeBoss: data?.timeBoss }));
 			}
 		};
 
@@ -127,10 +128,15 @@ export const Minigame = () => {
 		socket.on('status-sv', handleStatusSv);
 		socket.on('status-24/24', handleStatus24);
 
+		// socket.on('result-data-bet-re', (data) => {
+		// 	console.log(data);
+		// });
+
 		return () => {
 			socket.off('status-boss');
 			socket.off('status-sv');
 			socket.off('status-24/24');
+			// socket.off('result-data-bet-re');
 		};
 	}, [socket, dispatch, logBet, userGame]);
 
@@ -146,6 +152,15 @@ export const Minigame = () => {
 			clearInterval(loop);
 		};
 	}, [mainBet, dispatch]);
+
+	// useEffect(() => {
+	// 	if (counter === 7) {
+	// 		socket.emit('result-data-bet', {
+	// 			betId: mainBet?._id,
+	// 			counter: counter,
+	// 		});
+	// 	}
+	// }, [socket, counter, mainBet]);
 
 	return (
 		<div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 card card-side bg-base-100 shadow-xl border border-current">
@@ -171,15 +186,15 @@ export const Minigame = () => {
 					<p className="flex gap-2 items-center">
 						Máy Chủ:{' '}
 						<span className="text-red-500 font-medium">
-							{userGame.replace('-mini', ' Sao') ?? '1 Sao'}
+							{userGame?.replace('-mini', ' Sao') ?? '1 Sao'}
 						</span>
 					</p>
 
 					<p className="flex gap-2 items-center">
 						Kết quả giải trước:{' '}
 						<span className="text-red-500 font-medium">
-							{userGame.endsWith('mini') || userGame === '24'
-								? logBet[0]?.result.split('-')[1]
+							{userGame?.endsWith('mini') || userGame === '24'
+								? logBet[0]?.result?.split('-')[1]
 								: logBet[0]?.result === '0'
 								? 'Đỏ'
 								: 'Đen'}
@@ -193,6 +208,25 @@ export const Minigame = () => {
 							<span className="loading loading-dots loading-sm"></span>
 						)}
 					</div>
+					{/* <p
+						className={`flex gap-2 items-center ${
+							userGame?.endsWith('mini') ?? 'hidden'
+						}`}>
+						Thời gian Boss Chết:{' '}
+						<span className="text-red-500 font-medium">
+							{userGame?.endsWith('mini') &&
+								moment(mainBet?.createdAt).format('HH:mm')}
+						</span>
+					</p> */}
+					{/* <p
+						className={`flex gap-2 items-center ${
+							userGame?.endsWith('mini') ?? 'hidden'
+						}`}>
+						Số ngẫu nhiên:{' '}
+						<span className="text-red-500 font-medium">
+							{userGame?.endsWith('mini') && mainBet?.random}
+						</span>
+					</p> */}
 					<p>
 						Chẳn: <span className="text-red-500 font-medium">0</span> - Lẻ:{' '}
 						<span className="text-red-500 font-medium">0</span>
@@ -203,21 +237,21 @@ export const Minigame = () => {
 					</p>
 					<p>Thời gian hoạt động: 24/24</p>
 				</div>
-				{userGame.endsWith('mini') || userGame === '24' ? (
+				{userGame?.endsWith('mini') || userGame === '24' ? (
 					<>
 						<div className="flex flex-row gap-2 items-center">
 							<p>CL:</p>
 							<ul className="flex flex-row-reverse gap-2">
 								{logBet?.map((item) => {
-									let totalResult = item.result.split('-');
-									let result = totalResult[0].split('')[0];
+									let totalResult = item?.result?.split('-');
+									let result = totalResult && totalResult[0]?.split('')[0];
 									return (
 										<li key={item._id}>
 											<div
 												className="tooltip"
-												data-tip={`${totalResult[1]}`}>
+												data-tip={`${totalResult && totalResult[1]}`}>
 												<div
-													className={`btn btn-sm btn-circle btn-outline ${
+													className={`btn btn-xs btn-circle btn-outline ${
 														result === 'C' ? '' : 'btn-error'
 													}`}>
 													{result}
@@ -232,15 +266,15 @@ export const Minigame = () => {
 							<p>TX:</p>
 							<ul className="flex flex-row-reverse gap-2">
 								{logBet?.map((item) => {
-									let totalResult = item.result.split('-');
-									let result = totalResult[0].split('')[1];
+									let totalResult = item?.result?.split('-');
+									let result = totalResult && totalResult[0]?.split('')[1];
 									return (
 										<li key={item._id}>
 											<div
 												className="tooltip"
-												data-tip={`${totalResult[1]}`}>
+												data-tip={`${totalResult && totalResult[1]}`}>
 												<div
-													className={`btn btn-sm btn-circle btn-outline ${
+													className={`btn btn-xs btn-circle btn-outline ${
 														result === 'T' ? '' : 'btn-error'
 													}`}>
 													{result}
@@ -262,7 +296,7 @@ export const Minigame = () => {
 										className="tooltip"
 										data-tip={`${totalResult === '1' ? 'Đen' : 'Đỏ'}`}>
 										<div
-											className={`btn btn-sm btn-outline ${
+											className={`btn btn-xs btn-outline ${
 												totalResult === '1' ? '' : 'btn-error'
 											}`}>
 											{totalResult === '1' ? 'Đen' : 'Đỏ'}
@@ -395,7 +429,6 @@ export const BetMinigame = () => {
 					target.isEnd = true;
 					return target;
 				}
-
 				return bet;
 			});
 			dispatch(updateAll(new_userBetLog));
@@ -482,8 +515,19 @@ export const BetMinigame = () => {
 		return () => {
 			socket.off('re-bet-user-ce-sv');
 			socket.off('re-bet-user-ce-boss');
+			socket.off('re-bet-user-res-sv');
+			socket.off('re-bet-user-res-boss');
 		};
 	}, [socket, dispatch, user, betInfo, userBetLog]);
+
+	useEffect(() => {
+		let input_amount = document.getElementById(
+			'amount-bet',
+		) as HTMLInputElement;
+		if (input_amount) {
+			input_amount.value = `${betInfo.amount}`;
+		}
+	}, [betInfo]);
 
 	return (
 		<div className="lg:col-start-1 lg:row-start-3 row-span-3 card card-side justify-center items-center shadow-xl border border-current">
@@ -637,10 +681,15 @@ export const BetMinigame = () => {
 						<Gold className="" />
 					</button>
 					<input
+						id="amount-bet"
 						type="text"
 						className="px-4 font-medium border-l-2"
 						placeholder="Nhập số vàng chơi"
-						value={betInfo.amount ?? 0}
+						defaultValue={betInfo.amount ?? 0}
+						onChange={(e) => {
+							dispatch(changeAmountInput(Number(e.target.value)));
+							console.log(Number(e.target.value), betInfo.amount);
+						}}
 						// disabled
 					/>
 				</div>

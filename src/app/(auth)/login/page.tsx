@@ -72,7 +72,7 @@ function LoginPage() {
 				</figure>
 				<div className="card-body gap-6">
 					<h2 className="card-title justify-center">Đăng Nhập</h2>
-					<div className="flex flex-col gap-2 w-full justify-start">
+					<form className="flex flex-col gap-2 w-full justify-start">
 						<label className="input input-bordered flex items-center gap-2">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +111,7 @@ function LoginPage() {
 								}
 							/>
 						</label>
-					</div>
+					</form>
 					<div className="flex flex-row justify-start items-center ">
 						<label className="label cursor-pointer gap-4">
 							<input

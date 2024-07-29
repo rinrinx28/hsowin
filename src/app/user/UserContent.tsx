@@ -33,6 +33,9 @@ const UserContent = () => {
 		if (type === 'NAPBANKING') {
 			setMenu('NAPBANKING');
 		}
+		if (type === 'RUTBANKING') {
+			setMenu('RUTBANKING');
+		}
 	}, [searchParams]);
 
 	useEffect(() => {
