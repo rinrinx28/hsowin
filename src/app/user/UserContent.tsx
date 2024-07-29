@@ -156,7 +156,7 @@ function ProfileUser() {
 	useEffect(() => {
 		const getBank = async () => {
 			try {
-				const res = await apiClient.get('/banking/log', {
+				const res = await apiClient.get('/session/banking/log', {
 					headers: {
 						Authorization: 'Bearer ' + user.token,
 					},
@@ -196,8 +196,14 @@ function ProfileUser() {
 				<li className="w-full gap-2 rounded-md bg-base-300 flex flex-col justify-start p-4 items-start">
 					<p className="text-primary">Thông Tin VIP:</p>
 					<p className="text-error font-semibold">
-						30 ngày qua đã nạp: <span className="text-secondary">0</span> (Chưa
-						có vip vui lòng nạp đủ 100k)
+						30 ngày qua đã nạp:{' '}
+						<span className="text-primary">
+							{new Intl.NumberFormat('vi', {
+								currency: 'VND',
+								style: 'currency',
+							}).format(Number(totalBank) ?? 0)}
+						</span>{' '}
+						(Chưa có vip vui lòng nạp đủ 100k)
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">

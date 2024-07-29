@@ -116,7 +116,7 @@ export default function TableResult() {
 									? userBet
 									: showType === 'only'
 									? userBet.server === showType
-									: userBet.uid === user?._id && userBet.server === userGame,
+									: userBet.server === userGame,
 							)
 							?.map((userBet) => {
 								const {
