@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { updateUser } from '@/lib/redux/features/auth/user';
+import Gold from '@/components/icons/gold';
 
 interface InfoNapVang {
 	server?: string;
@@ -25,10 +26,18 @@ export default function PageNapVang() {
 	const [session, setSession] = useState<any[]>([]);
 	const [msg, setMsg] = useState('');
 	const router = useRouter();
-	const dispatch = useAppDispatch();
 
 	const handleNapVang = async () => {
 		try {
+			if (!user.isLogin) {
+				const modal = document.getElementById(
+					'noti',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg('Xin vui lòng điền đầy đủ thông tin ở các ô');
+					return modal.showModal();
+				}
+			}
 			if (
 				!info.server ||
 				!info.type ||
@@ -49,9 +58,6 @@ export default function PageNapVang() {
 					Authorization: 'Bearer ' + user?.token,
 				},
 			});
-			dispatch(
-				updateUser({ ...user, gold: (user.gold ?? 0) - Number(info.amount) }),
-			);
 		} catch (err: any) {
 			const modal = document.getElementById('lock') as HTMLDialogElement | null;
 			if (modal) {
@@ -83,8 +89,15 @@ export default function PageNapVang() {
 		if (user?.isLogin) {
 			getBotLog();
 			getSessionLog();
+			const modal = document.getElementById('noti') as HTMLDialogElement | null;
+			if (modal) {
+				return modal.close();
+			}
 		} else {
-			router.push('/login');
+			const modal = document.getElementById('noti') as HTMLDialogElement | null;
+			if (modal) {
+				return modal.showModal();
+			}
 		}
 	}, [user, router]);
 
@@ -113,8 +126,11 @@ export default function PageNapVang() {
 					</div>
 					<div className="flex flex-row gap-5 justify-between">
 						<div className="flex flex-col gap-2 border border-current p-8 rounded-lg">
-							<h2 className="text-center border-b border-current pb-2">
-								Số dư: {new Intl.NumberFormat('vi').format(user?.gold ?? 0)}
+							<h2 className="text-center border-b border-current pb-2 flex flex-row gap-2 justify-center items-center">
+								Số dư: {new Intl.NumberFormat('vi').format(user?.gold ?? 0)}{' '}
+								<span>
+									<Gold className="" />
+								</span>
 							</h2>
 							<div className="max-w-xl">
 								<label className="label w-full text-nowrap gap-2">
@@ -227,7 +243,9 @@ export default function PageNapVang() {
 										{session
 											?.filter(
 												(b: any) =>
-													b?.server === user?.server && b?.type === '0',
+													b?.server === user?.server &&
+													b?.type === '1' &&
+													b?._id === user?._id,
 											)
 											.map((userBet: any) => {
 												const {
@@ -281,6 +299,27 @@ export default function PageNapVang() {
 						<form method="dialog">
 							{/* if there is a button in form, it will close the modal */}
 							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="noti"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<p className="py-4">
+						Xin lỗi, bạn chưa đăng nhập, xin vui đăng nhập để tiếp tục sử dụng
+						dịch vụ!
+					</p>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button
+								className="btn"
+								onClick={() => router.push('/login')}>
+								Đăng Nhập
+							</button>
 						</form>
 					</div>
 				</div>

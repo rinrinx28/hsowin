@@ -42,13 +42,13 @@ export default function RootLayout({
 			lang="en"
 			data-theme="luxury">
 			<body className={`${inter.className} pt-4`}>
-				<SocketProvider>
-					<Providers>
+				<Providers>
+					<SocketProvider>
 						<NavBar />
 						{children}
 						<Footer />
-					</Providers>
-				</SocketProvider>
+					</SocketProvider>
+				</Providers>
 			</body>
 		</html>
 	);

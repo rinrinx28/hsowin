@@ -7,9 +7,6 @@ import React, { useEffect } from 'react';
 export default function TableUser() {
 	const userRanks = useAppSelector((state) => state.userRanks);
 	const dispatch = useAppDispatch();
-	useEffect(() => {
-		console.log(userRanks);
-	}, [userRanks]);
 
 	useEffect(() => {
 		let loop = setInterval(async () => {
@@ -42,13 +39,13 @@ export default function TableUser() {
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
 						{userRanks?.map((user, i) => {
-							const { username, server, totalBet = 0 } = user;
+							const { name, server, totalBet = 0 } = user;
 							return (
 								<tr
 									className="hover"
 									key={user._id}>
 									<td>{server}</td>
-									<td>{username}</td>
+									<td>{name}</td>
 									<td>{new Intl.NumberFormat('vi').format(totalBet)}</td>
 									<td>1000tr</td>
 								</tr>

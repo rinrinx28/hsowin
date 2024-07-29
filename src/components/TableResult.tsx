@@ -6,7 +6,6 @@ import apiClient from '@/lib/apiClient';
 import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 import { TranslateKey } from '@/lib/unit/translateKey';
 import { useSocket } from '@/lib/socket';
-import { updateUser } from '@/lib/redux/features/auth/user';
 
 export default function TableResult() {
 	const socket = useSocket();
@@ -36,37 +35,6 @@ export default function TableResult() {
 			socket.emit('bet-user-del-sv', { uid, betId, userBetId });
 		}
 	};
-
-	useEffect(() => {
-		socket.on('bet-user-del-boss-re', (data) => {
-			if (data?.status) {
-				if (data?.data?.user?._id === user?._id) {
-					dispatch(updateUser({ ...user, ...data?.data?.user }));
-				}
-				dispatch(
-					updateAll([
-						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
-					]),
-				);
-			}
-		});
-		socket.on('bet-user-del-sv-re', (data) => {
-			if (data?.status) {
-				if (data?.data?.user?._id === user?._id) {
-					dispatch(updateUser({ ...user, ...data?.data?.user }));
-				}
-				dispatch(
-					updateAll([
-						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
-					]),
-				);
-			}
-		});
-		return () => {
-			socket.off('bet-user-del-boss');
-			socket.off('bet-user-del-sv');
-		};
-	}, [socket, user, userBetLog, dispatch]);
 
 	return (
 		<div className="lg:flex lg:flex-col grid gap-1">
@@ -119,7 +87,11 @@ export default function TableResult() {
 									className="hover"
 									key={userBet._id}>
 									<td>{server.replace('-mini', ' Sao')}</td>
-									<td>{uid === user?._id ? user?.username : shortUID}</td>
+									<td>
+										{uid === user?._id
+											? user?.name ?? user?.username
+											: shortUID}
+									</td>
 									<td>{new Intl.NumberFormat('vi').format(amount)}</td>
 									<td>{new_result}</td>
 									<td>{new_resultBet_concat}</td>

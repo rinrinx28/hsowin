@@ -12,7 +12,7 @@ const NavBar = () => {
 	const user = useAppSelector((state) => state.user);
 	const logo_hsowin = ImageLoader('/image/hsowin_logo.gif');
 	return (
-		<div className="w-full flex justify-center items-center sticky">
+		<div className="w-full flex justify-center items-center sticky top-0 z-[1000] backdrop-blur-md">
 			<div className="navbar max-w-7xl rounded-md shadow-lg">
 				<div className="navbar-start">
 					<div className="lg:hidden">

@@ -42,7 +42,6 @@ function LoginPage() {
 			}
 			router.push('/');
 		} catch (err: any) {
-			console.log(err);
 			const modal = document.getElementById(
 				'error',
 			) as HTMLDialogElement | null;

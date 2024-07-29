@@ -816,7 +816,6 @@ function HistoryUserBet() {
 					Authorization: 'Bearer ' + user?.token,
 				},
 			});
-			console.log(res.data);
 			setUsetBet(res.data.data);
 		};
 		if (user) {
@@ -852,10 +851,7 @@ function HistoryUserBet() {
 								isEnd,
 								receive,
 								server,
-								uid,
 								createdAt = new Date(),
-								betId,
-								_id,
 							} = userBet;
 							const result = userBet.result;
 							let resultBet = userBet.resultBet?.split('-');
@@ -873,7 +869,7 @@ function HistoryUserBet() {
 									className="hover"
 									key={userBet._id}>
 									<td>{server.replace('-mini', ' Sao')}</td>
-									<td>{user?.username}</td>
+									<td>{user?.name ?? user?.username}</td>
 									<td>{new Intl.NumberFormat('vi').format(amount)}</td>
 									<td>{new_result}</td>
 									<td>{new_resultBet_concat}</td>

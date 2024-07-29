@@ -3,15 +3,11 @@ import React, { useEffect, useRef } from 'react';
 import Send from './icons/send';
 import Chat from './icons/chat';
 import Link from 'next/link';
-import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
-import { useSocket } from '@/lib/socket';
-import { updateMsgOne } from '@/lib/redux/features/logs/messageLog';
+import { useAppSelector } from '@/lib/redux/hook';
 
 export default function ChatBox() {
-	const socket = useSocket();
 	const user = useAppSelector((state) => state.user);
 	const messageLog = useAppSelector((state) => state.messageLog);
-	const dispatch = useAppDispatch();
 
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -31,17 +27,8 @@ export default function ChatBox() {
 		if (chatEndRef.current) {
 			chatEndRef.current.scrollTop = chatEndRef.current.scrollHeight;
 		}
-		console.log(messageLog, 'Message Log');
 	}, [messageLog]);
 
-	useEffect(() => {
-		socket.on('noti-bet', (data) => {
-			dispatch(updateMsgOne({ content: data, uid: '' }));
-		});
-		return () => {
-			socket.off('noti-bet');
-		};
-	}, [socket, dispatch]);
 	return (
 		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col gap-2 border border-current shadow-xl p-4 rounded-2xl">
 			<div className="flex flex-col gap-2 w-full border-b border-current">

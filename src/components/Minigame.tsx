@@ -7,14 +7,7 @@ import Hand from './icons/hand';
 import { useEffect } from 'react';
 import apiClient from '@/lib/apiClient';
 import moment from 'moment';
-import {
-	BetLog,
-	CreateUserBet,
-	Status24,
-	StatusBoss,
-	StatusSv,
-	userBet,
-} from './dto/dto';
+import { BetLog, CreateUserBet, userBet } from './dto/dto';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { useSocket } from '@/lib/socket';
 import { count } from '@/lib/redux/features/Minigame/countDownTimeSlice';
@@ -34,7 +27,6 @@ import { updateUser } from '@/lib/redux/features/auth/user';
 import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 
 export const Minigame = () => {
-	const socket = useSocket();
 	const dispatch = useAppDispatch();
 	const userGame = useAppSelector((state) => state.userGame);
 	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
@@ -56,7 +48,6 @@ export const Minigame = () => {
 				let data_isEnd = data.filter((item) => item.isEnd);
 				let data_mainBet = data.find((item) => !item.isEnd);
 				let data_logBet = data_isEnd;
-				// console.log(data_mainBet, data_logBet);
 				dispatch(updateLogBet(data_logBet));
 				dispatch(updateMainBet(data_mainBet ?? null));
 				dispatch(count(0));
@@ -83,59 +74,6 @@ export const Minigame = () => {
 			clearInterval(loop);
 		};
 	}, [mainBet, dispatch]);
-
-	useEffect(() => {
-		const handleStatusBoss = (data: StatusBoss) => {
-			if (data?.type === 'old' && data?.server === userGame) {
-				const new_mainBet = data?.boss;
-				const old_bet = [...logBet.slice(0, -1), new_mainBet];
-				const sort_bet = old_bet.sort(
-					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-				);
-				dispatch(updateMainBet(null));
-				dispatch(updateLogBet(sort_bet));
-			}
-			if (data?.type === 'new' && data?.server === userGame) {
-				dispatch(updateMainBet(data?.boss));
-			}
-		};
-
-		const handleStatusSv = (data: StatusSv) => {
-			if (data?.type === 'old' && data?.server === userGame) {
-				const new_mainBet = data?.sv;
-				const old_bet = [...logBet.slice(0, -1), new_mainBet];
-				const sort_bet = old_bet.sort(
-					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-				);
-				dispatch(updateMainBet(null));
-				dispatch(updateLogBet(sort_bet));
-			}
-			if (data?.type === 'new' && data?.server === userGame) {
-				dispatch(updateMainBet(data?.sv));
-			}
-		};
-
-		const handleStatus24 = (data: Status24) => {
-			if (data?.server === userGame) {
-				const old_bet = [...logBet.slice(0, -1), data?.old_bet];
-				const sort_bet = old_bet.sort(
-					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-				);
-				dispatch(updateLogBet(sort_bet));
-				dispatch(updateMainBet(data?.new_bet));
-			}
-		};
-
-		socket.on('status-boss', handleStatusBoss);
-		socket.on('status-sv', handleStatusSv);
-		socket.on('status-24/24', handleStatus24);
-
-		return () => {
-			socket.off('status-boss', handleStatusBoss);
-			socket.off('status-sv', handleStatusSv);
-			socket.off('status-24/24', handleStatus24);
-		};
-	}, [socket, userGame, logBet, dispatch]);
 
 	return (
 		<div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 card card-side bg-base-100 shadow-xl border border-current">
@@ -295,7 +233,6 @@ export const BetMinigame = () => {
 	};
 
 	const handlerBetUser = () => {
-		// console.log(user, betInfo);
 		if (!user.isLogin) {
 			showModelLogin();
 			return;
@@ -361,10 +298,6 @@ export const BetMinigame = () => {
 	}, [userGame, dispatch]);
 
 	useEffect(() => {
-		// console.log(betInfo, userGame, type, user);
-	}, [betInfo, userGame, type, user]);
-
-	useEffect(() => {
 		socket.on('re-bet-user-ce-sv', (data) => {
 			if (user?.isLogin && user?._id === data?.data[0]?.uid) {
 				showModelBet(data?.message);
@@ -413,60 +346,9 @@ export const BetMinigame = () => {
 			}
 		});
 
-		//TODO ———————————————[Event Res Reuslt]———————————————
-		socket.on('re-bet-user-res-sv', (data) => {
-			const userBets: userBet[] = data?.data;
-			const target = userBets.filter((bet) => bet.uid === user?._id);
-			let amount = 0;
-			for (const bet of target) {
-				amount += bet.receive;
-			}
-			const { gold = 0, totalBet = 0, ...rs } = user;
-			dispatch(
-				updateUser({ ...rs, gold: gold + amount, totalBet: totalBet + amount }),
-			);
-			// Update Table UserBetLog
-			const new_userBetLog = userBetLog.map((bet) => {
-				let target = userBets.find((b) => b._id === bet._id);
-				if (target) {
-					target.isEnd = true;
-					return target;
-				}
-
-				return bet;
-			});
-			dispatch(updateAll(new_userBetLog));
-		});
-
-		socket.on('re-bet-user-res-boss', (data) => {
-			const userBets: userBet[] = data?.data;
-			const target = userBets.filter((bet) => bet.uid === user?._id);
-			let amount = 0;
-			for (const bet of target) {
-				amount += bet.receive;
-			}
-			const { gold = 0, totalBet = 0, ...rs } = user;
-			dispatch(
-				updateUser({ ...rs, gold: gold + amount, totalBet: totalBet + amount }),
-			);
-			// Update Table UserBetLog
-			const new_userBetLog = userBetLog.map((bet) => {
-				let target = userBets.find((b) => b._id === bet._id);
-				if (target) {
-					target.isEnd = true;
-					return target;
-				}
-
-				return bet;
-			});
-			dispatch(updateAll(new_userBetLog));
-		});
-
 		return () => {
 			socket.off('re-bet-user-ce-sv');
 			socket.off('re-bet-user-ce-boss');
-			socket.off('re-bet-user-res-sv');
-			socket.off('re-bet-user-res-boss');
 		};
 	}, [socket, dispatch, user, betInfo, userBetLog]);
 
