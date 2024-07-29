@@ -11,14 +11,14 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
 	title: 'Hsowin VIP',
 	description: 'Mini game',
-	icons: 'https://www.hsowin.vip/image/icon.png',
+	icons: '/image/icon.png',
 	openGraph: {
 		type: 'website',
 		description:
 			'HỆ THỐNG MINI GAME, Kiếm Vàng Ngọc Rồng Giao Dịch Tự Động Uy Tín',
-		images: 'https://www.hsowin.vip/image/icon.png',
+		images: 'https://hsowin.vip/image/icon.png',
 		title: 'Hsowin VIP',
-		url: 'https://www.hsowin.vip/',
+		url: 'https://hsowin.vip/',
 	},
 	keywords: [
 		'Trò chơi điện tử ngọc rồng',
