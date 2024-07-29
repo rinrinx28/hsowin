@@ -39,7 +39,8 @@ const UserContent = () => {
 	}, [searchParams]);
 
 	useEffect(() => {
-		if (!user.isLogin) {
+		let token = localStorage.getItem('access_token');
+		if (!token || !user.isLogin) {
 			router.push('/');
 		}
 	}, [user, router]);

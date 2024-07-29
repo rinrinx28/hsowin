@@ -226,7 +226,7 @@ export default function Home() {
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Hướng dẫn</h3>
 					<div className="py-4 flex flex-col gap-2">
-						<p>Nhận ngay 20tv khi tạo tài khoản trên web </p>
+						<p>Nhận ngay 10 thỏi vàng khi tạo tài khoản trên web </p>
 						<p>Cập nhật gift code</p>
 						<p>Tặng thỏi vàng miễn phí mỗi ngày</p>
 						<p>Ra mắt vòng quay nhận vàng miễn phí</p>
