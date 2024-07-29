@@ -54,8 +54,10 @@ function LoginPage() {
 	};
 
 	useEffect(() => {
-		console.log(user);
-	}, [user]);
+		if (user.isLogin) {
+			router.push('/user');
+		}
+	}, [user, router]);
 
 	return (
 		<div className="min-h-screen flex justify-center items-center">

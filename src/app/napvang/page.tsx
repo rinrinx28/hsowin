@@ -87,7 +87,7 @@ export default function PageNapVang() {
 			} else {
 				router.push('/login');
 			}
-		}, 1e3 * 2.5);
+		}, 1e3 * 5);
 		return () => {
 			clearTimeout(timeOutRedic);
 		};

@@ -1,10 +1,11 @@
 'use client';
 import apiClient from '@/lib/apiClient';
 import ImageLoader from '@/lib/ImageLoader';
+import { useAppSelector } from '@/lib/redux/hook';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface InfoResgiter {
 	username?: string;
@@ -19,6 +20,7 @@ function Resigter() {
 	const [info, setInfo] = useState<InfoResgiter>({ server: '1' });
 	const [msg, setMsg] = useState('');
 	const router = useRouter();
+	const user = useAppSelector((state) => state.user);
 	const handleResgiter = async () => {
 		try {
 			if (
@@ -48,6 +50,12 @@ function Resigter() {
 			}
 		}
 	};
+
+	useEffect(() => {
+		if (user.isLogin) {
+			router.push('/user');
+		}
+	}, [user, router]);
 	return (
 		<div className="min-h-screen flex justify-center items-center">
 			<div className="card bg-base-100 w-1/3 shadow-xl border border-current">

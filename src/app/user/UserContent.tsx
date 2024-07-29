@@ -40,7 +40,7 @@ const UserContent = () => {
 			if (!user.isLogin) {
 				router.push('/');
 			}
-		}, 1e3 * 2.5);
+		}, 1e3 * 5);
 		return () => {
 			clearTimeout(timeOutRedic);
 		};
