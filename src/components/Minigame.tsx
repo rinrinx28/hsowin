@@ -54,12 +54,11 @@ export const Minigame = () => {
 				const data = response.data;
 				// Let check show 10 log has isEnd
 				let data_isEnd = data.filter((item) => item.isEnd);
-				let data_mainBet = data_isEnd.length === 10 ? data[0] : null;
-				let data_logBet =
-					data_isEnd.length === 10 ? data.slice(1) : data.slice(0, -1);
+				let data_mainBet = data.find((item) => !item.isEnd);
+				let data_logBet = data_isEnd;
 				// console.log(data_mainBet, data_logBet);
 				dispatch(updateLogBet(data_logBet));
-				dispatch(updateMainBet(data_mainBet));
+				dispatch(updateMainBet(data_mainBet ?? null));
 				dispatch(count(0));
 			} catch (error) {
 				console.error('Error fetching bet logs:', error);
