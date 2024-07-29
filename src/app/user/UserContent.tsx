@@ -151,6 +151,26 @@ export default UserContent;
 
 function ProfileUser() {
 	const user = useAppSelector((state) => state.user);
+	const [totalBank, setBank] = useState('');
+
+	useEffect(() => {
+		const getBank = async () => {
+			try {
+				const res = await apiClient.get('/banking/log', {
+					headers: {
+						Authorization: 'Bearer ' + user.token,
+					},
+				});
+				const data = res.data;
+				const banks = data?.reduce((a: any, b: any) => a + b.amount, 0);
+				setBank(`${banks}`);
+			} catch (err) {}
+		};
+		if (user.isLogin) {
+			getBank();
+		}
+	}, [user]);
+
 	return (
 		<div className="flex flex-col gap-5 items-center w-1/2 p-4">
 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
@@ -198,7 +218,7 @@ function ProfileUser() {
 						{new Intl.NumberFormat('vi', {
 							currency: 'VND',
 							style: 'currency',
-						}).format(user.totalBet ?? 0)}
+						}).format(Number(totalBank) ?? 0)}
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">

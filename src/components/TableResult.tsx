@@ -24,7 +24,9 @@ export default function TableResult() {
 		} catch (err) {}
 	};
 
-	const showDialogCancelUserBet = () => {
+	const showDialogCancelUserBet = (uid: any) => {
+		if (uid !== user._id) return;
+
 		const modal = document.getElementById(
 			'error_bet_2',
 		) as HTMLDialogElement | null;
@@ -162,7 +164,7 @@ export default function TableResult() {
 												'Đã Thua'
 											)}
 										</td>
-										<td>{moment(createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+										<td>{moment(createdAt).format('DD/MM/YYYY')}</td>
 										<td>
 											{isEnd ? (
 												''
@@ -170,7 +172,7 @@ export default function TableResult() {
 												<>
 													<button
 														className="btn btn-error btn-sm"
-														onClick={showDialogCancelUserBet}>
+														onClick={() => showDialogCancelUserBet(uid)}>
 														Hủy
 													</button>
 													<dialog
