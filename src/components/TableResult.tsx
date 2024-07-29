@@ -1,16 +1,19 @@
 'use client';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import apiClient from '@/lib/apiClient';
 import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 import { TranslateKey } from '@/lib/unit/translateKey';
 import { useSocket } from '@/lib/socket';
+import { updateUser } from '@/lib/redux/features/auth/user';
 
 export default function TableResult() {
 	const socket = useSocket();
+	const userGame = useAppSelector((state) => state.userGame);
 	const userBetLog = useAppSelector((state) => state.userBetLog);
 	const user = useAppSelector((state) => state.user);
+	const [showType, setShow] = useState<string>(userGame ?? 'all');
 	const dispatch = useAppDispatch();
 
 	const changeRowTable = async (value: any) => {
@@ -36,6 +39,39 @@ export default function TableResult() {
 		}
 	};
 
+	useEffect(() => {
+		socket.on('bet-user-del-boss-re', (data) => {
+			if (data?.status) {
+				if (data?.data?.user?._id === user?._id) {
+					dispatch(updateUser({ ...user, ...data?.data?.user }));
+				}
+				dispatch(
+					updateAll([
+						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
+					]),
+				);
+			}
+		});
+
+		socket.on('bet-user-del-sv-re', (data) => {
+			if (data?.status) {
+				if (data?.data?.user?._id === user?._id) {
+					dispatch(updateUser({ ...user, ...data?.data?.user }));
+				}
+				dispatch(
+					updateAll([
+						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
+					]),
+				);
+			}
+		});
+
+		return () => {
+			socket.off('bet-user-del-boss-re');
+			socket.off('bet-user-del-sv-re');
+		};
+	}, [dispatch, socket, user, userBetLog]);
+
 	return (
 		<div className="lg:flex lg:flex-col grid gap-1">
 			<div className="border-current border rounded-box grid h-20 place-items-center">
@@ -59,69 +95,77 @@ export default function TableResult() {
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
 						{/* row 1 */}
-						{userBetLog?.map((userBet) => {
-							const {
-								amount,
-								isEnd,
-								receive,
-								server,
-								uid,
-								createdAt = new Date(),
-								betId,
-								_id,
-							} = userBet;
-							const result = userBet.result;
-							let resultBet = userBet.resultBet?.split('-');
-							const shortUID = shortenString(uid, 4, 3);
-							let new_result =
-								result in TranslateKey ? TranslateKey[`${result}`] : result;
-							let new_resultBet =
-								resultBet[0] in TranslateKey
-									? TranslateKey[`${resultBet[0]}`]
-									: resultBet[0];
-							let new_resultBet_concat = [new_resultBet, resultBet[1]].join(
-								'-',
-							);
-							return (
-								<tr
-									className="hover"
-									key={userBet._id}>
-									<td>{server.replace('-mini', ' Sao')}</td>
-									<td>
-										{uid === user?._id
-											? user?.name ?? user?.username
-											: shortUID}
-									</td>
-									<td>{new Intl.NumberFormat('vi').format(amount)}</td>
-									<td>{new_result}</td>
-									<td>{new_resultBet_concat}</td>
-									<td>{new Intl.NumberFormat('vi').format(receive)}</td>
-									<td>
-										{isEnd && receive > 0 ? (
-											'Đã Thanh Toán'
-										) : !isEnd ? (
-											<span className="loading loading-dots loading-sm"></span>
-										) : (
-											'Đã Thua'
-										)}
-									</td>
-									<td>{moment(createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
-									<td>
-										{isEnd ? (
-											''
-										) : (
-											<button
-												className="btn btn-error btn-sm"
-												onClick={() =>
-													handleCancelUserBet(uid, betId, _id, server)
-												}>
-												Hủy
-											</button>
-										)}
-									</td>
-								</tr>
-							);
-						})}
+						{userBetLog
+							?.filter((userBet) =>
+								showType === 'all'
+									? userBet
+									: showType === 'only'
+									? userBet.uid === user?._id
+									: userBet.server === showType,
+							)
+							?.map((userBet) => {
+								const {
+									amount,
+									isEnd,
+									receive,
+									server,
+									uid,
+									createdAt = new Date(),
+									betId,
+									_id,
+								} = userBet;
+								const result = userBet.result;
+								let resultBet = userBet.resultBet?.split('-');
+								const shortUID = shortenString(uid, 4, 3);
+								let new_result =
+									result in TranslateKey ? TranslateKey[`${result}`] : result;
+								let new_resultBet =
+									resultBet[0] in TranslateKey
+										? TranslateKey[`${resultBet[0]}`]
+										: resultBet[0];
+								let new_resultBet_concat = [new_resultBet, resultBet[1]].join(
+									'-',
+								);
+								return (
+									<tr
+										className="hover"
+										key={userBet._id}>
+										<td>{server.replace('-mini', ' Sao')}</td>
+										<td>
+											{uid === user?._id
+												? user?.name ?? user?.username
+												: shortUID}
+										</td>
+										<td>{new Intl.NumberFormat('vi').format(amount)}</td>
+										<td>{new_result}</td>
+										<td>{new_resultBet_concat}</td>
+										<td>{new Intl.NumberFormat('vi').format(receive)}</td>
+										<td>
+											{isEnd && receive > 0 ? (
+												'Đã Thanh Toán'
+											) : !isEnd ? (
+												<span className="loading loading-dots loading-sm"></span>
+											) : (
+												'Đã Thua'
+											)}
+										</td>
+										<td>{moment(createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+										<td>
+											{isEnd ? (
+												''
+											) : (
+												<button
+													className="btn btn-error btn-sm"
+													onClick={() =>
+														handleCancelUserBet(uid, betId, _id, server)
+													}>
+													Hủy
+												</button>
+											)}
+										</td>
+									</tr>
+								);
+							})}
 					</tbody>
 				</table>
 			</div>
@@ -130,10 +174,28 @@ export default function TableResult() {
 				<div className="flex flex-row items-center gap-2">
 					<p className="text-nowrap">Hiển Thị:</p>
 					<select
-						defaultValue={'all'}
+						defaultValue={showType}
+						onChange={(e) => setShow(e.target.value)}
 						className="select select-bordered w-full">
-						<option value={'all'}>Tất cả</option>
-						<option value={'only'}>Chỉ mình tôi</option>
+						{[
+							{ name: 'Tất cả', value: 'all' },
+							{ name: 'Chỉ mình tôi', value: 'only' },
+							{ name: 'Server 1 Sao', value: '1-mini' },
+							{ name: 'Server 2 Sao', value: '2-mini' },
+							{ name: 'Server 3 Sao', value: '3-mini' },
+							{ name: 'Server 1', value: '1' },
+							{ name: 'Server 2', value: '2' },
+							{ name: 'Server 3', value: '3' },
+							{ name: 'Server 24', value: '24' },
+						].map((type, i) => {
+							return (
+								<option
+									value={type.value}
+									key={`${i}-showtype`}>
+									{type.name}
+								</option>
+							);
+						})}
 					</select>
 				</div>
 				<div className="flex flex-row items-center gap-2">

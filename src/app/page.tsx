@@ -2,7 +2,6 @@
 
 import ChatBox from '@/components/Chat';
 import { BetMinigame, Minigame } from '@/components/Minigame';
-import TableClans from '@/components/TableClans';
 import TableResult from '@/components/TableResult';
 import TableUser from '@/components/TableUser';
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hook';

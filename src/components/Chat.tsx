@@ -3,13 +3,16 @@ import React, { useEffect, useRef } from 'react';
 import Send from './icons/send';
 import Chat from './icons/chat';
 import Link from 'next/link';
-import { useAppSelector } from '@/lib/redux/hook';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
+import { useSocket } from '@/lib/socket';
+import { updateMsgOne } from '@/lib/redux/features/logs/messageLog';
 
 export default function ChatBox() {
 	const user = useAppSelector((state) => state.user);
 	const messageLog = useAppSelector((state) => state.messageLog);
-
+	const socket = useSocket();
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
+	const dispatch = useAppDispatch();
 
 	const handlerBetUser = () => {
 		if (!user.isLogin) {
@@ -28,6 +31,17 @@ export default function ChatBox() {
 			chatEndRef.current.scrollTop = chatEndRef.current.scrollHeight;
 		}
 	}, [messageLog]);
+
+	useEffect(() => {
+		//TODO ———————————————[Handle event noti]———————————————
+		socket.on('noti-bet', (data) => {
+			dispatch(updateMsgOne({ content: data, uid: '' }));
+		});
+
+		return () => {
+			socket.off('noti-bet');
+		};
+	}, [dispatch, socket]);
 
 	return (
 		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col gap-2 border border-current shadow-xl p-4 rounded-2xl">
