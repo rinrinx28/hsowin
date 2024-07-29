@@ -41,7 +41,9 @@ export default function StoreProvider({
 				});
 				const data = res.data;
 				storeRef.current?.dispatch(login({ ...data, isLogin: true, token }));
-			} catch (err) {}
+			} catch (err) {
+				localStorage.removeItem('access_token');
+			}
 		};
 		const getUserBetLog = async () => {
 			try {
