@@ -79,10 +79,21 @@ export default function Home() {
 									className="btn btn-primary btn-outline rounded-btn">
 									Hướng Dẫn
 								</button>
-								<button className="btn btn-primary btn-outline rounded-btn">
+								<Link
+									href={'https://www.facebook.com/groups/hsowin.vip'}
+									className="btn btn-primary btn-outline rounded-btn">
 									Group Facebook
-								</button>
-								<button className="btn btn-primary btn-outline rounded-btn">
+								</Link>
+								<button
+									onClick={() => {
+										const modal = document.getElementById(
+											'penning',
+										) as HTMLDialogElement | null;
+										if (modal) {
+											modal.showModal();
+										}
+									}}
+									className="btn btn-primary btn-outline rounded-btn">
 									Điểm Danh
 								</button>
 							</div>
@@ -158,16 +169,26 @@ export default function Home() {
 			<dialog
 				id="huongdan"
 				className="modal">
-				<div className="modal-box">
+				<div className="modal-box max-w-xl">
 					<h3 className="font-bold text-lg">Hướng dẫn</h3>
 					<h3 className="font-semibold">
-						{`Hệ thống chẵn lẻ game Hồi Sinh Ngọc Rồng: https://hsowin.vip/
-						Lấy chức năng thông báo  xuất hiện boss " Tiểu Đội Sát Thủ " trong game làm kết quả
-						Bạn đều có thể đặt cược, lấy kết quả ở server tùy thích `}
+						<span>
+							Hệ thống chẵn lẻ game Hồi Sinh Ngọc Rồng:{' '}
+							<Link
+								href={'/'}
+								className="link">
+								https://hsowin.vip/
+							</Link>
+						</span>
+						<span>
+							Lấy chức năng thông báo xuất hiện boss Tiểu Đội Sát Thủ trong game
+							làm kết quả
+						</span>
+						<span>Bạn đều có thể đặt cược, lấy kết quả ở server tùy thích</span>
 					</h3>
 					<div className="py-4 flex flex-col gap-2">
 						<p>Thể lệ gồm các trò chơi:</p>
-						<p>- - Dự đoán chẵn-lẻ: kết quả số chẵn hoặc số lẻ</p>
+						<p>- Dự đoán chẵn-lẻ: kết quả số chẵn hoặc số lẻ</p>
 						<p>Tỷ lệ 1.9 (Đặt cược 10 thỏi vàng được 19 thỏi vàng)</p>
 						<p>{`Ví dụ con số may mắn là 1 số chẵn như 0, 2, 4, 6, 8, 10, 12... thì đặt bên Chẵn thắng, ngược lại con số may mắn là số lẻ như 1, 3, 5, 7, 9, 11... thì đặt bên Lẻ thắng`}</p>
 						<p>{`- Dự đoán tài xỉu: kết quả được tính là 1 số cuối 5-->9 là tài 0-->4 là xỉu`}</p>
@@ -180,13 +201,13 @@ export default function Home() {
 							Liên kết:{' '}
 							<Link
 								href={'/napvang'}
-								className="link link-hover">
+								className="link">
 								Nạp vàng
 							</Link>{' '}
 							|{' '}
 							<Link
 								href={'/rutvang'}
-								className="link link-hover">
+								className="link">
 								Rút vàng
 							</Link>
 						</p>
@@ -210,6 +231,24 @@ export default function Home() {
 						<p>Tặng thỏi vàng miễn phí mỗi ngày</p>
 						<p>Ra mắt vòng quay nhận vàng miễn phí</p>
 						<p>Vàng khuyễn mãi lên đến x0,48% qua ví/atm</p>
+					</div>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="penning"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<div className="py-4 flex flex-col gap-2">
+						<p>
+							Xin lỗi tính năng đang được phát triển, xin vui lòng thử lại sau
+						</p>
 					</div>
 					<div className="modal-action">
 						<form method="dialog">

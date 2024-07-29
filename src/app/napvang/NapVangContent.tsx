@@ -163,10 +163,7 @@ export default function PageNapVang() {
 						</p>
 						<p>- Tỷ lệ nạp 100%, nạp 100 thỏi vàng được 100 thỏi vàng</p>
 						<p>
-							Hệ thống tự động hủy đơn sau 15 phút nếu chưa giao dịch thành công
-						</p>
-						<p>
-							Hãy tìm khu không có Virus/BOSS để tránh bị hủy GD giữa chừng.
+							Hệ thống tự động hủy đơn sau 10 phút nếu chưa giao dịch thành công
 						</p>
 					</div>
 					<div className="flex flex-row gap-5 justify-between">

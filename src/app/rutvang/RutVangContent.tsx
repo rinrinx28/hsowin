@@ -144,9 +144,6 @@ export default function PageRutVang() {
 						<p>
 							Hệ thống tự động hủy đơn sau 10 phút nếu chưa giao dịch thành công
 						</p>
-						<p>
-							Hãy tìm khu không có Virus/BOSS để tránh bị hủy GD giữa chừng.
-						</p>
 					</div>
 					<div className="flex flex-row gap-5 justify-between">
 						<div className="flex flex-col gap-2 border border-current p-8 rounded-lg">

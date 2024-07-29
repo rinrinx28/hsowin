@@ -61,7 +61,7 @@ const UserContent = () => {
 							className="text-xl btn btn-ghost"
 							onClick={() => {
 								const modal = document.getElementById(
-									'lock',
+									'lock_user',
 								) as HTMLDialogElement | null;
 								if (modal) {
 									setMsg(
@@ -91,7 +91,7 @@ const UserContent = () => {
 							className="text-xl btn btn-ghost"
 							onClick={() => {
 								const modal = document.getElementById(
-									'lock',
+									'lock_user',
 								) as HTMLDialogElement | null;
 								if (modal) {
 									setMsg(
@@ -106,7 +106,7 @@ const UserContent = () => {
 							className="text-xl btn btn-ghost"
 							onClick={() => {
 								const modal = document.getElementById(
-									'lock',
+									'lock_user',
 								) as HTMLDialogElement | null;
 								if (modal) {
 									setMsg(
