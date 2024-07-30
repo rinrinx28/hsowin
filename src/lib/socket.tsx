@@ -10,7 +10,7 @@ const urlConfig = {
 	local: 'http://localhost:3031',
 };
 
-const socket: Socket = io(urlConfig.local);
+const socket: Socket = io(urlConfig.https);
 
 const SocketContext = createContext<Socket | null>(null);
 
