@@ -162,7 +162,9 @@ function ProfileUser() {
 					},
 				});
 				const data = res.data;
-				const banks = data?.reduce((a: any, b: any) => a + b.amount, 0);
+				const banks = data
+					?.filter((i: any) => i?.status === '1')
+					?.reduce((a: any, b: any) => a + b.amount, 0);
 				setBank(`${banks}`);
 			} catch (err) {}
 		};
