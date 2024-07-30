@@ -102,14 +102,14 @@ export default function PageRutVang() {
 				),
 			);
 		};
-		if (user?.isLogin) {
+		if (user?.isLogin && localStorage.getItem('access_token')) {
 			getBotLog();
 			getSessionLog();
 			setInfo((e) => ({ ...e, uid: user?._id, server: user?.server }));
 		} else {
 			const modal = document.getElementById('noti') as HTMLDialogElement | null;
 			if (modal) {
-				setMsg('Xin vui lòng điền đầy đủ thông tin ở các ô');
+				setMsg('Bạn chưa đăng nhập, xin vui lòng đăng nhập!');
 				return modal.showModal();
 			}
 		}
@@ -117,7 +117,7 @@ export default function PageRutVang() {
 
 	useEffect(() => {
 		socket.on('session-res', (data) => {
-			console.log(data);
+			// console.log(data);
 		});
 
 		return () => {

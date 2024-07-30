@@ -120,7 +120,8 @@ export default function PageNapVang() {
 				),
 			);
 		};
-		if (user?.isLogin) {
+
+		if (user?.isLogin && localStorage.getItem('access_token')) {
 			setInfo((e) => ({ ...e, uid: user?._id, server: user?.server }));
 			getBotLog();
 			getSessionLog();
@@ -131,6 +132,7 @@ export default function PageNapVang() {
 		} else {
 			const modal = document.getElementById('noti') as HTMLDialogElement | null;
 			if (modal) {
+				setMsg('Bạn chưa đăng nhập, xin vui lòng đăng nhập!');
 				return modal.showModal();
 			}
 		}
