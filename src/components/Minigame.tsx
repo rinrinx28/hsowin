@@ -303,9 +303,7 @@ export const Minigame = () => {
 							</p>
 						</>
 					)}
-					<p>
-						Thời gian hoạt động: {userGame !== '24' ? '8pm - 0am' : '24/24'}
-					</p>
+					<p>Thời gian hoạt động: {userGame !== '24' ? '8h - 24h' : '24/24'}</p>
 				</div>
 				{userGame?.endsWith('mini') || userGame === '24' ? (
 					<>
@@ -390,7 +388,7 @@ export const BetMinigame = () => {
 	const user = useAppSelector((state) => state.user);
 	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
 	const userBetLog = useAppSelector((state) => state.userBetLog);
-	const [msg, setMsg] = useState('');
+	const [msg, setMsg] = useState({ isShow: false, msg: '' });
 	const dispatch = useAppDispatch();
 
 	const handleTypeMiniserver = (e: any) => {
@@ -465,13 +463,7 @@ export const BetMinigame = () => {
 	};
 
 	const showModelBet = (message: string) => {
-		const modal = document.getElementById(
-			'error_bet',
-		) as HTMLDialogElement | null;
-		if (modal) {
-			setMsg(message);
-			modal.showModal();
-		}
+		setMsg({ isShow: true, msg: message });
 	};
 
 	useEffect(() => {
@@ -633,17 +625,17 @@ export const BetMinigame = () => {
 					<option
 						value={'CL'}
 						disabled={['1', '2', '3'].includes(userGame)}>
-						Chẳn lẻ - Tài xỉu (10tr được 19tr)
+						Chẳn lẻ - Tài xỉu (10tv được 19tv)
 					</option>
 					<option
 						value={'XIEN'}
 						disabled={['1', '2', '3'].includes(userGame)}>
-						Xiên (10tr được 30tr)
+						Xiên (10tv được 32tv)
 					</option>
 					<option
 						value={'GUEST'}
 						disabled={['1', '2', '3'].includes(userGame)}>
-						Dự đoán kết quả (10tr ăn 700tr)
+						Dự đoán kết quả (10tv ăn 700tv)
 					</option>
 					<option
 						value={'BOSS'}
@@ -737,7 +729,7 @@ export const BetMinigame = () => {
 						type === 'BOSS' ? '' : 'hidden'
 					}`}>
 					<button
-						className={`btn uppercase ${
+						className={`btn btn-primary uppercase ${
 							betInfo.type === '1' ? '' : 'btn-outline'
 						}`}
 						onClick={() => handlerBetType('1')}>
@@ -787,6 +779,31 @@ export const BetMinigame = () => {
 					/>
 				</div>
 
+				<div
+					role="alert"
+					className={`alert shadow-lg ${!msg.isShow && 'hidden'}`}>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						className="stroke-info h-6 w-6 shrink-0">
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth="2"
+							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+					<div>
+						<h3 className="font-bold">Thông báo!</h3>
+						<div className="text-xs">{msg.msg}</div>
+					</div>
+					<button
+						onClick={() => setMsg((e) => ({ ...e, isShow: false }))}
+						className="btn btn-sm btn-circle btn-ghost">
+						✕
+					</button>
+				</div>
+
 				<button
 					id="btn-bet"
 					className="btn btn-outline"
@@ -817,20 +834,19 @@ export const BetMinigame = () => {
 					</div>
 				</dialog>
 
-				<dialog
+				{/* <dialog
 					id="error_bet"
 					className="modal">
 					<div className="modal-box">
 						<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
-						<p className="py-4">{msg}</p>
+						<p className="py-4"></p>
 						<div className="modal-action">
 							<form method="dialog">
-								{/* if there is a button in form, it will close the modal */}
 								<button className="btn">Đóng</button>
 							</form>
 						</div>
 					</div>
-				</dialog>
+				</dialog> */}
 			</div>
 		</div>
 	);

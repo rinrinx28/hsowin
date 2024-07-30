@@ -61,15 +61,15 @@ const NavBar = () => {
 				</div>
 				{user?.isLogin ? (
 					<div className="navbar-end gap-4">
-						{/* <label className="swap swap-rotate">
+						<label className="swap swap-rotate">
 							<input
 								type="checkbox"
 								className="theme-controller"
-								value="winter"
+								value="emerald"
 							/>
 							<Sun />
 							<Moon />
-						</label> */}
+						</label>
 						<Link
 							href={'/user'}
 							className="btn btn-outline items-center lg:inline-flex hidden">

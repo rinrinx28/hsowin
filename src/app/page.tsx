@@ -172,14 +172,14 @@ export default function Home() {
 				<div className="modal-box max-w-xl">
 					<h3 className="font-bold text-lg">Hướng dẫn</h3>
 					<h3 className="font-semibold">
-						<span>
-							Hệ thống chẵn lẻ game Hồi Sinh Ngọc Rồng:{' '}
-							<Link
-								href={'/'}
-								className="link">
-								https://hsowin.vip/
-							</Link>
-						</span>
+						Hệ thống chẵn lẻ game Hồi Sinh Ngọc Rồng:{' '}
+						<Link
+							href={'/'}
+							className="link">
+							https://hsowin.vip/
+						</Link>
+					</h3>
+					<h3 className="font-semibold">
 						<span>
 							Lấy chức năng thông báo xuất hiện boss Tiểu Đội Sát Thủ trong game
 							làm kết quả
@@ -187,16 +187,51 @@ export default function Home() {
 						<span>Bạn đều có thể đặt cược, lấy kết quả ở server tùy thích</span>
 					</h3>
 					<div className="py-4 flex flex-col gap-2">
-						<p>Thể lệ gồm các trò chơi:</p>
-						<p>- Dự đoán chẵn-lẻ: kết quả số chẵn hoặc số lẻ</p>
-						<p>Tỷ lệ 1.9 (Đặt cược 10 thỏi vàng được 19 thỏi vàng)</p>
-						<p>{`Ví dụ con số may mắn là 1 số chẵn như 0, 2, 4, 6, 8, 10, 12... thì đặt bên Chẵn thắng, ngược lại con số may mắn là số lẻ như 1, 3, 5, 7, 9, 11... thì đặt bên Lẻ thắng`}</p>
-						<p>{`- Dự đoán tài xỉu: kết quả được tính là 1 số cuối 5-->9 là tài 0-->4 là xỉu`}</p>
-						<p>Tỷ lệ: x1.9 (Đặt cược 10 thỏi vàng được 19 thỏi vàng)</p>
-						<p>{`
-						Ví dụ kết quả của con số là 35,16,27,58,09 thì kết quả được tính  là 1 số cuối tương tự lần lượt là: 5,6,7,8,9  là bên Tài thắng, ngược lại số cuối từ 0-->4 sẽ là Xỉu thắng`}</p>
-						<p>- Dự đoán kết quả: kết quả là con số may mắn từ 0 tới 99</p>
-						<p>Tỷ lệ: x70 (đặt 10 thỏi vàng được 700 thỏi vàng)</p>
+						<p className="text-red-500">Thể lệ gồm các trò chơi: </p>
+						<p className="text-primary">
+							Lấy thời gian Boss chết cộng với số ngẫu nhiên để ra kết quả trò
+							chơi
+						</p>
+						<p>
+							- <span className="text-red-500">Dự đoán chẵn-lẻ</span>: kết quả
+							<span className="font-semibold">số chẵn</span> hoặc{' '}
+							<span className="font-semibold">số lẻ</span>
+						</p>
+						<p className="text-green-500">
+							Tỷ lệ 1.9 (Đặt cược 10 thỏi vàng được 19 thỏi vàng)
+						</p>
+						<p>
+							Ví dụ con số may mắn là 1 số chẵn như{' '}
+							<span className="text-primary">0, 2, 4, 6, 8, 10, 12...</span> thì
+							đặt bên <span className="text-primary">Chẵn thắng</span>, ngược
+							lại con số may mắn là số lẻ như{' '}
+							<span className="text-primary">1, 3, 5, 7, 9, 11...</span> thì đặt
+							bên <span className="text-primary">Lẻ thắng</span>
+						</p>
+						<p>
+							- <span className="text-red-500">Dự đoán tài xỉu</span>: kết quả
+							được tính là 1 số cuối{' '}
+							<span className="text-primary">5-9 là tài</span>{' '}
+							<span className="text-primary">0-4 là xỉu</span>
+						</p>
+						<p className="text-green-500">
+							Tỷ lệ: x1.9 (Đặt cược 10 thỏi vàng được 19 thỏi vàng)
+						</p>
+						<p>
+							Ví dụ kết quả của con số là{' '}
+							<span className="text-primary">35,16,27,58,09</span> thì kết quả
+							được tính là 1 số cuối. Tương tự lần lượt là:{' '}
+							<span className="text-primary">5-9 là bên Tài thắng</span>, ngược
+							lại số cuối từ{' '}
+							<span className="text-primary">0-4 sẽ là Xỉu thắng</span>
+						</p>
+						<p>
+							- <span className="text-red-500">Dự đoán kết quả</span>: kết quả
+							là con số may mắn từ 0 tới 99
+						</p>
+						<p className="text-green-500">
+							Tỷ lệ: x70 (đặt 10 thỏi vàng được 700 thỏi vàng)
+						</p>
 						<p>
 							Liên kết:{' '}
 							<Link

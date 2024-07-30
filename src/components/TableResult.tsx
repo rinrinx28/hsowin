@@ -57,9 +57,9 @@ export default function TableResult() {
 		socket.on('bet-user-del-boss-re', (data) => {
 			if (data?.status) {
 				if (data?.data?.user?._id === user?._id) {
+					showMessageTable(data?.message);
 					dispatch(updateUser({ ...user, ...data?.data?.user }));
 				}
-				showMessageTable(data?.message);
 				dispatch(
 					updateAll([
 						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
@@ -75,9 +75,9 @@ export default function TableResult() {
 		socket.on('bet-user-del-sv-re', (data) => {
 			if (data?.status) {
 				if (data?.data?.user?._id === user?._id) {
+					showMessageTable(data?.message);
 					dispatch(updateUser({ ...user, ...data?.data?.user }));
 				}
-				showMessageTable(data?.message);
 				dispatch(
 					updateAll([
 						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
@@ -97,11 +97,20 @@ export default function TableResult() {
 	}, [dispatch, socket, user, userBetLog]);
 
 	useEffect(() => {
-		setShow(userGame);
+		const changeTable = async (server: any) => {
+			try {
+				const res = await apiClient.get(
+					`/user/log-bet/all?limit=10&server=${server}`,
+				);
+				const data = res.data;
+				dispatch(updateAll(data?.data));
+			} catch (err) {}
+		};
 		if (userGame) {
-			changeRowTable(10);
+			changeTable(userGame);
+			setShow(userGame);
 		}
-	}, [userGame, changeRowTable]);
+	}, [userGame, dispatch]);
 
 	function showMessageTable(message: any) {
 		const modal = document.getElementById(
