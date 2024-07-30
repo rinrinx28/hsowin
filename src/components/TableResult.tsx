@@ -101,7 +101,7 @@ export default function TableResult() {
 		if (userGame) {
 			changeRowTable(10);
 		}
-	}, [userGame]);
+	}, [userGame, changeRowTable]);
 
 	function showMessageTable(message: any) {
 		const modal = document.getElementById(

@@ -81,7 +81,7 @@ export default function StoreProvider({
 		getUserRank();
 		getMessageLog();
 		return () => {};
-	}, []);
+	}, [router]);
 
 	return <Provider store={storeRef.current}>{children}</Provider>;
 }
