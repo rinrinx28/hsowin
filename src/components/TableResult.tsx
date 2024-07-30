@@ -15,10 +15,13 @@ export default function TableResult() {
 	const user = useAppSelector((state) => state.user);
 	const [showType, setShow] = useState<string>(userGame ?? 'all');
 	const dispatch = useAppDispatch();
+	const [msg, setMsg] = useState('');
 
 	const changeRowTable = async (value: any) => {
 		try {
-			const res = await apiClient.get(`/user/log-bet/all?limit=${value}`);
+			const res = await apiClient.get(
+				`/user/log-bet/all?limit=${value}&server=${userGame}`,
+			);
 			const data = res.data;
 			dispatch(updateAll(data?.data));
 		} catch (err) {}
@@ -56,11 +59,16 @@ export default function TableResult() {
 				if (data?.data?.user?._id === user?._id) {
 					dispatch(updateUser({ ...user, ...data?.data?.user }));
 				}
+				showMessageTable(data?.message);
 				dispatch(
 					updateAll([
 						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
 					]),
 				);
+			} else {
+				if (data?.data?.uid === user?._id) {
+					showMessageTable(data?.message);
+				}
 			}
 		});
 
@@ -69,11 +77,16 @@ export default function TableResult() {
 				if (data?.data?.user?._id === user?._id) {
 					dispatch(updateUser({ ...user, ...data?.data?.user }));
 				}
+				showMessageTable(data?.message);
 				dispatch(
 					updateAll([
 						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
 					]),
 				);
+			} else {
+				if (data?.data?.uid === user?._id) {
+					showMessageTable(data?.message);
+				}
 			}
 		});
 
@@ -85,7 +98,20 @@ export default function TableResult() {
 
 	useEffect(() => {
 		setShow(userGame);
+		if (userGame) {
+			changeRowTable(10);
+		}
 	}, [userGame]);
+
+	function showMessageTable(message: any) {
+		const modal = document.getElementById(
+			'error_bet_table',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			setMsg(message);
+			modal.showModal();
+		}
+	}
 
 	return (
 		<div className="lg:flex lg:flex-col grid">
@@ -115,8 +141,8 @@ export default function TableResult() {
 								showType === 'all'
 									? userBet
 									: showType === 'only'
-									? userBet.server === showType
-									: userBet.server === userGame,
+									? userBet.uid === user?._id
+									: userBet,
 							)
 							?.map((userBet) => {
 								const {
@@ -228,13 +254,6 @@ export default function TableResult() {
 						{[
 							{ name: 'Tất cả', value: 'all' },
 							{ name: 'Chỉ mình tôi', value: 'only' },
-							{ name: 'Server 1 Sao', value: '1-mini' },
-							{ name: 'Server 2 Sao', value: '2-mini' },
-							{ name: 'Server 3 Sao', value: '3-mini' },
-							{ name: 'Server 1', value: '1' },
-							{ name: 'Server 2', value: '2' },
-							{ name: 'Server 3', value: '3' },
-							{ name: 'Server 24', value: '24' },
 						].map((type, i) => {
 							return (
 								<option
@@ -258,6 +277,20 @@ export default function TableResult() {
 					</select>
 				</div>
 			</div>
+			<dialog
+				id="error_bet_table"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<p className="py-4">{msg}</p>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
 		</div>
 	);
 }

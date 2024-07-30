@@ -7,9 +7,10 @@ moment().format();
 const urlConfig = {
 	vps: 'http://144.126.145.81:3031',
 	https: 'https://api.hsowin.vip',
+	local: 'http://localhost:3031',
 };
 
-const socket: Socket = io(urlConfig.https);
+const socket: Socket = io(urlConfig.local);
 
 const SocketContext = createContext<Socket | null>(null);
 

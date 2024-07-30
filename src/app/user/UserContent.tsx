@@ -90,6 +90,11 @@ const UserContent = () => {
 						</li>
 						<li
 							className="text-xl btn btn-ghost"
+							onClick={() => setMenu('LICHSUBANK')}>
+							Lịch Sử Bank
+						</li>
+						<li
+							className="text-xl btn btn-ghost"
 							onClick={() => {
 								const modal = document.getElementById(
 									'lock_user',
@@ -125,6 +130,7 @@ const UserContent = () => {
 				{menu === 'NAPBANKING' && <NapBanking />}
 				{menu === 'RUTBANKING' && <RutBanking />}
 				{menu === 'LICHSUCUOC' && <HistoryUserBet />}
+				{menu === 'LICHSUBANK' && <HistoryUserBank />}
 				{menu === 'CHUYENVANG' && <TradeOtherUser />}
 			</div>
 			<dialog
@@ -156,7 +162,7 @@ function ProfileUser() {
 	useEffect(() => {
 		const getBank = async () => {
 			try {
-				const res = await apiClient.get('/session/banking/log', {
+				const res = await apiClient.get('/session/banking/log/nap', {
 					headers: {
 						Authorization: 'Bearer ' + user.token,
 					},
@@ -648,6 +654,37 @@ function RutBanking() {
 				}
 			}
 
+			if (!info.accountName ||
+				!info.accountNumber || 
+				!info.bankName ||
+				!info.type 
+			) {
+				const modal = document.getElementById(
+					'err-bank',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg(
+						`Xin vui lòng kiểm tra lại thông tin rút tiền!`,
+					);
+					return modal.showModal();
+				}
+			}
+
+			if (Number(info.amount) < 10000) {
+				const modal = document.getElementById(
+					'err-bank',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg(
+						`Xin vui lòng rút trên ${new Intl.NumberFormat('vi', {
+							currency: 'VND',
+							style: 'currency',
+						}).format(10000)}`,
+					);
+					return modal.showModal();
+				}
+			}
+
 			const res = await apiClient.post(
 				'/user/bank/withdraw',
 				{
@@ -666,7 +703,10 @@ function RutBanking() {
 					'success-bank',
 				) as HTMLDialogElement | null;
 				if (modal) {
-					setMsg('Đã rút thành công, xin vui lòng đợi trong ít phút!');
+					setMsg(
+						res?.data?.message ??
+							'Đã Rút Thành Công, xin vui lòng chờ trong giây lát!',
+					);
 					return modal.showModal();
 				}
 			}
@@ -975,6 +1015,152 @@ function HistoryUserBet() {
 				</div>
 			</div> */}
 		</div>
+	);
+}
+
+function HistoryUserBank() {
+	const user = useAppSelector((state) => state.user);
+	const [fil, setFill] = useState(0);
+	const [logBank, setBank] = useState([]);
+
+	useEffect(() => {
+		const getNapBankLog = async (type: any) => {
+			try {
+				const res = await apiClient.get(
+					`/session/banking/log/${type === 0 ? 'nap' : 'rut'}`,
+					{
+						headers: {
+							Authorization: 'Bearer ' + user?.token,
+						},
+					},
+				);
+				setBank(res.data);
+			} catch (err) {}
+		};
+		if (user.isLogin) {
+			getNapBankLog(fil);
+		}
+	}, [fil, user]);
+
+	return (
+		<div className="lg:flex lg:flex-col grid gap-1 max-w-5xl">
+			<div className="border-current border rounded-box grid h-20 place-items-center">
+				Lịch Sử {fil === 0 ? 'Nạp' : 'Rút'} Ngân Hàng
+			</div>
+			<select
+				defaultValue={fil}
+				onChange={(e) => setFill(Number(e.target.value))}
+				className="max-w-fit select">
+				<option value={0}>Nạp</option>
+				<option value={1}>Rút</option>
+			</select>
+			<div className="overflow-auto border border-current max-h-[600px]">
+				{fil === 0 && <HistoryNapBank data={logBank} />}
+				{fil === 1 && <HistoryRutBank data={logBank} />}
+			</div>
+		</div>
+	);
+}
+
+function HistoryNapBank({ data }: { data: any[] }) {
+	const user = useAppSelector((state) => state.user);
+	return (
+		<table className="table table-lg table-pin-rows table-pin-cols">
+			{/* head */}
+			<thead className="text-sm  text-center">
+				<tr>
+					<th>Tên Tài Khoản</th>
+					<th>UID</th>
+					<th>Số Tiền</th>
+					<th>Số Thỏi Vàng</th>
+					<th>Trạng Thái</th>
+					<th>Ngày Tạo</th>
+				</tr>
+			</thead>
+			<tbody className="text-sm text-center text-nowrap">
+				{/* row 1 */}
+				{data
+					?.sort(
+						(a: any, b: any) =>
+							moment(b?.createdAt).unix() - moment(a?.createdAt).unix(),
+					)
+					?.map((item: any) => {
+						return (
+							<tr
+								key={item?._id}
+								className="hover">
+								<td>{user?.username}</td>
+								<td>{user?._id}</td>
+								<td>
+									{new Intl.NumberFormat('vi', {
+										currency: 'VND',
+										style: 'currency',
+									}).format(item?.amount)}
+								</td>
+								<td>
+									{new Intl.NumberFormat('vi').format(item?.amount * 0.0048)}
+								</td>
+								<td>
+									{item?.status === '1'
+										? 'Thành Công'
+										: item?.status === '0'
+										? 'Đang giao dịch'
+										: 'Hủy Giao Dịch'}
+								</td>
+								<td>{moment(item?.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+							</tr>
+						);
+					})}
+			</tbody>
+		</table>
+	);
+}
+
+function HistoryRutBank({ data }: { data: any[] }) {
+	return (
+		<table className="table table-lg table-pin-rows table-pin-cols">
+			{/* head */}
+			<thead className="text-sm  text-center">
+				<tr>
+					<th>Tên Ngân Hàng</th>
+					<th>Tên Tài Khoản</th>
+					<th>Số Tài Khoản</th>
+					<th>Số Tiền</th>
+					<th>Số Thỏi Vàng</th>
+					<th>Trạng Thái</th>
+					<th>Ngày Tạo</th>
+				</tr>
+			</thead>
+			<tbody className="text-sm text-center text-nowrap">
+				{/* row 1 */}
+				{data?.sort()?.map((item: any) => {
+					return (
+						<tr
+							key={item?._id}
+							className="hover">
+							<td>{item?.bankName}</td>
+							<td>{item?.accountName}</td>
+							<td>{item?.accountNumber}</td>
+							<td>
+								{new Intl.NumberFormat('vi', {
+									currency: 'VND',
+									style: 'currency',
+								}).format(item?.amount)}
+							</td>
+							<td>{new Intl.NumberFormat('vi').format(item?.gold)}</td>
+							<td>
+								{item?.status === '1'
+									? 'Thành Công'
+									: item?.status === '0'
+									? 'Đang giao dịch'
+									: 'Hủy Giao Dịch'}
+							</td>
+							<td>{moment(item?.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+						</tr>
+					);
+				})}
+			</tbody>
+		</table>
 	);
 }
 

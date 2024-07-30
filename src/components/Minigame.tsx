@@ -60,6 +60,12 @@ export const Minigame = () => {
 				dispatch(updateLogBet(data_logBet));
 				dispatch(updateMainBet(data_mainBet ?? null));
 				dispatch(count(0));
+				if (data_mainBet) {
+					socket.emit('value-bet-users', {
+						betId: data_mainBet._id,
+						server: userGame,
+					});
+				}
 			} catch (error) {
 				console.error('Error fetching bet logs:', error);
 			}
@@ -69,7 +75,7 @@ export const Minigame = () => {
 			getDataMiniserver(userGame);
 		}
 		return () => {};
-	}, [userGame, dispatch]);
+	}, [userGame, dispatch, socket]);
 
 	useEffect(() => {
 		//TODO ———————————————[Handle mini game event]———————————————
@@ -128,6 +134,56 @@ export const Minigame = () => {
 		socket.on('status-sv', handleStatusSv);
 		socket.on('status-24/24', handleStatus24);
 
+		socket.on('value-bet-users-re', (data) => {
+			if (data?.status) {
+				if (data?.data?.data === userGame) {
+					dispatch(updateMainBet({ ...mainBet, ...data?.data?.result }));
+				}
+			}
+		});
+		socket.on('value-bet-user-re', (data) => {
+			if (data?.status) {
+				let result = data?.data?.result;
+				if (userGame === data?.data?.server && mainBet) {
+					let result_bet: BetLog = {
+						t: 0,
+						x: 0,
+						c: 0,
+						l: 0,
+						0: 0,
+						1: 0,
+					};
+					if ('TXCL'.indexOf(result) > -1) {
+						let split_res: any = result.toLowerCase().split('');
+						console.log(split_res);
+						if (split_res.length > 1) {
+							result_bet[split_res[0]] = data?.data?.amount / 2;
+							result_bet[split_res[1]] = data?.data?.amount / 2;
+						} else {
+							result_bet[split_res[0]] = data?.data?.amount;
+						}
+					}
+					if (
+						['1', '2', '3'].includes(data?.server) &&
+						'01'.indexOf(result) > -1
+					) {
+						result_bet[result] = data?.data?.amount;
+					}
+					const newMainBet = { ...mainBet };
+					for (const [key, value] of Object.entries(result_bet)) {
+						if (
+							key in newMainBet &&
+							typeof newMainBet[key as keyof BetLog] === 'number' &&
+							typeof value === 'number'
+						) {
+							newMainBet[key as keyof BetLog] += value;
+						}
+					}
+					dispatch(updateMainBet({ ...mainBet, ...newMainBet }));
+				}
+			}
+		});
+
 		// socket.on('result-data-bet-re', (data) => {
 		// 	console.log(data);
 		// });
@@ -136,9 +192,11 @@ export const Minigame = () => {
 			socket.off('status-boss');
 			socket.off('status-sv');
 			socket.off('status-24/24');
+			socket.off('value-bet-users-re');
+			socket.off('value-bet-user-re');
 			// socket.off('result-data-bet-re');
 		};
-	}, [socket, dispatch, logBet, userGame]);
+	}, [socket, dispatch, logBet, userGame, mainBet]);
 
 	useEffect(() => {
 		const loop = setInterval(() => {
@@ -208,34 +266,46 @@ export const Minigame = () => {
 							<span className="loading loading-dots loading-sm"></span>
 						)}
 					</div>
-					{/* <p
-						className={`flex gap-2 items-center ${
-							userGame?.endsWith('mini') ?? 'hidden'
-						}`}>
-						Thời gian Boss Chết:{' '}
-						<span className="text-red-500 font-medium">
-							{userGame?.endsWith('mini') &&
-								moment(mainBet?.createdAt).format('HH:mm')}
-						</span>
-					</p> */}
-					{/* <p
-						className={`flex gap-2 items-center ${
-							userGame?.endsWith('mini') ?? 'hidden'
-						}`}>
-						Số ngẫu nhiên:{' '}
-						<span className="text-red-500 font-medium">
-							{userGame?.endsWith('mini') && mainBet?.random}
-						</span>
-					</p> */}
+					{['1', '2', '3'].includes(userGame) ? (
+						<>
+							<p>
+								Đen:{' '}
+								<span className="text-red-500 font-medium">
+									{mainBet?.[1] ?? 0}
+								</span>{' '}
+								- Đỏ:{' '}
+								<span className="text-red-500 font-medium">
+									{mainBet?.[0] ?? 0}
+								</span>
+							</p>
+						</>
+					) : (
+						<>
+							<p>
+								Chẳn:{' '}
+								<span className="text-red-500 font-medium">
+									{mainBet?.c ?? 0}
+								</span>{' '}
+								- Lẻ:{' '}
+								<span className="text-red-500 font-medium">
+									{mainBet?.l ?? 0}
+								</span>
+							</p>
+							<p>
+								Tài:{' '}
+								<span className="text-red-500 font-medium">
+									{mainBet?.t ?? 0}
+								</span>{' '}
+								- Xỉu:{' '}
+								<span className="text-red-500 font-medium">
+									{mainBet?.x ?? 0}
+								</span>
+							</p>
+						</>
+					)}
 					<p>
-						Chẳn: <span className="text-red-500 font-medium">0</span> - Lẻ:{' '}
-						<span className="text-red-500 font-medium">0</span>
+						Thời gian hoạt động: {userGame !== '24' ? '8pm - 0am' : '24/24'}
 					</p>
-					<p>
-						Tài: <span className="text-red-500 font-medium">0</span> - Xỉu:{' '}
-						<span className="text-red-500 font-medium">0</span>
-					</p>
-					<p>Thời gian hoạt động: 24/24</p>
 				</div>
 				{userGame?.endsWith('mini') || userGame === '24' ? (
 					<>
@@ -353,6 +423,7 @@ export const BetMinigame = () => {
 			showModelBet('Tiền cược tối thiểu là 3 thỏi vàng');
 			return;
 		}
+		isDisableBtn(true);
 
 		if (type === 'BOSS') {
 			const data: CreateUserBet = {
@@ -381,6 +452,15 @@ export const BetMinigame = () => {
 		) as HTMLDialogElement | null;
 		if (modal) {
 			modal.showModal();
+		}
+	};
+
+	const isDisableBtn = (isDisable: boolean) => {
+		const modal = document.getElementById(
+			'btn_bet',
+		) as HTMLButtonElement | null;
+		if (modal) {
+			modal.disabled = isDisable;
 		}
 	};
 
@@ -431,6 +511,7 @@ export const BetMinigame = () => {
 				}
 				return bet;
 			});
+			isDisableBtn(false);
 			dispatch(updateAll(new_userBetLog));
 		});
 
@@ -461,6 +542,7 @@ export const BetMinigame = () => {
 
 				return bet;
 			});
+			isDisableBtn(false);
 			dispatch(updateAll(new_userBetLog));
 		});
 
@@ -633,8 +715,19 @@ export const BetMinigame = () => {
 					<input
 						type="text"
 						className="grow border-l-2 px-4"
-						placeholder="Nhập số dự đoán. Ví dụ: 11,28,23"
-						onChange={(e) => dispatch(changeType(e.target.value))}
+						placeholder="Nhập số dự đoán. Ví dụ: 11"
+						onChange={(e) => {
+							let value = e.target.value;
+							let checkOne = value.split(',');
+							let checkTwo = value.split('');
+							if (checkTwo.length > 2 || checkOne.length > 1) {
+								showModelBet(
+									'Xin vui lòng kiểm tra dự đoán, chỉ đươc phép dùng một cặp số. Ví dụ: 28',
+								);
+								return;
+							}
+							dispatch(changeType(value));
+						}}
 					/>
 				</label>
 
@@ -695,6 +788,7 @@ export const BetMinigame = () => {
 				</div>
 
 				<button
+					id="btn-bet"
 					className="btn btn-outline"
 					onClick={handlerBetUser}>
 					Chơi Ngay

@@ -7,7 +7,7 @@ const urlConfig = {
 };
 
 const apiClient = axios.create({
-	baseURL: urlConfig.https,
+	baseURL: urlConfig.dev,
 	// timeout: 1000,
 	headers: { 'Content-Type': 'application/json' },
 });

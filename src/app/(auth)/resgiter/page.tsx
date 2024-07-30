@@ -42,10 +42,17 @@ function Resigter() {
 			if (res.data) {
 				router.push('/login');
 			}
-		} catch (err) {
+		} catch (err: any) {
 			const modal = document.getElementById('lock') as HTMLDialogElement | null;
 			if (modal) {
-				setMsg('Xin lỗi đã xảy ra lỗi!');
+				let message = err?.response?.data?.message?.split(' ');
+				console.log(message);
+				let msg = message.includes('username_1')
+					? 'Tên tài khoản đã có người sử dụng'
+					: message.includes('name_1')
+					? 'Tên hiển thị đã có người sử dụng'
+					: 'Xin vui lòng kiểm tra lại thông tin đăng ký';
+				setMsg(msg);
 				return modal.showModal();
 			}
 		}

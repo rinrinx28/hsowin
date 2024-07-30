@@ -42,15 +42,17 @@ export default function StoreProvider({
 					},
 				});
 				const data = res.data;
+				if (data.status === 400) throw new Error(data.message);
 				storeRef.current?.dispatch(login({ ...data, isLogin: true, token }));
 			} catch (err) {
+				storeRef.current?.dispatch(login({ isLogin: false }));
 				localStorage.removeItem('access_token');
 				router.push('/');
 			}
 		};
 		const getUserBetLog = async () => {
 			try {
-				const res = await apiClient.get('/user/log-bet/all?limit=10');
+				const res = await apiClient.get('/user/log-bet/all?limit=10&server=24');
 				const data = res.data;
 				storeRef.current?.dispatch(updateAll(data?.data));
 			} catch (err) {}

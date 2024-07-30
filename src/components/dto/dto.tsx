@@ -32,6 +32,13 @@ export interface BetLog {
 	__v?: number;
 	timeBoss?: string;
 	random?: string;
+	t?: number;
+	x?: number;
+	c?: number;
+	l?: number;
+	0?: number;
+	1?: number;
+	[key: string]: any; // Add index signature for flexibility
 }
 
 export interface CreateUserBet {
