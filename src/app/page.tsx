@@ -81,6 +81,7 @@ export default function Home() {
 								</button>
 								<Link
 									href={'https://www.facebook.com/groups/hsowin.vip'}
+									target="_blank"
 									className="btn btn-primary btn-outline rounded-btn">
 									Group Facebook
 								</Link>
