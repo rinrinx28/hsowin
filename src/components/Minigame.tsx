@@ -494,17 +494,19 @@ export const BetMinigame = () => {
 					}),
 				);
 			}
-			// Update Table UserBetLog
-			const new_userBetLog = userBetLog.map((bet) => {
-				let target = userBets.find((b) => b._id === bet._id);
-				if (target) {
-					target.isEnd = true;
-					return target;
-				}
-				return bet;
-			});
-			isDisableBtn(false);
-			dispatch(updateAll(new_userBetLog));
+			if (data?.server === userGame) {
+				// Update Table UserBetLog
+				const new_userBetLog = userBetLog.map((bet) => {
+					let target = userBets.find((b) => b._id === bet._id);
+					if (target) {
+						target.isEnd = true;
+						return target;
+					}
+					return bet;
+				});
+				isDisableBtn(false);
+				dispatch(updateAll(new_userBetLog));
+			}
 		});
 
 		socket.on('re-bet-user-res-boss', (data) => {
@@ -524,18 +526,20 @@ export const BetMinigame = () => {
 					}),
 				);
 			}
-			// Update Table UserBetLog
-			const new_userBetLog = userBetLog.map((bet) => {
-				let target = userBets.find((b) => b._id === bet._id);
-				if (target) {
-					target.isEnd = true;
-					return target;
-				}
+			if (data?.server === userGame) {
+				// Update Table UserBetLog
+				const new_userBetLog = userBetLog.map((bet) => {
+					let target = userBets.find((b) => b._id === bet._id);
+					if (target) {
+						target.isEnd = true;
+						return target;
+					}
 
-				return bet;
-			});
-			isDisableBtn(false);
-			dispatch(updateAll(new_userBetLog));
+					return bet;
+				});
+				isDisableBtn(false);
+				dispatch(updateAll(new_userBetLog));
+			}
 		});
 
 		socket.on('re-bet-user-ce-sv', (data) => {
@@ -549,11 +553,19 @@ export const BetMinigame = () => {
 					dispatch(resetBet());
 				}
 				// Update Table User BetLog
-				const list_notEnd = userBetLog.filter((b) => !b.isEnd);
-				const list_isEnd = userBetLog.filter((b) => b.isEnd);
-				dispatch(
-					updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
-				);
+				// const list_notEnd = userBetLog.filter((b) => !b.isEnd);
+				// const list_isEnd = userBetLog.filter((b) => b.isEnd);
+				// dispatch(
+				// 	updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
+				// );
+				if (data?.server === userGame) {
+					// Update Table User BetLog
+					const list_notEnd = userBetLog.filter((b) => !b.isEnd);
+					const list_isEnd = userBetLog.filter((b) => b.isEnd);
+					dispatch(
+						updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
+					);
+				}
 			} else {
 				if (data?.data[0]?.uid === user._id) {
 					showModelBet(data?.message);
@@ -572,12 +584,14 @@ export const BetMinigame = () => {
 					dispatch(updateUser({ ...rs, gold: gold - betInfo.amount }));
 					dispatch(resetBet());
 				}
-				// Update Table User BetLog
-				const list_notEnd = userBetLog.filter((b) => !b.isEnd);
-				const list_isEnd = userBetLog.filter((b) => b.isEnd);
-				dispatch(
-					updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
-				);
+				if (data?.server === userGame) {
+					// Update Table User BetLog
+					const list_notEnd = userBetLog.filter((b) => !b.isEnd);
+					const list_isEnd = userBetLog.filter((b) => b.isEnd);
+					dispatch(
+						updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
+					);
+				}
 			} else {
 				if (data?.data[0]?.uid === user._id) {
 					showModelBet(data?.message);
@@ -592,7 +606,7 @@ export const BetMinigame = () => {
 			socket.off('re-bet-user-res-sv');
 			socket.off('re-bet-user-res-boss');
 		};
-	}, [socket, dispatch, user, betInfo, userBetLog]);
+	}, [socket, dispatch, user, betInfo, userBetLog, userGame]);
 
 	useEffect(() => {
 		let input_amount = document.getElementById(

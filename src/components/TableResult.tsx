@@ -60,11 +60,13 @@ export default function TableResult() {
 					showMessageTable(data?.message);
 					dispatch(updateUser({ ...user, ...data?.data?.user }));
 				}
-				dispatch(
-					updateAll([
-						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
-					]),
-				);
+				if (data?.server === userGame) {
+					dispatch(
+						updateAll([
+							...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
+						]),
+					);
+				}
 			} else {
 				if (data?.data?.uid === user?._id) {
 					showMessageTable(data?.message);
@@ -78,11 +80,13 @@ export default function TableResult() {
 					showMessageTable(data?.message);
 					dispatch(updateUser({ ...user, ...data?.data?.user }));
 				}
-				dispatch(
-					updateAll([
-						...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
-					]),
-				);
+				if (data?.server === userGame) {
+					dispatch(
+						updateAll([
+							...userBetLog.filter((bet) => bet._id !== data?.data?.userBetId),
+						]),
+					);
+				}
 			} else {
 				if (data?.data?.uid === user?._id) {
 					showMessageTable(data?.message);
@@ -94,7 +98,7 @@ export default function TableResult() {
 			socket.off('bet-user-del-boss-re');
 			socket.off('bet-user-del-sv-re');
 		};
-	}, [dispatch, socket, user, userBetLog]);
+	}, [dispatch, socket, user, userBetLog, userGame]);
 
 	useEffect(() => {
 		const changeTable = async (server: any) => {
