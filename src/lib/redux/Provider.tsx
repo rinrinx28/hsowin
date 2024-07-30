@@ -12,6 +12,7 @@ import { updateAll } from './features/logs/userBetLog';
 import { updateUserRanks } from './features/rank/userRanks';
 import { changeTypeGame } from './features/Minigame/typeGame';
 import { updateMsgAll } from './features/logs/messageLog';
+import { useRouter } from 'next/navigation';
 
 export default function StoreProvider({
 	children,
@@ -30,6 +31,7 @@ export default function StoreProvider({
 		storeRef.current.dispatch(login({ isLogin: false }));
 		storeRef.current.dispatch(changeTypeGame('CL'));
 	}
+	const router = useRouter();
 
 	useEffect(() => {
 		const relogin = async (token: any) => {
@@ -43,6 +45,7 @@ export default function StoreProvider({
 				storeRef.current?.dispatch(login({ ...data, isLogin: true, token }));
 			} catch (err) {
 				localStorage.removeItem('access_token');
+				router.push('/');
 			}
 		};
 		const getUserBetLog = async () => {
