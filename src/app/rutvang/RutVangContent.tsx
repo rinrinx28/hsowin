@@ -54,6 +54,15 @@ export default function PageRutVang() {
 					return modal.showModal();
 				}
 			}
+			if (Number(info.amount) < 100) {
+				const modal = document.getElementById(
+					'lock',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg('Xin vui lòng rút trên 100 thỏi vàng');
+					return modal.showModal();
+				}
+			}
 			const res = await apiClient.post('/session/create', info, {
 				headers: {
 					Authorization: 'Bearer ' + user?.token,
