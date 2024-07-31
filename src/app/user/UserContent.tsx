@@ -76,12 +76,12 @@ const UserContent = () => {
 						<li
 							className="text-xl btn btn-ghost"
 							onClick={() => setMenu('NAPBANKING')}>
-							Nạp Banking
+							Nạp Bank/Momo
 						</li>
 						<li
 							className="text-xl btn btn-ghost"
 							onClick={() => setMenu('RUTBANKING')}>
-							Rút Về Banking
+							Rút Về Bank/Momo
 						</li>
 						<li
 							className="text-xl btn btn-ghost"
@@ -654,18 +654,17 @@ function RutBanking() {
 				}
 			}
 
-			if (!info.accountName ||
-				!info.accountNumber || 
+			if (
+				!info.accountName ||
+				!info.accountNumber ||
 				!info.bankName ||
-				!info.type 
+				!info.type
 			) {
 				const modal = document.getElementById(
 					'err-bank',
 				) as HTMLDialogElement | null;
 				if (modal) {
-					setMsg(
-						`Xin vui lòng kiểm tra lại thông tin rút tiền!`,
-					);
+					setMsg(`Xin vui lòng kiểm tra lại thông tin rút tiền!`);
 					return modal.showModal();
 				}
 			}
