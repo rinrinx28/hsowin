@@ -560,7 +560,11 @@ export const BetMinigame = () => {
 				// );
 				if (data?.server === userGame) {
 					// Update Table User BetLog
-					dispatch(updateAll([data?.data[0], userBetLog.slice(0, -1)]));
+					const updatedUserBetLog = [data?.data[0], ...userBetLog].slice(
+						0,
+						userBetLog.length,
+					);
+					dispatch(updateAll(updatedUserBetLog));
 				}
 			} else {
 				if (data?.data[0]?.uid === user._id) {
@@ -582,7 +586,11 @@ export const BetMinigame = () => {
 				}
 				if (data?.server === userGame) {
 					// Update Table User BetLog
-					dispatch(updateAll([data?.data[0], userBetLog.slice(0, -1)]));
+					const updatedUserBetLog = [data?.data[0], ...userBetLog].slice(
+						0,
+						userBetLog.length,
+					);
+					dispatch(updateAll(updatedUserBetLog));
 				}
 			} else {
 				if (data?.data[0]?.uid === user._id) {

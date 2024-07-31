@@ -153,7 +153,7 @@ export default function TableResult() {
 								showType === 'all' ? userBet : userBet.uid === user?._id,
 							)
 							?.map((userBet) => {
-								const {
+								let {
 									amount,
 									isEnd,
 									receive,
@@ -164,32 +164,34 @@ export default function TableResult() {
 									_id,
 									name,
 								} = userBet;
-								const result = userBet.result;
-								let resultBet = userBet.resultBet?.split('-');
-								const shortUID = shortenString(uid, 4, 3);
+								let result = userBet?.result;
+								let resultBet = userBet?.resultBet?.split('-');
+								let shortUID = shortenString(uid ?? '', 4, 3);
 								let new_result =
 									result in TranslateKey ? TranslateKey[`${result}`] : result;
-								let new_resultBet =
-									resultBet[0] in TranslateKey
-										? TranslateKey[`${resultBet[0]}`]
-										: resultBet[0];
-								let new_resultBet_concat = [new_resultBet, resultBet[1]].join(
-									'-',
-								);
+								let new_resultBet = !resultBet
+									? userBet?.resultBet
+									: resultBet[0] in TranslateKey
+									? TranslateKey[`${resultBet[0]}`]
+									: resultBet[0];
 								return (
 									<tr
 										className="hover"
-										key={userBet._id}>
-										<td>{server.replace('-mini', ' Sao')}</td>
+										key={userBet?._id}>
+										<td>{server?.replace('-mini', ' Sao')}</td>
 										<td>
 											{uid === user?._id
 												? user?.name ?? user?.username
 												: name ?? shortUID}
 										</td>
-										<td>{new Intl.NumberFormat('vi').format(amount)}</td>
-										<td>{new_result}</td>
-										<td>{new_resultBet_concat}</td>
-										<td>{new Intl.NumberFormat('vi').format(receive)}</td>
+										<td>{new Intl.NumberFormat('vi').format(amount ?? 0)}</td>
+										<td>{new_result ?? result ?? ''}</td>
+										<td>
+											{new_resultBet
+												? `${new_resultBet}-${resultBet[1]}`
+												: userBet?.resultBet}
+										</td>
+										<td>{new Intl.NumberFormat('vi').format(receive ?? 0)}</td>
 										<td>
 											{isEnd && receive > 0 ? (
 												'Đã Thanh Toán'
@@ -305,6 +307,7 @@ export default function TableResult() {
 }
 
 function shortenString(str: string, startLength: number, endLength: number) {
+	// console.log(str);
 	if (str.length <= startLength + endLength) {
 		return str; // Trả về chuỗi gốc nếu nó ngắn hơn hoặc bằng tổng chiều dài của phần đầu và phần cuối
 	}
