@@ -6,6 +6,7 @@ export interface Message {
 	uid: string;
 	content: string;
 	username?: string;
+	server?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 }

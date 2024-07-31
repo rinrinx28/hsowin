@@ -60,6 +60,7 @@ export interface userBet {
 	server: string;
 	receive: number;
 	isEnd: boolean;
+	name?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 }

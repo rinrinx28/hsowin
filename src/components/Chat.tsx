@@ -10,6 +10,7 @@ import { updateMsgOne } from '@/lib/redux/features/logs/messageLog';
 export default function ChatBox() {
 	const user = useAppSelector((state) => state.user);
 	const messageLog = useAppSelector((state) => state.messageLog);
+	const userGame = useAppSelector((state) => state.userGame);
 	const socket = useSocket();
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
@@ -35,7 +36,7 @@ export default function ChatBox() {
 	useEffect(() => {
 		//TODO ———————————————[Handle event noti]———————————————
 		socket.on('noti-bet', (data) => {
-			dispatch(updateMsgOne({ content: data, uid: '' }));
+			dispatch(updateMsgOne(data));
 		});
 
 		return () => {
@@ -54,34 +55,36 @@ export default function ChatBox() {
 			<div
 				className="overflow-auto max-h-[950px] bg-base-200 h-full rounded-lg p-4"
 				ref={chatEndRef}>
-				{messageLog?.map((msg, i) => {
-					const { uid, content, username } = msg;
-					return (
-						<div
-							className="chat chat-start"
-							key={`${i}-msg-log`}>
-							{uid === '' ? (
-								<div className="chat-image avatar">
-									<div className="avatar online  placeholder">
-										<div className="bg-neutral text-neutral-content w-12 rounded-full">
-											<span className="text-sm">BOT</span>
+				{messageLog
+					?.filter((i) => i.server === userGame)
+					?.map((msg, i) => {
+						const { uid, content, username } = msg;
+						return (
+							<div
+								className="chat chat-start"
+								key={`${i}-msg-log`}>
+								{uid === '' ? (
+									<div className="chat-image avatar">
+										<div className="avatar online  placeholder">
+											<div className="bg-neutral text-neutral-content w-12 rounded-full">
+												<span className="text-sm">BOT</span>
+											</div>
 										</div>
 									</div>
-								</div>
-							) : (
-								<div className="chat-image avatar">
-									<div className="avatar online  placeholder">
-										<div className="bg-neutral text-neutral-content w-12 rounded-full"></div>
+								) : (
+									<div className="chat-image avatar">
+										<div className="avatar online  placeholder">
+											<div className="bg-neutral text-neutral-content w-12 rounded-full"></div>
+										</div>
 									</div>
+								)}
+								<div className="chat-header">{username ?? 'Hệ thống'}</div>
+								<div className="chat-bubble text-sm chat-bubble-primary">
+									{content}
 								</div>
-							)}
-							<div className="chat-header">{username ?? 'Hệ thống'}</div>
-							<div className="chat-bubble text-sm chat-bubble-primary">
-								{content}
 							</div>
-						</div>
-					);
-				})}
+						);
+					})}
 			</div>
 			<div className="flex flex-row w-full py-2 gap-2">
 				<input

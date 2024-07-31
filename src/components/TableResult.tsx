@@ -167,6 +167,7 @@ export default function TableResult() {
 									createdAt = new Date(),
 									betId,
 									_id,
+									name,
 								} = userBet;
 								const result = userBet.result;
 								let resultBet = userBet.resultBet?.split('-');
@@ -188,7 +189,7 @@ export default function TableResult() {
 										<td>
 											{uid === user?._id
 												? user?.name ?? user?.username
-												: shortUID}
+												: name ?? shortUID}
 										</td>
 										<td>{new Intl.NumberFormat('vi').format(amount)}</td>
 										<td>{new_result}</td>
