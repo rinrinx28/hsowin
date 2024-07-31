@@ -464,8 +464,8 @@ function NapBanking() {
 				NẠP TỪ BANKING
 			</h1>
 			<div className="flex flex-col gap-2 w-full p-4 rounded-md bg-base-300">
-				<p className="text-error">Tỉ lệ 0.48%</p>
-				<p className="text-error">Nạp 100k nhận 480 thỏi vàng</p>
+				<p className="text-error">Tỉ lệ 0.5%</p>
+				<p className="text-error">Nạp 100k nhận 500 thỏi vàng</p>
 				<p>
 					<span className="text-success">Tặng ngẫu nhiên</span> từ{' '}
 					<span className="text-success">2 thỏi vàng tới 25 thỏi vàng</span> cho
