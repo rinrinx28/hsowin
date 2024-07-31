@@ -40,7 +40,7 @@ export default function PageRutVang() {
 				}
 			}
 
-			const modal = document.getElementById('noti') as HTMLDialogElement | null;
+			const modal = document.getElementById('lock') as HTMLDialogElement | null;
 			if (modal) {
 				setMsg('Xin vui lòng liên hệ Fanpage để thực hiện lệnh rút');
 				return modal.showModal();
@@ -57,7 +57,7 @@ export default function PageRutVang() {
 					'lock',
 				) as HTMLDialogElement | null;
 				if (modal) {
-					setMsg('Xin vui lòng điền đầy đủ thông tin ở các ô');
+					setMsg('Xin vui lòng kiểm tra thông tin rút');
 					return modal.showModal();
 				}
 			}
@@ -129,6 +129,12 @@ export default function PageRutVang() {
 				return modal.showModal();
 			}
 		}
+		return () => {
+			const modal = document.getElementById('noti') as HTMLDialogElement | null;
+			if (modal) {
+				return modal.close();
+			}
+		};
 	}, [user, router]);
 
 	useEffect(() => {
