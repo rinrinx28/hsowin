@@ -153,9 +153,8 @@ export const Minigame = () => {
 						0: 0,
 						1: 0,
 					};
-					if ('TXCL'.indexOf(result) > -1) {
+					if ('CXCTLXLT'.indexOf(result) > -1) {
 						let split_res: any = result.toLowerCase().split('');
-						console.log(split_res);
 						if (split_res.length > 1) {
 							result_bet[split_res[0]] = data?.data?.amount / 2;
 							result_bet[split_res[1]] = data?.data?.amount / 2;
