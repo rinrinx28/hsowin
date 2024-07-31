@@ -44,7 +44,7 @@ export default function ChatBox() {
 	}, [dispatch, socket]);
 
 	return (
-		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col gap-2 border border-current shadow-xl p-4 rounded-2xl">
+		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col justify-between gap-2 border border-current shadow-xl p-4 rounded-2xl">
 			<div className="flex flex-col gap-2 w-full border-b border-current">
 				<div className="flex flex-row items-center justify-center gap-2">
 					<Chat />
@@ -52,7 +52,7 @@ export default function ChatBox() {
 				</div>
 			</div>
 			<div
-				className="overflow-auto max-h-[900px] bg-base-200 h-full rounded-lg p-4"
+				className="overflow-auto max-h-[950px] bg-base-200 h-full rounded-lg p-4"
 				ref={chatEndRef}>
 				{messageLog?.map((msg, i) => {
 					const { uid, content, username } = msg;

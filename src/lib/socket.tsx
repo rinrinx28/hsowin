@@ -10,7 +10,14 @@ const urlConfig = {
 	local: 'http://localhost:3031',
 };
 
-const socket: Socket = io(urlConfig.https);
+const socket: Socket = io(urlConfig.https, {
+	transports: ['websocket', 'polling'],
+	// withCredentials: true,
+	reconnectionAttempts: 5, // Limit reconnection attempts
+	// auth: {
+	//   token: 'your-auth-token' // Ensure to pass a valid token
+	// }
+});
 
 const SocketContext = createContext<Socket | null>(null);
 
