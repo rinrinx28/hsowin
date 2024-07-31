@@ -35,10 +35,17 @@ export default function PageRutVang() {
 					'noti',
 				) as HTMLDialogElement | null;
 				if (modal) {
-					setMsg('Xin vui lòng điền đầy đủ thông tin ở các ô');
+					setMsg('Xin lỗi, bạn hiện tại chưa đăng nhập');
 					return modal.showModal();
 				}
 			}
+
+			const modal = document.getElementById('noti') as HTMLDialogElement | null;
+			if (modal) {
+				setMsg('Xin vui lòng liên hệ Fanpage để thực hiện lệnh rút');
+				return modal.showModal();
+			}
+
 			if (
 				!info.server ||
 				!info.type ||
