@@ -12,7 +12,7 @@ const urlConfig = {
 
 const socket: Socket = io(urlConfig.https, {
 	transports: ['websocket'],
-	// withCredentials: true,
+	withCredentials: true,
 	reconnectionAttempts: 5, // Limit reconnection attempts
 	// auth: {
 	//   token: 'your-auth-token' // Ensure to pass a valid token

@@ -51,7 +51,7 @@ function Resigter() {
 					? 'Tên tài khoản đã có người sử dụng'
 					: message.includes('name_1')
 					? 'Tên hiển thị đã có người sử dụng'
-					: 'Xin vui lòng kiểm tra lại thông tin đăng ký';
+					: err?.response?.data?.message;
 				setMsg(msg);
 				return modal.showModal();
 			}

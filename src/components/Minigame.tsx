@@ -504,7 +504,6 @@ export const BetMinigame = () => {
 					}
 					return bet;
 				});
-				isDisableBtn(false);
 				dispatch(updateAll(new_userBetLog));
 			}
 		});
@@ -537,10 +536,11 @@ export const BetMinigame = () => {
 
 					return bet;
 				});
-				isDisableBtn(false);
 				dispatch(updateAll(new_userBetLog));
 			}
 		});
+
+		//TODO ———————————————[Handle Event Bet create]———————————————
 
 		socket.on('re-bet-user-ce-sv', (data) => {
 			if (user?.isLogin && user?._id === data?.data[0]?.uid) {
@@ -560,11 +560,7 @@ export const BetMinigame = () => {
 				// );
 				if (data?.server === userGame) {
 					// Update Table User BetLog
-					const list_notEnd = userBetLog.filter((b) => !b.isEnd);
-					const list_isEnd = userBetLog.filter((b) => b.isEnd);
-					dispatch(
-						updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
-					);
+					dispatch(updateAll([data?.data[0], userBetLog.slice(0, -1)]));
 				}
 			} else {
 				if (data?.data[0]?.uid === user._id) {
@@ -586,11 +582,7 @@ export const BetMinigame = () => {
 				}
 				if (data?.server === userGame) {
 					// Update Table User BetLog
-					const list_notEnd = userBetLog.filter((b) => !b.isEnd);
-					const list_isEnd = userBetLog.filter((b) => b.isEnd);
-					dispatch(
-						updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
-					);
+					dispatch(updateAll([data?.data[0], userBetLog.slice(0, -1)]));
 				}
 			} else {
 				if (data?.data[0]?.uid === user._id) {

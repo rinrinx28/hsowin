@@ -13,6 +13,7 @@ import { updateUserRanks } from './features/rank/userRanks';
 import { changeTypeGame } from './features/Minigame/typeGame';
 import { updateMsgAll } from './features/logs/messageLog';
 import { useRouter } from 'next/navigation';
+import moment from 'moment';
 
 export default function StoreProvider({
 	children,
@@ -70,7 +71,14 @@ export default function StoreProvider({
 			try {
 				const res = await apiClient.get('/message/all?page=1&limit=10');
 				const data = res.data;
-				storeRef.current?.dispatch(updateMsgAll(data));
+				storeRef.current?.dispatch(
+					updateMsgAll(
+						data.sort(
+							(a: any, b: any) =>
+								moment(a.createdAt).unix() - moment(b.createdAt).unix(),
+						),
+					),
+				);
 			} catch (err) {}
 		};
 		const isStay = localStorage.getItem('access_token');

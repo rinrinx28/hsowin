@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Send from './icons/send';
 import Chat from './icons/chat';
 import Link from 'next/link';
@@ -7,24 +7,44 @@ import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { useSocket } from '@/lib/socket';
 import { updateMsgOne } from '@/lib/redux/features/logs/messageLog';
 
+interface ChatBox {
+	server: string;
+	token: string;
+	content: string;
+}
+
 export default function ChatBox() {
 	const user = useAppSelector((state) => state.user);
 	const messageLog = useAppSelector((state) => state.messageLog);
 	const userGame = useAppSelector((state) => state.userGame);
+	const [chat, setChat] = useState<ChatBox | any>(null);
 	const socket = useSocket();
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
 
-	const handlerBetUser = () => {
+	const handlerChatUser = () => {
 		if (!user.isLogin) {
 			const modal = document.getElementById(
-				'my_modal_1',
+				'auth_chat',
 			) as HTMLDialogElement | null;
 			if (modal) {
 				modal.showModal();
 			}
 			return;
 		}
+		if (!chat?.content || chat?.content.length < 1) {
+			const modal = document.getElementById(
+				'error_chat',
+			) as HTMLDialogElement | null;
+			if (modal) {
+				modal.showModal();
+			}
+			return;
+		}
+		socket.emit('message-user', chat);
+		setChat((e: any) => ({ ...e, content: '' }));
+		let inputE = document.getElementById('chat-input-id') as HTMLInputElement;
+		inputE.value = '';
 	};
 
 	useEffect(() => {
@@ -34,9 +54,21 @@ export default function ChatBox() {
 	}, [messageLog]);
 
 	useEffect(() => {
+		if (user) {
+			setChat({ server: userGame, content: '', token: user?.token ?? '' });
+		}
+	}, [userGame, user]);
+
+	useEffect(() => {
 		//TODO ———————————————[Handle event noti]———————————————
 		socket.on('noti-bet', (data) => {
 			dispatch(updateMsgOne(data));
+		});
+
+		socket.on('message-user-re', (data) => {
+			if (data?.status) {
+				dispatch(updateMsgOne(data?.msg));
+			}
 		});
 
 		return () => {
@@ -53,7 +85,7 @@ export default function ChatBox() {
 				</div>
 			</div>
 			<div
-				className="overflow-auto max-h-[950px] bg-base-200 h-full rounded-lg p-4"
+				className="overflow-auto h-[950px] bg-base-200 rounded-lg p-4"
 				ref={chatEndRef}>
 				{messageLog
 					?.filter((i) => i.server === userGame)
@@ -61,7 +93,9 @@ export default function ChatBox() {
 						const { uid, content, username } = msg;
 						return (
 							<div
-								className="chat chat-start"
+								className={`chat ${
+									uid === user?._id ? 'chat-end' : 'chat-start'
+								}`}
 								key={`${i}-msg-log`}>
 								{uid === '' ? (
 									<div className="chat-image avatar">
@@ -78,7 +112,9 @@ export default function ChatBox() {
 										</div>
 									</div>
 								)}
-								<div className="chat-header">{username ?? 'Hệ thống'}</div>
+								<div className="chat-header">
+									{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
+								</div>
 								<div className="chat-bubble text-sm chat-bubble-primary">
 									{content}
 								</div>
@@ -88,18 +124,23 @@ export default function ChatBox() {
 			</div>
 			<div className="flex flex-row w-full py-2 gap-2">
 				<input
+					id="chat-input-id"
 					type="text"
 					className="grow w-full input input-bordered"
 					placeholder="Nhập nội dung trò chuyện"
+					defaultValue={chat?.content}
+					onChange={(e) =>
+						setChat((c: ChatBox | any) => ({ ...c, content: e.target.value }))
+					}
 				/>
 				<button
-					onClick={handlerBetUser}
+					onClick={handlerChatUser}
 					className="btn  btn-outline">
 					<Send />
 				</button>
 			</div>
 			<dialog
-				id="my_modal_1"
+				id="auth_chat"
 				className="modal">
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
@@ -112,6 +153,20 @@ export default function ChatBox() {
 						</Link>{' '}
 						để tiếp tục!
 					</p>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="error_chat"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<p className="py-4">Xin vui lòng nhập tin nhắn</p>
 					<div className="modal-action">
 						<form method="dialog">
 							{/* if there is a button in form, it will close the modal */}

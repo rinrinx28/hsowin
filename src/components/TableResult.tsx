@@ -13,7 +13,7 @@ export default function TableResult() {
 	const userGame = useAppSelector((state) => state.userGame);
 	const userBetLog = useAppSelector((state) => state.userBetLog);
 	const user = useAppSelector((state) => state.user);
-	const [showType, setShow] = useState<string>(userGame ?? 'all');
+	const [showType, setShow] = useState<string>('all');
 	const dispatch = useAppDispatch();
 	const [msg, setMsg] = useState('');
 
@@ -112,7 +112,6 @@ export default function TableResult() {
 		};
 		if (userGame) {
 			changeTable(userGame);
-			setShow(userGame);
 		}
 	}, [userGame, dispatch]);
 
@@ -151,11 +150,7 @@ export default function TableResult() {
 						{/* row 1 */}
 						{userBetLog
 							?.filter((userBet) =>
-								showType === 'all'
-									? userBet
-									: showType === 'only'
-									? userBet.uid === user?._id
-									: userBet,
+								showType === 'all' ? userBet : userBet.uid === user?._id,
 							)
 							?.map((userBet) => {
 								const {
