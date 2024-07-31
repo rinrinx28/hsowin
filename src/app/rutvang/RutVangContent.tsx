@@ -39,13 +39,6 @@ export default function PageRutVang() {
 					return modal.showModal();
 				}
 			}
-
-			const modal = document.getElementById('lock') as HTMLDialogElement | null;
-			if (modal) {
-				setMsg('Xin vui lòng liên hệ Fanpage để thực hiện lệnh rút');
-				return modal.showModal();
-			}
-
 			if (
 				!info.server ||
 				!info.type ||
