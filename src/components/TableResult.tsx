@@ -190,7 +190,11 @@ export default function TableResult() {
 											{new_resultBet &&
 											!['1', '2', '3'].includes(userBet?.server)
 												? `${new_resultBet}-${resultBet[1]}`
-												: userBet?.resultBet}
+												: userBet?.resultBet === '0'
+												? 'Khỉ Đỏ'
+												: userBet?.resultBet === '1'
+												? 'Khỉ Đen'
+												: ''}
 										</td>
 										<td>{new Intl.NumberFormat('vi').format(receive ?? 0)}</td>
 										<td>
