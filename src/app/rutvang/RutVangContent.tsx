@@ -122,6 +122,10 @@ export default function PageRutVang() {
 			getBotLog();
 			getSessionLog();
 			setInfo((e) => ({ ...e, uid: user?._id, server: user?.server }));
+			const modal = document.getElementById('noti') as HTMLDialogElement | null;
+			if (modal) {
+				return modal.close();
+			}
 		} else {
 			const modal = document.getElementById('noti') as HTMLDialogElement | null;
 			if (modal) {
@@ -129,12 +133,6 @@ export default function PageRutVang() {
 				return modal.showModal();
 			}
 		}
-		return () => {
-			const modal = document.getElementById('noti') as HTMLDialogElement | null;
-			if (modal) {
-				return modal.close();
-			}
-		};
 	}, [user, router]);
 
 	useEffect(() => {
