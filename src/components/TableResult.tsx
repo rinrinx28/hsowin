@@ -187,7 +187,8 @@ export default function TableResult() {
 										<td>{new Intl.NumberFormat('vi').format(amount ?? 0)}</td>
 										<td>{new_result ?? result ?? ''}</td>
 										<td>
-											{new_resultBet
+											{new_resultBet &&
+											!['1', '2', '3'].includes(userBet?.server)
 												? `${new_resultBet}-${resultBet[1]}`
 												: userBet?.resultBet}
 										</td>
