@@ -601,7 +601,7 @@ export const BetMinigame = () => {
 			if (msg.isShow) {
 				setMsg((e) => ({ ...e, isShow: false }));
 			}
-		}, 1e3);
+		}, 1e3 * 3);
 
 		return () => {
 			clearTimeout(autoDelete);
