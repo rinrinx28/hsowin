@@ -9,6 +9,7 @@ import betInfo from './features/Minigame/betInfo';
 import userBetLog from './features/logs/userBetLog';
 import userRanks from './features/rank/userRanks';
 import messageLog from './features/logs/messageLog';
+import eventConfig from './features/logs/eventConfig';
 
 export const makeStore = () => {
 	return configureStore({
@@ -23,6 +24,7 @@ export const makeStore = () => {
 			userBetLog: userBetLog,
 			userRanks: userRanks,
 			messageLog: messageLog,
+			eventConfig: eventConfig,
 		},
 	});
 };

@@ -123,7 +123,12 @@ export default function ChatBox() {
 						);
 					})}
 			</div>
-			<div className="flex flex-row w-full py-2 gap-2">
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					handlerChatUser();
+				}}
+				className="flex flex-row w-full py-2 gap-2">
 				<input
 					id="chat-input-id"
 					type="text"
@@ -135,11 +140,11 @@ export default function ChatBox() {
 					}
 				/>
 				<button
-					onClick={handlerChatUser}
+					type="submit"
 					className="btn  btn-outline">
 					<Send />
 				</button>
-			</div>
+			</form>
 			<dialog
 				id="auth_chat"
 				className="modal">

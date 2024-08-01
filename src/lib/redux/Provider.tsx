@@ -14,6 +14,7 @@ import { changeTypeGame } from './features/Minigame/typeGame';
 import { updateMsgAll } from './features/logs/messageLog';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
+import { updateEventConfig } from './features/logs/eventConfig';
 
 export default function StoreProvider({
 	children,
@@ -81,6 +82,14 @@ export default function StoreProvider({
 				);
 			} catch (err) {}
 		};
+
+		const getEventConfig = async () => {
+			try {
+				const res = await apiClient.get('/user/config');
+				const data = res.data;
+				storeRef.current?.dispatch(updateEventConfig(data));
+			} catch (err) {}
+		};
 		const isStay = localStorage.getItem('access_token');
 		const isTheme =
 			typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
@@ -93,6 +102,7 @@ export default function StoreProvider({
 		getUserBetLog();
 		getUserRank();
 		getMessageLog();
+		getEventConfig();
 		return () => {};
 	}, [router]);
 

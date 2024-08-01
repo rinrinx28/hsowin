@@ -2,10 +2,12 @@
 import apiClient from '@/lib/apiClient';
 import { updateUserRanks } from '@/lib/redux/features/rank/userRanks';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function TableUser() {
 	const userRanks = useAppSelector((state) => state.userRanks);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
+	const [prizes, setPrize] = useState([]);
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -21,6 +23,18 @@ export default function TableUser() {
 			clearInterval(loop);
 		};
 	}, [dispatch]);
+
+	useEffect(() => {
+		if (eventConfig) {
+			let e_auto_rank_user = eventConfig.find(
+				(e) => e.name === 'e-auto-rank-days',
+			);
+			if (e_auto_rank_user && e_auto_rank_user.status) {
+				setPrize(JSON.parse(e_auto_rank_user.option));
+			}
+		}
+	}, [eventConfig]);
+
 	return (
 		<div className="lg:flex lg:flex-col grid gap-1">
 			<div className="border-current border rounded-box grid h-20 place-items-center">
@@ -47,7 +61,7 @@ export default function TableUser() {
 									<td>{i + 1}</td>
 									<td>{name}</td>
 									<td>{new Intl.NumberFormat('vi').format(totalBet)}</td>
-									<td>Phần thưởng đang cập ...</td>
+									<td>{prizes[i] ?? '0'} thỏi vàng</td>
 								</tr>
 							);
 						})}

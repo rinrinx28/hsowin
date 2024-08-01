@@ -596,6 +596,18 @@ export const BetMinigame = () => {
 		}
 	}, [betInfo]);
 
+	useEffect(() => {
+		let autoDelete = setTimeout(() => {
+			if (msg.isShow) {
+				setMsg((e) => ({ ...e, isShow: false }));
+			}
+		}, 1e3);
+
+		return () => {
+			clearTimeout(autoDelete);
+		};
+	}, [msg]);
+
 	return (
 		<div className="lg:col-start-1 lg:row-start-3 row-span-3 card card-side justify-center items-center shadow-xl border border-current">
 			<div className="card-body gap-6">
@@ -826,20 +838,6 @@ export const BetMinigame = () => {
 						</div>
 					</div>
 				</dialog>
-
-				{/* <dialog
-					id="error_bet"
-					className="modal">
-					<div className="modal-box">
-						<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
-						<p className="py-4"></p>
-						<div className="modal-action">
-							<form method="dialog">
-								<button className="btn">Đóng</button>
-							</form>
-						</div>
-					</div>
-				</dialog> */}
 			</div>
 		</div>
 	);

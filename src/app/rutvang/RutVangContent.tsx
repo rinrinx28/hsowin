@@ -216,20 +216,8 @@ export default function PageRutVang() {
 							</button>
 
 							<div className="flex flex-col">
-								<p>Hạn mức hôm nay (0h00p sẽ reset): {user?.totalBet}</p>
-								<p>
-									Đã sử dụng:{' '}
-									{session
-										?.filter(
-											(b: any) =>
-												b?.server === user?.server &&
-												b?.type === '1' &&
-												b?.uid === user?._id &&
-												moment(b?.createdAt).format('DD/MM/YYYY') ===
-													moment().format('DD/MM/YYYY'),
-										)
-										?.reduce((a, b) => a + b?.recive, 0)}
-								</p>
+								<p>Hạn mức hôm nay (0h00p sẽ reset): {user?.limitedTrade}</p>
+								<p>Đã sử dụng: {user?.trade ?? 0}</p>
 								<p>Vui lòng chơi để nâng thêm hạn mức !</p>
 							</div>
 						</div>

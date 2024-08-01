@@ -6,13 +6,14 @@ moment().format();
 
 const urlConfig = {
 	vps: 'http://144.126.145.81:3031',
-	https: 'https://api.hsowin.vip',
+	https: 'wss://api.hsowin.vip',
 	local: 'http://localhost:3031',
 };
 
 const socket: Socket = io(urlConfig.https, {
+	path: '/socket.io/',
 	transports: ['websocket'],
-	// withCredentials: true,
+	secure: true,
 	reconnectionAttempts: 5, // Limit reconnection attempts
 	// auth: {
 	//   token: 'your-auth-token' // Ensure to pass a valid token

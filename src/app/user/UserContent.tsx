@@ -1063,6 +1063,18 @@ function HistoryUserBank() {
 
 function HistoryNapBank({ data }: { data: any[] }) {
 	const user = useAppSelector((state) => state.user);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
+	const [percent, setPercent] = useState(0.0048);
+
+	useEffect(() => {
+		if (eventConfig) {
+			let e_bank_gold = eventConfig.find((e) => e.name === 'e-bank-gold');
+			if (e_bank_gold && e_bank_gold.status) {
+				setPercent(e_bank_gold.value);
+			}
+		}
+	}, [eventConfig]);
+
 	return (
 		<table className="table table-lg table-pin-rows table-pin-cols">
 			{/* head */}
@@ -1097,7 +1109,7 @@ function HistoryNapBank({ data }: { data: any[] }) {
 									}).format(item?.amount)}
 								</td>
 								<td>
-									{new Intl.NumberFormat('vi').format(item?.amount * 0.0048)}
+									{new Intl.NumberFormat('vi').format(item?.amount * percent)}
 								</td>
 								<td>
 									{item?.status === '1'

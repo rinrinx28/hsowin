@@ -25,6 +25,8 @@ export interface userState {
 
 	limitedTrade?: number;
 
+	trade?: number;
+
 	server?: string;
 
 	createdAt?: Date;
