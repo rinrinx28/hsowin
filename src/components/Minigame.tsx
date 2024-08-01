@@ -416,12 +416,6 @@ export const BetMinigame = () => {
 				return;
 			}
 
-		if (betInfo.amount < 3) {
-			showModelBet('Tiền cược tối thiểu là 3 thỏi vàng');
-			return;
-		}
-		isDisableBtn(true);
-
 		if (type === 'BOSS') {
 			const data: CreateUserBet = {
 				amount: betInfo.amount,
@@ -449,15 +443,6 @@ export const BetMinigame = () => {
 		) as HTMLDialogElement | null;
 		if (modal) {
 			modal.showModal();
-		}
-	};
-
-	const isDisableBtn = (isDisable: boolean) => {
-		const modal = document.getElementById(
-			'btn_bet',
-		) as HTMLButtonElement | null;
-		if (modal) {
-			modal.disabled = isDisable;
 		}
 	};
 
@@ -552,11 +537,6 @@ export const BetMinigame = () => {
 					dispatch(resetBet());
 				}
 				// Update Table User BetLog
-				// const list_notEnd = userBetLog.filter((b) => !b.isEnd);
-				// const list_isEnd = userBetLog.filter((b) => b.isEnd);
-				// dispatch(
-				// 	updateAll([data?.data[0], ...list_notEnd, ...list_isEnd.slice(1)]),
-				// );
 				if (data?.server === userGame) {
 					// Update Table User BetLog
 					const updatedUserBetLog = [data?.data[0], ...userBetLog].slice(

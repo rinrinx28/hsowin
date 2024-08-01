@@ -73,6 +73,7 @@ export default function ChatBox() {
 
 		return () => {
 			socket.off('noti-bet');
+			socket.off('message-user-re');
 		};
 	}, [dispatch, socket]);
 
