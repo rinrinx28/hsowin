@@ -11,14 +11,12 @@ import Gold from './icons/gold';
 const NavBar = () => {
 	const user = useAppSelector((state) => state.user);
 	const logo_hsowin = ImageLoader('/image/hsowin_logo.gif');
-	const [isTheme, setIsTheme] = useState<string | null>(null);
+	// const [isTheme, setIsTheme] = useState<string | null>(null);
 
-	useEffect(() => {
-		if (typeof window !== 'undefined') {
-			const theme = localStorage.getItem('theme');
-			setIsTheme(theme);
-		}
-	}, []);
+	// useEffect(() => {
+	// 	const theme = localStorage.getItem('theme');
+	// 	setIsTheme(theme);
+	// }, []);
 
 	const changeTheme = (value: boolean) => {
 		if (typeof window !== 'undefined') {
@@ -29,20 +27,70 @@ const NavBar = () => {
 		<div className="w-full flex justify-center items-center sticky top-0 z-[1000] backdrop-blur-md">
 			<div className="navbar max-w-7xl rounded-md shadow-lg">
 				<div className="navbar-start">
-					<div className="lg:hidden">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-5 w-5"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor">
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M4 6h16M4 12h8m-8 6h16"
-							/>
-						</svg>
+					<div className="drawer lg:hidden z-50">
+						<input
+							id="my-drawer-2"
+							type="checkbox"
+							className="drawer-toggle"
+						/>
+						<div className="drawer-content flex flex-col items-center justify-center">
+							<label
+								htmlFor="my-drawer-2"
+								className="drawer-button lg:hidden">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-5 w-5"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor">
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2"
+										d="M4 6h16M4 12h8m-8 6h16"
+									/>
+								</svg>
+							</label>
+						</div>
+						<div className="drawer-side">
+							<label
+								htmlFor="my-drawer-2"
+								aria-label="close sidebar"
+								className="drawer-overlay"></label>
+							<ul className="menu menu-vertical bg-base-200 text-base-content min-h-full w-fit p-4">
+								{/* Sidebar content here */}
+								<li>
+									<Link href={'/'}>Trang Chủ</Link>
+								</li>
+								<li>
+									<Link href={'/user?type=NAPBANKING'}>Mua Vàng</Link>
+								</li>
+								<li>
+									<Link href={'/napvang'}>Nạp Vàng</Link>
+								</li>
+								<li>
+									<Link href={'/rutvang'}>Rút Vàng</Link>
+								</li>
+								<li>
+									<hr className="w-full h-1"></hr>
+								</li>
+								<li>
+									<Link href={'/user?type=INFO'}>Thông tin tài khoản</Link>
+								</li>
+								<li>
+									<Link href={'/user?type=NAPBANKING'}>Nạp Bank/Momo</Link>
+								</li>
+								<li>
+									<Link href={'/user?type=RUTBANKING'}>Rút Về Bank/Momo</Link>
+								</li>
+								<li>
+									<Link href={'/user?type=LICHSUCUOC'}>Lịch Sử Cược</Link>
+								</li>
+								<li>
+									<Link href={'/user?type=LICHSUBANK'}>Lịch Sử Bank</Link>
+								</li>
+							</ul>
+						</div>
 					</div>
 					<Link
 						href={'/'}
@@ -80,7 +128,8 @@ const NavBar = () => {
 							type="checkbox"
 							className="theme-controller"
 							value="emerald"
-							defaultChecked={isTheme === 'true'}
+							defaultChecked={true}
+							// defaultChecked={isTheme === 'true'}
 							onChange={(e) => changeTheme(e.target.checked)}
 						/>
 						<Sun />

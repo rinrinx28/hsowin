@@ -5,9 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { TranslateKey } from '@/lib/unit/translateKey';
 import moment from 'moment';
+import Link from 'next/link';
 
 const UserContent = () => {
 	const user = useAppSelector((state) => state.user);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
 	const [menu, setMenu] = useState('INFO');
 	const searchParams = useSearchParams();
 	const [msg, setMsg] = useState('');
@@ -36,6 +38,15 @@ const UserContent = () => {
 		if (type === 'RUTBANKING') {
 			setMenu('RUTBANKING');
 		}
+		if (type === 'INFO') {
+			setMenu('INFO');
+		}
+		if (type === 'LICHSUCUOC') {
+			setMenu('LICHSUCUOC');
+		}
+		if (type === 'LICHSUBANK') {
+			setMenu('LICHSUBANK');
+		}
 	}, [searchParams]);
 
 	useEffect(() => {
@@ -47,83 +58,117 @@ const UserContent = () => {
 
 	return (
 		<div className="min-h-screen flex justify-center mt-10 p-8">
-			<div className="max-w-7xl w-full flex justify-between gap-10">
-				<div className="flex flex-col gap-5 items-start flex-nowrap text-nowrap p-4 border-r border-current">
-					<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
-						MENU TÀI KHOẢN
-					</h1>
-					<ul className="flex flex-col gap-4 items-start justify-start">
-						<li
-							className="text-xl btn btn-ghost"
-							onClick={() => setMenu('INFO')}>
-							Thông tin tài khoản
-						</li>
-						<li
-							className="text-xl btn btn-ghost"
-							onClick={() => {
-								const modal = document.getElementById(
-									'lock_user',
-								) as HTMLDialogElement | null;
-								if (modal) {
-									setMsg(
-										'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
-									);
-									return modal.showModal();
-								}
-							}}>
-							Nạp Thẻ Cào
-						</li>
-						<li
-							className="text-xl btn btn-ghost"
-							onClick={() => setMenu('NAPBANKING')}>
-							Nạp Bank/Momo
-						</li>
-						<li
-							className="text-xl btn btn-ghost"
-							onClick={() => setMenu('RUTBANKING')}>
-							Rút Về Bank/Momo
-						</li>
-						<li
-							className="text-xl btn btn-ghost"
-							onClick={() => setMenu('LICHSUCUOC')}>
-							Lịch Sử Cược
-						</li>
-						<li
-							className="text-xl btn btn-ghost"
-							onClick={() => setMenu('LICHSUBANK')}>
-							Lịch Sử Bank
-						</li>
-						<li
-							className="text-xl btn btn-ghost"
-							onClick={() => {
-								const modal = document.getElementById(
-									'lock_user',
-								) as HTMLDialogElement | null;
-								if (modal) {
-									setMsg(
-										'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
-									);
-									return modal.showModal();
-								}
-							}}>
-							Chuyển Vàng Cho Người Chơi
-						</li>
-						<li
-							className="text-xl btn btn-ghost"
-							onClick={() => {
-								const modal = document.getElementById(
-									'lock_user',
-								) as HTMLDialogElement | null;
-								if (modal) {
-									setMsg(
-										'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
-									);
-									return modal.showModal();
-								}
-							}}>
-							Nhiệm Vụ Hàng Ngày
-						</li>
-					</ul>
+			<div
+				className={`lg:max-w-7xl w-full lg:flex justify-between gap-10 ${
+					!user.isLogin ? 'skeleton' : ''
+				}`}>
+				<div className="hidden lg:flex flex-col gap-5 items-start flex-nowrap text-nowrap p-4 border-r border-current">
+					<div className="flex-none lg:block">
+						<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
+							MENU TÀI KHOẢN
+						</h1>
+						<ul className="menu menu-vertical justify-start items-start">
+							{/* Navbar menu content here */}
+							<li
+								className="text-xl btn btn-ghost"
+								onClick={() => setMenu('INFO')}>
+								Thông tin tài khoản
+							</li>
+							<li
+								className="text-xl btn btn-ghost"
+								onClick={() => {
+									const modal = document.getElementById(
+										'lock_user',
+									) as HTMLDialogElement | null;
+									if (modal) {
+										setMsg(
+											'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
+										);
+										return modal.showModal();
+									}
+								}}>
+								Nạp Thẻ Cào
+							</li>
+							<li
+								className="text-xl btn btn-ghost"
+								onClick={() => setMenu('NAPBANKING')}>
+								Nạp Bank/Momo
+							</li>
+							<li
+								className="text-xl btn btn-ghost"
+								onClick={() => setMenu('RUTBANKING')}>
+								Rút Về Bank/Momo
+							</li>
+							<li
+								className="text-xl btn btn-ghost"
+								onClick={() => setMenu('LICHSUCUOC')}>
+								Lịch Sử Cược
+							</li>
+							<li
+								className="text-xl btn btn-ghost"
+								onClick={() => setMenu('LICHSUBANK')}>
+								Lịch Sử Bank
+							</li>
+							<li
+								className="text-xl btn btn-ghost"
+								onClick={() => {
+									const modal = document.getElementById(
+										'lock_user',
+									) as HTMLDialogElement | null;
+									if (modal) {
+										setMsg(
+											'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
+										);
+										return modal.showModal();
+									}
+								}}>
+								Chuyển Vàng Cho Người Chơi
+							</li>
+							<li
+								className="text-xl btn btn-ghost"
+								onClick={() => {
+									const modal = document.getElementById(
+										'lock_user',
+									) as HTMLDialogElement | null;
+									if (modal) {
+										setMsg(
+											'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
+										);
+										return modal.showModal();
+									}
+								}}>
+								Nhiệm Vụ Hàng Ngày
+							</li>
+							<li className="bg-base-300 text-sm lg:flex hidden flex-col justify-center items-start px-2 py-2 w-full rounded-lg">
+								<p>
+									Hạn mức hôm nay: {Math.ceil(user?.limitedTrade ?? 0)}{' '}
+									<span className="text-xs">
+										{new Intl.NumberFormat('vi', {
+											currency: 'VND',
+											style: 'currency',
+										}).format(
+											(user?.limitedTrade ?? 0) /
+												(eventConfig?.find((e) => e.name === 'e-withdraw-bank')
+													?.value ?? 0),
+										)}
+									</span>
+								</p>
+								<p>
+									Hạn mức đã sử dụng: {Math.ceil(user?.trade ?? 0)}
+									<span className="text-xs">
+										{new Intl.NumberFormat('vi', {
+											currency: 'VND',
+											style: 'currency',
+										}).format(
+											(user?.trade ?? 0) /
+												(eventConfig?.find((e) => e.name === 'e-withdraw-bank')
+													?.value ?? 0),
+										)}
+									</span>
+								</p>
+							</li>
+						</ul>
+					</div>
 				</div>
 				{menu === 'INFO' && <ProfileUser />}
 				{menu === 'NAPTHE' && <NapThe />}
@@ -180,28 +225,28 @@ function ProfileUser() {
 	}, [user]);
 
 	return (
-		<div className="flex flex-col gap-5 items-center w-1/2 p-4">
+		<div className="flex flex-col gap-5 items-center lg:w-1/2 lg:p-4">
 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
 				Thông tin tài khoản
 			</h1>
 			<ul className="flex flex-col gap-4 items-start justify-start w-full">
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>ID Tài Khoản:</p>
 					<p className="font-semibold">{user._id}</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Tên Tài Khoản:</p>
 					<p className="font-semibold">{user.username}</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Email Tài Khoản:</p>
 					<p className="font-semibold">{user.email}</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Tên hiển thị:</p>
 					<p className="font-semibold">{user?.name}</p>
 				</li>
-				<li className="w-full gap-2 rounded-md bg-base-300 flex flex-col justify-start p-4 items-start">
+				<li className="w-full gap-2 rounded-md bg-base-300 flex flex-col justify-start p-1 lg:p-4 items-start">
 					<p className="text-primary">Thông Tin VIP:</p>
 					<p className="text-error font-semibold">
 						30 ngày qua đã nạp:{' '}
@@ -214,19 +259,19 @@ function ProfileUser() {
 						(Chưa có vip vui lòng nạp đủ 100k)
 					</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Số Thỏi Vàng:</p>
 					<p className="text-green-500">
 						{new Intl.NumberFormat('vi').format(user.gold ?? 0)}
 					</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Kim Cương hiện có:</p>
 					<p className="text-green-500">
 						{new Intl.NumberFormat('vi').format(user.diamon ?? 0)}
 					</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Tháng này đã hiến:</p>
 					<p className="text-green-500">
 						{new Intl.NumberFormat('vi', {
@@ -235,7 +280,7 @@ function ProfileUser() {
 						}).format(Number(totalBank) ?? 0)}
 					</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					Đổi Mật Khẩu
 				</li>
 			</ul>
@@ -417,7 +462,16 @@ function NapBanking() {
 					'err-bank',
 				) as HTMLDialogElement | null;
 				if (modal) {
-					setMsg('Xin vui lòng nạp trên 10.000 VND');
+					setMsg('Xin vui lòng nạp trên 10.000 ₫');
+					return modal.showModal();
+				}
+			}
+			if (Number(amount) > 1000000) {
+				const modal = document.getElementById(
+					'err-bank',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg('Không thể nạp trên 1.000.000 ₫');
 					return modal.showModal();
 				}
 			}
@@ -459,7 +513,7 @@ function NapBanking() {
 		}
 	}, []);
 	return (
-		<div className="flex flex-col gap-5 items-start p-4 w-full">
+		<div className="flex flex-col gap-5 items-start lg:p-4 w-full">
 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
 				NẠP TỪ BANKING
 			</h1>
@@ -491,7 +545,7 @@ function NapBanking() {
 				<p>Nạp tối thiểu 10K và đúng nội dung để được xử lý tự động!</p>
 			</div>
 			<div className="flex flex-col gap-4 items-center justify-center w-full">
-				<label className="label w-3/4">
+				<label className="label w-full lg:w-3/4">
 					<p>ID Tài Khoản:</p>
 					<input
 						type="text"
@@ -502,7 +556,7 @@ function NapBanking() {
 					/>
 				</label>
 
-				<label className="label w-3/4">
+				<label className="label w-full lg:w-3/4">
 					<p>Tên Tài Khoản:</p>
 					<input
 						type="text"
@@ -513,7 +567,7 @@ function NapBanking() {
 					/>
 				</label>
 
-				<label className="label w-3/4">
+				<label className="label w-full lg:w-3/4">
 					<p>Nhập Số Tiền:</p>
 					<input
 						type="text"
@@ -522,7 +576,7 @@ function NapBanking() {
 					/>
 				</label>
 
-				<div className="flex flex-col gap-2 w-3/4">
+				<div className="flex flex-col gap-2 w-full lg:w-3/4">
 					<button
 						className="btn btn-lg"
 						onClick={handleNapBank}>
@@ -549,7 +603,7 @@ function NapBanking() {
 			<dialog
 				id="noti-vip"
 				className="modal">
-				<div className="modal-box max-w-xl w-full">
+				<div className="modal-box max-w-sm lg:max-w-xl w-full">
 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
 					<div className="py-4 flex flex-col gap-2">
 						<p>
@@ -639,6 +693,7 @@ interface TypeRutBank {
 
 function RutBanking() {
 	const user = useAppSelector((state) => state.user);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
 	const [msg, setMsg] = useState('');
 	const [info, setInfo] = useState<TypeRutBank>({});
 
@@ -654,12 +709,7 @@ function RutBanking() {
 				}
 			}
 
-			if (
-				!info.accountName ||
-				!info.accountNumber ||
-				!info.bankName ||
-				!info.type
-			) {
+			if (!info.accountName || !info.accountNumber || !info.type) {
 				const modal = document.getElementById(
 					'err-bank',
 				) as HTMLDialogElement | null;
@@ -669,17 +719,38 @@ function RutBanking() {
 				}
 			}
 
-			if (Number(info.amount) < 10000) {
+			if (
+				(user?.limitedTrade ?? 0) -
+					(Number(info.amount) ?? 0) *
+						(eventConfig?.find((e) => e.name === 'e-withdraw-bank')?.value ??
+							0) <
+				0
+			) {
 				const modal = document.getElementById(
 					'err-bank',
 				) as HTMLDialogElement | null;
 				if (modal) {
-					setMsg(
-						`Xin vui lòng rút trên ${new Intl.NumberFormat('vi', {
-							currency: 'VND',
-							style: 'currency',
-						}).format(10000)}`,
-					);
+					setMsg('Bạn không được phép rút quá hạn mức hôm nay');
+					return modal.showModal();
+				}
+			}
+
+			if (Number(info.amount) < 50000) {
+				const modal = document.getElementById(
+					'err-bank',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg(`Xin vui lòng rút trên 50.000 ₫`);
+					return modal.showModal();
+				}
+			}
+
+			if (Number(info.amount) > 1000000) {
+				const modal = document.getElementById(
+					'err-bank',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg(`Bạn không thể rút trên 1.000.000 ₫`);
 					return modal.showModal();
 				}
 			}
@@ -728,15 +799,25 @@ function RutBanking() {
 			return modal.showModal();
 		}
 	}, []);
+
+	useEffect(() => {
+		if (info && info.type === 'MOMO') {
+			setInfo((e) => {
+				delete e.bankName;
+				return e;
+			});
+		}
+	}, [info]);
+
 	return (
-		<div className="flex flex-col gap-5 items-start p-4 w-full">
+		<div className="flex flex-col gap-5 items-start lg:p-4 max-w-3xl w-full">
 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
 				Rút Tiền Về Ví
 			</h1>
 			<div className="flex flex-col gap-2 w-full p-4 rounded-md bg-base-300">
 				<p>
 					Thông Báo: Cập nhật hệ thống rút tiền tự động về Ngân hàng và Momo,
-					rút tối thiểu 50k, max 1tr/lần, 3tr/ngày
+					rút tối thiểu 50.000 ₫
 				</p>
 				<p>Bước 1: Đặt đơn rút tiền trên website</p>
 				<p>Bước 2: Admin sẽ duyệt và tiền sẽ về túi của bạn nhanh chóng.</p>
@@ -751,8 +832,8 @@ function RutBanking() {
 					}).format(Math.floor((user?.gold ?? 0) / 0.0062))}
 				</p>
 			</div>
-			<div className="flex flex-col gap-4 items-center justify-center w-full">
-				<label className="label w-3/4">
+			<div className="flex flex-col gap-4 items-center justify-center w-full text-nowrap">
+				<label className="label w-full lg:w-5/6">
 					<p>ID Tài Khoản:</p>
 					<input
 						type="text"
@@ -763,7 +844,7 @@ function RutBanking() {
 					/>
 				</label>
 
-				<label className="label w-3/4">
+				<label className="label w-full lg:w-5/6">
 					<p>Hình Thức:</p>
 					<select
 						defaultValue={'OTHER'}
@@ -780,7 +861,7 @@ function RutBanking() {
 				</label>
 
 				{info?.type === 'BANK' && (
-					<label className="label w-3/4">
+					<label className="label w-full lg:w-5/6">
 						<p>Ngân hàng:</p>
 						<select
 							defaultValue={'OTHER'}
@@ -808,7 +889,7 @@ function RutBanking() {
 				)}
 
 				{info?.type === 'MOMO' && (
-					<label className="label w-3/4">
+					<label className="label w-full lg:w-5/6">
 						<p>Loại Ví:</p>
 						<select
 							defaultValue={'OTHER'}
@@ -822,7 +903,7 @@ function RutBanking() {
 					</label>
 				)}
 
-				<label className="label w-3/4">
+				<label className="label w-full lg:w-5/6">
 					<p>Tên Tài Khoản:</p>
 					<input
 						type="text"
@@ -834,7 +915,7 @@ function RutBanking() {
 					/>
 				</label>
 
-				<label className="label w-3/4">
+				<label className="label w-full lg:w-5/6">
 					<p>Số Tài Khoản:</p>
 					<input
 						type="text"
@@ -846,7 +927,7 @@ function RutBanking() {
 					/>
 				</label>
 
-				<label className="label w-3/4">
+				<label className="label w-full lg:w-5/6">
 					<p>Nhập Số Tiền (VND):</p>
 					<input
 						type="text"
@@ -855,7 +936,7 @@ function RutBanking() {
 					/>
 				</label>
 
-				<label className="label w-3/4">
+				<label className="label w-full lg:w-5/6">
 					<p>Số Thỏi Vàng:</p>
 					<input
 						type="text"
@@ -865,7 +946,7 @@ function RutBanking() {
 					/>
 				</label>
 
-				<div className="flex flex-col gap-2 w-3/4">
+				<div className="flex flex-col gap-2 w-full lg:w-5/6">
 					<button
 						className="btn btn-lg"
 						onClick={handleRutBank}>
@@ -907,6 +988,7 @@ function RutBanking() {
 
 function HistoryUserBet() {
 	const user = useAppSelector((state) => state.user);
+	const [watch, setWatch] = useState('24');
 	const [userBet, setUsetBet] = useState([]);
 
 	useEffect(() => {
@@ -928,6 +1010,19 @@ function HistoryUserBet() {
 			<div className="border-current border rounded-box grid h-20 place-items-center">
 				Lịch Sử Cược
 			</div>
+			<select
+				defaultValue={watch}
+				onChange={(e) => setWatch(e.target.value)}
+				className="select select-bordered w-fit">
+				{['1-mini', '2-mini', '3-mini', '1', '2', '3', '24'].map((i) => (
+					<option
+						selected={i === watch}
+						key={`${i}-watch`}
+						value={i}>
+						Server {i.replace('-mini', ' Sao')}
+					</option>
+				))}
+			</select>
 			<div className="overflow-auto border border-current max-h-[600px]">
 				<table className="table table-lg table-pin-rows table-pin-cols">
 					{/* head */}
@@ -945,48 +1040,63 @@ function HistoryUserBet() {
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
 						{/* row 1 */}
-						{userBet?.map((userBet: any) => {
-							const {
-								amount,
-								isEnd,
-								receive,
-								server,
-								createdAt = new Date(),
-							} = userBet;
-							const result = userBet.result;
-							let resultBet = userBet.resultBet?.split('-');
-							let new_result =
-								result in TranslateKey ? TranslateKey[`${result}`] : result;
-							let new_resultBet =
-								resultBet[0] in TranslateKey
+						{userBet
+							?.filter((u: any) => u.server === watch)
+							.map((userBet: any) => {
+								let {
+									amount,
+									isEnd,
+									receive,
+									server,
+									uid,
+									createdAt = new Date(),
+									betId,
+									_id,
+									name,
+								} = userBet;
+								let result = userBet?.result;
+								let resultBet = userBet?.resultBet?.split('-');
+								let new_result =
+									result in TranslateKey ? TranslateKey[`${result}`] : result;
+								let new_resultBet = !resultBet
+									? userBet?.resultBet
+									: resultBet[0] in TranslateKey
 									? TranslateKey[`${resultBet[0]}`]
 									: resultBet[0];
-							let new_resultBet_concat = [new_resultBet, resultBet[1]].join(
-								'-',
-							);
-							return (
-								<tr
-									className="hover"
-									key={userBet._id}>
-									<td>{server.replace('-mini', ' Sao')}</td>
-									<td>{user?.name ?? user?.username}</td>
-									<td>{new Intl.NumberFormat('vi').format(amount)}</td>
-									<td>{new_result}</td>
-									<td>{new_resultBet_concat}</td>
-									<td>{new Intl.NumberFormat('vi').format(receive)}</td>
-									<td>
-										{isEnd && receive > 0 ? (
-											'Đã Thanh Toán'
-										) : !isEnd ? (
-											<span className="loading loading-dots loading-sm"></span>
-										) : (
-											'Đã Thua'
-										)}
-									</td>
-									<td>{moment(createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
-								</tr>
-							);
-						})}
+								return (
+									<tr
+										className="hover"
+										key={userBet?._id}>
+										<td>{server?.replace('-mini', ' Sao')}</td>
+										<td>
+											{uid === user?._id ? user?.name ?? user?.username : name}
+										</td>
+										<td>{new Intl.NumberFormat('vi').format(amount ?? 0)}</td>
+										<td>{new_result ?? result ?? ''}</td>
+										<td>
+											{new_resultBet &&
+											!['1', '2', '3'].includes(userBet?.server)
+												? `${new_resultBet}-${resultBet[1]}`
+												: userBet?.resultBet === '0'
+												? 'Khỉ Đỏ'
+												: userBet?.resultBet === '1'
+												? 'Khỉ Đen'
+												: ''}
+										</td>
+										<td>{new Intl.NumberFormat('vi').format(receive ?? 0)}</td>
+										<td>
+											{isEnd && receive > 0 ? (
+												'Đã Thanh Toán'
+											) : !isEnd ? (
+												<span className="loading loading-dots loading-sm"></span>
+											) : (
+												'Đã Thua'
+											)}
+										</td>
+										<td>{moment(createdAt).format('DD/MM/YYYY')}</td>
+									</tr>
+								);
+							})}
 					</tbody>
 				</table>
 			</div>
@@ -1081,10 +1191,10 @@ function HistoryNapBank({ data }: { data: any[] }) {
 			<thead className="text-sm  text-center">
 				<tr>
 					<th>Tên Tài Khoản</th>
-					<th>UID</th>
 					<th>Số Tiền</th>
 					<th>Số Thỏi Vàng</th>
 					<th>Trạng Thái</th>
+					<th>Trang Thanh Toán</th>
 					<th>Ngày Tạo</th>
 				</tr>
 			</thead>
@@ -1101,7 +1211,6 @@ function HistoryNapBank({ data }: { data: any[] }) {
 								key={item?._id}
 								className="hover">
 								<td>{user?.username}</td>
-								<td>{user?._id}</td>
 								<td>
 									{new Intl.NumberFormat('vi', {
 										currency: 'VND',
@@ -1117,6 +1226,18 @@ function HistoryNapBank({ data }: { data: any[] }) {
 										: item?.status === '0'
 										? 'Đang giao dịch'
 										: 'Hủy Giao Dịch'}
+								</td>
+								<td>
+									{item?.status === '0' ? (
+										<Link
+											className="link btn-square"
+											target="_blank"
+											href={`https://pay.payos.vn/web/${item?.orderId}`}>
+											Thanh Toán
+										</Link>
+									) : (
+										''
+									)}
 								</td>
 								<td>{moment(item?.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
 							</tr>

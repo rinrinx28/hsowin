@@ -2,6 +2,7 @@
 import apiClient from '@/lib/apiClient';
 import { updateUserRanks } from '@/lib/redux/features/rank/userRanks';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 export default function TableUser() {
@@ -58,10 +59,17 @@ export default function TableUser() {
 								<tr
 									className="hover"
 									key={user._id}>
-									<td>{i + 1}</td>
+									<td className="flex items-center justify-center">
+										<Image
+											alt={`${i + 1}_user`}
+											src={`/image/rank/${i + 1}_user.webp`}
+											width={100}
+											height={100}
+										/>
+									</td>
 									<td>{name}</td>
 									<td>{new Intl.NumberFormat('vi').format(totalBet)}</td>
-									<td>{prizes[i] ?? '0'} thỏi vàng</td>
+									<td>{prizes[i] ? `${prizes[i]} thỏi vàng` : 'Cái Nịt'}</td>
 								</tr>
 							);
 						})}

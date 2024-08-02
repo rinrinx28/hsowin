@@ -29,6 +29,8 @@ export interface userState {
 
 	server?: string;
 
+	avatar?: string;
+
 	createdAt?: Date;
 	updatedAt?: Date;
 	token?: string;

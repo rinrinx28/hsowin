@@ -8,6 +8,14 @@ import { useAppSelector, useAppDispatch } from '@/lib/redux/hook';
 import { updateUserGame } from '@/lib/redux/features/Minigame/userGameSlice';
 import Link from 'next/link';
 import { useEffect } from 'react';
+import Typewriter from 'typewriter-effect';
+
+const slogans = [
+	'Mini Game Đỏ Đen Hồi Sinh Ngọc Rồng',
+	'Chơi Mini Game, Nhận Vàng Ngay',
+	'Tự Động - Ưu Đãi Hấp Dẫn - Uy Tín 100%',
+	'Giao Dịch Tự Động - An Toàn & Chất Lượng',
+];
 
 export default function Home() {
 	const user = useAppSelector((state) => state.user);
@@ -35,16 +43,23 @@ export default function Home() {
 	}, [user]);
 
 	return (
-		<div className="min-w-[300px] flex flex-col gap-5 py-5 transition-all">
+		<div className="min-w-[300px] flex flex-col gap-5 py-5 px-2 transition-all">
 			<div className="flex justify-center">
 				<div className="max-w-6xl">
 					<div className="flex flex-col justify-center items-center text-center">
-						<h1 className="text-3xl font-bold">Hệ Thống HSOWIN</h1>
-						<p className="py-6 mb-4 text-xl border-b border-current">
-							Hồi Sinh Ngọc Rồng - MiniGame Kiếm Vàng
-							<br />
-							Giao Dịch - Tự Động - Uy Tín - Chất Lượng
-						</p>
+						<h1 className="text-3xl font-bold">HSOWIN.VIP</h1>
+						<div className="py-3 mb-4 text-xl border-b border-current">
+							<Typewriter
+								options={{
+									strings: slogans,
+									autoStart: true,
+									loop: true,
+									deleteSpeed: 1,
+									delay: 50,
+								}}
+							/>
+						</div>
+
 						<div className="flex flex-col gap-4">
 							<div className="flex flex-wrap lg:flex-row gap-4 justify-center">
 								<div className="dropdown ">

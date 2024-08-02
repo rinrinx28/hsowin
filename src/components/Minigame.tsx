@@ -169,13 +169,9 @@ export const Minigame = () => {
 						result_bet[result] = data?.data?.amount;
 					}
 					const newMainBet = { ...mainBet };
-					for (const [key, value] of Object.entries(result_bet)) {
-						if (
-							key in newMainBet &&
-							typeof newMainBet[key as keyof BetLog] === 'number' &&
-							typeof value === 'number'
-						) {
-							newMainBet[key as keyof BetLog] += value;
+					for (const key of Object.keys(newMainBet)) {
+						if (key in result_bet) {
+							newMainBet[key] += result_bet[key];
 						}
 					}
 					dispatch(updateMainBet({ ...mainBet, ...newMainBet }));
@@ -220,7 +216,7 @@ export const Minigame = () => {
 	// }, [socket, counter, mainBet]);
 
 	return (
-		<div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 card card-side bg-base-100 shadow-xl border border-current">
+		<div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 card bg-base-100 shadow-xl border border-current">
 			<div className="card-body items-start">
 				<div className="flex flex-col gap-2 w-full border-b border-current">
 					<div className="flex flex-row items-center justify-center gap-2">
@@ -318,8 +314,10 @@ export const Minigame = () => {
 												className="tooltip"
 												data-tip={`${totalResult && totalResult[1]}`}>
 												<div
-													className={`btn btn-xs btn-circle btn-outline ${
-														result === 'C' ? '' : 'btn-error'
+													className={`size-5 text-xs cursor-help text-center border  rounded-full ${
+														result === 'C'
+															? 'border-current text-current'
+															: 'border-error text-error'
 													}`}>
 													{result}
 												</div>
@@ -341,8 +339,10 @@ export const Minigame = () => {
 												className="tooltip"
 												data-tip={`${totalResult && totalResult[1]}`}>
 												<div
-													className={`btn btn-xs btn-circle btn-outline ${
-														result === 'T' ? '' : 'btn-error'
+													className={`size-5 text-xs cursor-help text-center border  rounded-full ${
+														result === 'T'
+															? 'border-current text-current'
+															: 'border-error text-error'
 													}`}>
 													{result}
 												</div>
@@ -363,11 +363,9 @@ export const Minigame = () => {
 										className="tooltip"
 										data-tip={`${totalResult === '1' ? 'Đen' : 'Đỏ'}`}>
 										<div
-											className={`btn btn-xs btn-outline ${
-												totalResult === '1' ? '' : 'btn-error'
-											}`}>
-											{totalResult === '1' ? 'Đen' : 'Đỏ'}
-										</div>
+											className={`size-5 cursor-help text-xs flex justify-center items-center p-2 border  rounded-full ${
+												totalResult === '1' ? 'bg-black' : 'bg-red-600'
+											}`}></div>
 									</div>
 								</li>
 							);

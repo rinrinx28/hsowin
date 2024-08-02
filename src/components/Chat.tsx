@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { useSocket } from '@/lib/socket';
 import { updateMsgOne } from '@/lib/redux/features/logs/messageLog';
+import Image from 'next/image';
 
 interface ChatBox {
 	server: string;
@@ -17,6 +18,7 @@ export default function ChatBox() {
 	const user = useAppSelector((state) => state.user);
 	const messageLog = useAppSelector((state) => state.messageLog);
 	const userGame = useAppSelector((state) => state.userGame);
+	const userRanks = useAppSelector((state) => state.userRanks);
 	const [chat, setChat] = useState<ChatBox | any>(null);
 	const socket = useSocket();
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
@@ -71,9 +73,16 @@ export default function ChatBox() {
 			}
 		});
 
+		socket.on('message-system-re', (data) => {
+			if (data?.status) {
+				dispatch(updateMsgOne(data?.msg));
+			}
+		});
+
 		return () => {
 			socket.off('noti-bet');
 			socket.off('message-user-re');
+			socket.off('message-system-re');
 		};
 	}, [dispatch, socket]);
 
@@ -89,7 +98,7 @@ export default function ChatBox() {
 				className="overflow-auto h-[950px] bg-base-200 rounded-lg p-4"
 				ref={chatEndRef}>
 				{messageLog
-					?.filter((i) => i.server === userGame)
+					?.filter((i) => i.server === userGame || i.server === 'all')
 					?.map((msg, i) => {
 						const { uid, content, username } = msg;
 						return (
@@ -101,20 +110,51 @@ export default function ChatBox() {
 								{uid === '' ? (
 									<div className="chat-image avatar">
 										<div className="avatar online  placeholder">
-											<div className="bg-neutral text-neutral-content w-12 rounded-full">
-												<span className="text-sm">BOT</span>
-											</div>
+											<div
+												className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
+												style={{
+													backgroundImage: `url("/image/avatar/Dueling_Spatulas_profileicon.webp")`,
+												}}></div>
 										</div>
 									</div>
 								) : (
 									<div className="chat-image avatar">
-										<div className="avatar online  placeholder">
-											<div className="bg-neutral text-neutral-content w-12 rounded-full"></div>
+										<div className="avatar online placeholder">
+											<div
+												className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
+												style={{
+													backgroundImage: `url("/image/avatar/${
+														uid === user._id ? `${user?.avatar}.webp` : ''
+													}")`,
+												}}></div>
 										</div>
 									</div>
 								)}
 								<div className="chat-header">
-									{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
+									<div
+										className={`flex ${
+											uid === user?._id ? 'flex-row-reverse' : 'flex-row'
+										} gap-2 items-center`}>
+										{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
+										{userRanks &&
+											userRanks.map((u, index) => {
+												if (uid === u._id) {
+													return (
+														<div
+															key={`${u._id}-chat-header-rank`}
+															className="tooltip"
+															data-tip={`Khứa này top ${index + 1}`}>
+															<Image
+																src={`/image/rank/${index + 1}_user.webp`}
+																width={44}
+																height={44}
+																alt={`${index + 1}_user_rank_image`}
+															/>
+														</div>
+													);
+												}
+											})}
+									</div>
 								</div>
 								<div className="chat-bubble text-sm chat-bubble-primary">
 									{content}
