@@ -5,8 +5,6 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import Providers from '@/lib/redux/Provider';
 import { SocketProvider } from '@/lib/socket';
-import { GA_TRACKING_ID } from '@/lib/gtag';
-import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -43,23 +41,22 @@ export default function RootLayout({
 		<html
 			lang="en"
 			data-theme="luxury">
-			<Head>
+			<head>
 				<script
 					async
-					src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}></script>
+					src={`https://www.googletagmanager.com/gtag/js?id=G-HYR5NVVKYJ`}></script>
 				<script
 					dangerouslySetInnerHTML={{
 						__html: `
                 window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_TRACKING_ID}', {
-                  page_path: window.location.pathname,
-                });
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+
+				gtag('config', 'G-HYR5NVVKYJ');
               `,
 					}}
 				/>
-			</Head>
+			</head>
 			<body className={`${inter.className} pt-4`}>
 				<Providers>
 					<SocketProvider>
