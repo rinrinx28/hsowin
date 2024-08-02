@@ -7,6 +7,7 @@ export interface Message {
 	content: string;
 	username?: string;
 	server?: string;
+	meta?: any;
 	createdAt?: Date;
 	updatedAt?: Date;
 }

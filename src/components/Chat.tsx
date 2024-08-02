@@ -124,7 +124,9 @@ export default function ChatBox() {
 												className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
 												style={{
 													backgroundImage: `url("/image/avatar/${
-														uid === user._id ? `${user?.avatar}.webp` : ''
+														msg?.meta
+															? `${JSON.parse(msg?.meta)?.avatar}.webp`
+															: ''
 													}")`,
 												}}></div>
 										</div>
