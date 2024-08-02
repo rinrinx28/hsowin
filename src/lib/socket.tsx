@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import moment from 'moment';
+import { useAppDispatch } from './redux/hook';
+import { updateMsgOne } from './redux/features/logs/messageLog';
 moment().format();
 
 const urlConfig = {
@@ -33,13 +35,33 @@ export const useSocket = (): Socket => {
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
+	const dispatch = useAppDispatch();
 	useEffect(() => {
 		socket.connect();
+		//TODO ———————————————[Handle event noti]———————————————
+		socket.on('noti-bet', (data) => {
+			dispatch(updateMsgOne(data));
+		});
+
+		socket.on('message-user-re', (data) => {
+			if (data?.status) {
+				dispatch(updateMsgOne(data?.msg));
+			}
+		});
+
+		socket.on('message-system-re', (data) => {
+			if (data?.status) {
+				dispatch(updateMsgOne(data?.msg));
+			}
+		});
 
 		return () => {
 			socket.disconnect();
+			socket.off('noti-bet');
+			socket.off('message-user-re');
+			socket.off('message-system-re');
 		};
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<SocketContext.Provider value={socket}>{children}</SocketContext.Provider>

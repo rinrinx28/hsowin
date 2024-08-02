@@ -480,6 +480,7 @@ function NapBanking() {
 				{
 					uid: user._id,
 					amount: Number(amount),
+					username: user?.username,
 				},
 				{
 					headers: {

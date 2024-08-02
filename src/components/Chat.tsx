@@ -61,30 +61,30 @@ export default function ChatBox() {
 		}
 	}, [userGame, user]);
 
-	useEffect(() => {
-		//TODO ———————————————[Handle event noti]———————————————
-		socket.on('noti-bet', (data) => {
-			dispatch(updateMsgOne(data));
-		});
+	// useEffect(() => {
+	// 	//TODO ———————————————[Handle event noti]———————————————
+	// 	socket.on('noti-bet', (data) => {
+	// 		dispatch(updateMsgOne(data));
+	// 	});
 
-		socket.on('message-user-re', (data) => {
-			if (data?.status) {
-				dispatch(updateMsgOne(data?.msg));
-			}
-		});
+	// 	socket.on('message-user-re', (data) => {
+	// 		if (data?.status) {
+	// 			dispatch(updateMsgOne(data?.msg));
+	// 		}
+	// 	});
 
-		socket.on('message-system-re', (data) => {
-			if (data?.status) {
-				dispatch(updateMsgOne(data?.msg));
-			}
-		});
+	// 	socket.on('message-system-re', (data) => {
+	// 		if (data?.status) {
+	// 			dispatch(updateMsgOne(data?.msg));
+	// 		}
+	// 	});
 
-		return () => {
-			socket.off('noti-bet');
-			socket.off('message-user-re');
-			socket.off('message-system-re');
-		};
-	}, [dispatch, socket]);
+	// 	return () => {
+	// 		socket.off('noti-bet');
+	// 		socket.off('message-user-re');
+	// 		socket.off('message-system-re');
+	// 	};
+	// }, [dispatch, socket]);
 
 	return (
 		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col justify-between gap-2 border border-current shadow-xl p-4 rounded-2xl">
