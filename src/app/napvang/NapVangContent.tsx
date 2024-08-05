@@ -66,6 +66,11 @@ export default function PageNapVang() {
 						moment(b.createdAt).unix() - moment(a.createdAt).unix(),
 				),
 			);
+			const modal = document.getElementById('lock') as HTMLDialogElement | null;
+			if (modal) {
+				setMsg('Đã tạo đơn nạp thành công!');
+				return modal.showModal();
+			}
 		} catch (err: any) {
 			const modal = document.getElementById('lock') as HTMLDialogElement | null;
 			if (modal) {
@@ -93,6 +98,11 @@ export default function PageNapVang() {
 				...e?.filter((i: any) => i?._id !== sessionId),
 				res.data,
 			]);
+			const modal = document.getElementById('lock') as HTMLDialogElement | null;
+			if (modal) {
+				setMsg('Đã hủy đơn nạp thành công!');
+				return modal.showModal();
+			}
 		} catch (err) {}
 	};
 

@@ -78,6 +78,11 @@ export default function PageRutVang() {
 			dispatch(
 				updateUser({ ...user, gold: (user.gold ?? 0) - Number(info.amount) }),
 			);
+			const modal = document.getElementById('lock') as HTMLDialogElement | null;
+			if (modal) {
+				setMsg('Đã tạo đơn rút thành công!');
+				return modal.showModal();
+			}
 		} catch (err: any) {
 			const modal = document.getElementById('lock') as HTMLDialogElement | null;
 			if (modal) {
