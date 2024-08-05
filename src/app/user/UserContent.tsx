@@ -1094,7 +1094,7 @@ function HistoryUserBet() {
 												'Đã Thua'
 											)}
 										</td>
-										<td>{moment(createdAt).format('DD/MM/YYYY')}</td>
+										<td>{moment(createdAt).format('DD/MM/YYYY HH:mm')}</td>
 									</tr>
 								);
 							})}

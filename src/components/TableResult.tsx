@@ -206,7 +206,7 @@ export default function TableResult() {
 												'Đã Thua'
 											)}
 										</td>
-										<td>{moment(createdAt).format('DD/MM/YYYY HH:mm')}</td>
+										<td>{moment(createdAt).format('DD/MM/YYYY')}</td>
 										<td>
 											{uid !== user?._id ? (
 												''

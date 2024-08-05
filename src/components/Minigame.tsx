@@ -179,17 +179,12 @@ export const Minigame = () => {
 			}
 		});
 
-		// socket.on('result-data-bet-re', (data) => {
-		// 	console.log(data);
-		// });
-
 		return () => {
 			socket.off('status-boss');
 			socket.off('status-sv');
 			socket.off('status-24/24');
 			socket.off('value-bet-users-re');
 			socket.off('value-bet-user-re');
-			// socket.off('result-data-bet-re');
 		};
 	}, [socket, dispatch, logBet, userGame, mainBet]);
 

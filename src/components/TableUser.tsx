@@ -65,6 +65,7 @@ export default function TableUser() {
 											src={`/image/rank/${i + 1}_user.webp`}
 											width={100}
 											height={100}
+											className="flicker-4"
 										/>
 									</td>
 									<td>{name}</td>
