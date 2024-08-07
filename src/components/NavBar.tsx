@@ -71,24 +71,35 @@ const NavBar = () => {
 								<li>
 									<Link href={'/rutvang'}>Rút Vàng</Link>
 								</li>
-								<li>
-									<hr className="w-full h-1"></hr>
-								</li>
-								<li>
-									<Link href={'/user?type=INFO'}>Thông tin tài khoản</Link>
-								</li>
-								<li>
-									<Link href={'/user?type=NAPBANKING'}>Nạp Bank/Momo</Link>
-								</li>
-								<li>
-									<Link href={'/user?type=RUTBANKING'}>Rút Về Bank/Momo</Link>
-								</li>
-								<li>
-									<Link href={'/user?type=LICHSUCUOC'}>Lịch Sử Cược</Link>
-								</li>
-								<li>
-									<Link href={'/user?type=LICHSUBANK'}>Lịch Sử Bank</Link>
-								</li>
+								{user?.isLogin && (
+									<>
+										<li>
+											<hr className="w-full h-1"></hr>
+										</li>
+										{(user?.vip ?? 0) > 0 && (
+											<li>
+												<Link href={'/vip'}>Điểm Danh VIP</Link>
+											</li>
+										)}
+										<li>
+											<Link href={'/user?type=INFO'}>Thông tin tài khoản</Link>
+										</li>
+										<li>
+											<Link href={'/user?type=NAPBANKING'}>Nạp Bank/Momo</Link>
+										</li>
+										<li>
+											<Link href={'/user?type=RUTBANKING'}>
+												Rút Về Bank/Momo
+											</Link>
+										</li>
+										<li>
+											<Link href={'/user?type=LICHSUCUOC'}>Lịch Sử Cược</Link>
+										</li>
+										<li>
+											<Link href={'/user?type=LICHSUBANK'}>Lịch Sử Bank</Link>
+										</li>
+									</>
+								)}
 							</ul>
 						</div>
 					</div>
@@ -118,6 +129,17 @@ const NavBar = () => {
 							<li>
 								<Link href={'/rutvang'}>Rút Vàng</Link>
 							</li>
+							{user?.isLogin && (user?.vip ?? 0) > 0 && (
+								<>
+									<li>
+										<Link
+											className="fire"
+											href={'/vip'}>
+											Điểm Danh VIP
+										</Link>
+									</li>
+								</>
+							)}
 						</ul>
 					</div>
 				</div>

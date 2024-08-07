@@ -7,9 +7,9 @@ import { updateMsgOne } from './redux/features/logs/messageLog';
 moment().format();
 
 const urlConfig = {
+	dev: 'http://localhost:3031',
 	vps: 'http://144.126.145.81:3031',
-	https: 'wss://api.hsowin.vip',
-	local: 'http://localhost:3031',
+	https: 'https://api.hsowin.vip',
 };
 
 const socket: Socket = io(urlConfig.https, {

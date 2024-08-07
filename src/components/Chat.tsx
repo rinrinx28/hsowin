@@ -61,31 +61,6 @@ export default function ChatBox() {
 		}
 	}, [userGame, user]);
 
-	// useEffect(() => {
-	// 	//TODO ———————————————[Handle event noti]———————————————
-	// 	socket.on('noti-bet', (data) => {
-	// 		dispatch(updateMsgOne(data));
-	// 	});
-
-	// 	socket.on('message-user-re', (data) => {
-	// 		if (data?.status) {
-	// 			dispatch(updateMsgOne(data?.msg));
-	// 		}
-	// 	});
-
-	// 	socket.on('message-system-re', (data) => {
-	// 		if (data?.status) {
-	// 			dispatch(updateMsgOne(data?.msg));
-	// 		}
-	// 	});
-
-	// 	return () => {
-	// 		socket.off('noti-bet');
-	// 		socket.off('message-user-re');
-	// 		socket.off('message-system-re');
-	// 	};
-	// }, [dispatch, socket]);
-
 	return (
 		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col justify-between gap-2 border border-current shadow-xl p-4 rounded-2xl">
 			<div className="flex flex-col gap-2 w-full border-b border-current">
@@ -138,6 +113,11 @@ export default function ChatBox() {
 											uid === user?._id ? 'flex-row-reverse' : 'flex-row'
 										} gap-2 items-center`}>
 										{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
+										{msg?.meta && (JSON.parse(msg?.meta)?.vip ?? 0) > 0 && (
+											<p className="fire font-extrabold text-yellow-300">
+												VIP {JSON.parse(msg?.meta)?.vip}
+											</p>
+										)}
 										{userRanks &&
 											userRanks.map((u, index) => {
 												if (uid === u._id) {

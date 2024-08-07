@@ -202,27 +202,6 @@ export default UserContent;
 
 function ProfileUser() {
 	const user = useAppSelector((state) => state.user);
-	const [totalBank, setBank] = useState('');
-
-	useEffect(() => {
-		const getBank = async () => {
-			try {
-				const res = await apiClient.get('/session/banking/log/nap', {
-					headers: {
-						Authorization: 'Bearer ' + user.token,
-					},
-				});
-				const data = res.data;
-				const banks = data
-					?.filter((i: any) => i?.status === '1')
-					?.reduce((a: any, b: any) => a + b.amount, 0);
-				setBank(`${banks}`);
-			} catch (err) {}
-		};
-		if (user.isLogin) {
-			getBank();
-		}
-	}, [user]);
 
 	return (
 		<div className="flex flex-col gap-5 items-center lg:w-1/2 lg:p-4">
@@ -247,37 +226,41 @@ function ProfileUser() {
 					<p className="font-semibold">{user?.name}</p>
 				</li>
 				<li className="w-full gap-2 rounded-md bg-base-300 flex flex-col justify-start p-1 lg:p-4 items-start">
-					<p className="text-primary">Thông Tin VIP:</p>
-					<p className="text-error font-semibold">
+					<p className="">
+						Thông Tin VIP:{' '}
+						<span className="fire font-extrabold text-yellow-300">
+							VIP {user?.vip ?? 0}
+						</span>
+					</p>
+					<p className="text-current">
 						30 ngày qua đã nạp:{' '}
-						<span className="text-primary">
+						<span className="text-yellow-500 font-extrabold">
 							{new Intl.NumberFormat('vi', {
 								currency: 'VND',
 								style: 'currency',
-							}).format(Number(totalBank) ?? 0)}
-						</span>{' '}
-						(Chưa có vip vui lòng nạp đủ 100k)
+							}).format(Number(user?.totalBank) ?? 0)}
+						</span>
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Số Thỏi Vàng:</p>
-					<p className="text-green-500">
+					<p className="text-yellow-500 font-semibold">
 						{new Intl.NumberFormat('vi').format(user.gold ?? 0)}
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
-					<p>Kim Cương hiện có:</p>
-					<p className="text-green-500">
+					<p>Lục Bảo hiện có:</p>
+					<p className="text-green-500 font-semibold">
 						{new Intl.NumberFormat('vi').format(user.diamon ?? 0)}
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Tháng này đã hiến:</p>
-					<p className="text-green-500">
+					<p className="text-yellow-500 font-extrabold">
 						{new Intl.NumberFormat('vi', {
 							currency: 'VND',
 							style: 'currency',
-						}).format(Number(totalBank) ?? 0)}
+						}).format(Number(user?.totalBank) ?? 0)}
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">

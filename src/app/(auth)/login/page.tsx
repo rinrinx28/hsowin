@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { login, userState } from '@/lib/redux/features/auth/user';
 import { useRouter } from 'next/navigation';
+import { updateUserVip } from '@/lib/redux/features/auth/userVip';
 
 interface Info {
 	username: string;
@@ -41,6 +42,12 @@ function LoginPage() {
 			if (isStay) {
 				localStorage.setItem('access_token', data?.access_token);
 			}
+			const res_info = await apiClient.get('/user/vip/info', {
+				headers: {
+					Authorization: 'Bearer ' + data?.access_token,
+				},
+			});
+			dispatch(updateUserVip({ ...res_info.data }));
 			router.push('/');
 		} catch (err: any) {
 			const modal = document.getElementById(

@@ -264,3 +264,29 @@
         }
       }
       
+/* Define the animation named "flicker" */
+@keyframes flicker {
+  /* Initial state of animation */
+  0%, 
+  /* Final state of animation */
+  100% { 
+      text-shadow: 
+          0 -1px 3px #fff, /* Innermost layer - intense heat (white) */
+          0 -2px 6px #FF3, /* Second layer - core of flame (yellow) */
+          0 -6px 12px #F90, /* Middle layer - body of flame (orange) */
+          0 -10px 20px #C33; /* Outermost layer - edges of flame (red) */
+  }
+  /* Middle state of animation */
+  50% { 
+      text-shadow: 
+          0 -2px 6px #fff, /* Innermost layer - intense heat (white) */
+          0 -4px 12px #FF3, /* Second layer - core of flame (yellow) */
+          0 -8px 16px #F90, /* Middle layer - body of flame (orange) */
+          0 -12px 24px #C33; /* Outermost layer - edges of flame (red) */
+  }
+}
+
+.fire {
+  /* Apply the "flicker" animation to the .fire class */
+  animation: flicker 2s infinite;
+}

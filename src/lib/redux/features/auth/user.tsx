@@ -31,6 +31,12 @@ export interface userState {
 
 	avatar?: string;
 
+	vip?: number;
+
+	totalBank?: number;
+
+	type?: string;
+
 	createdAt?: Date;
 	updatedAt?: Date;
 	token?: string;

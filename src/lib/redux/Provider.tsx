@@ -15,6 +15,7 @@ import { updateMsgAll } from './features/logs/messageLog';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { updateEventConfig } from './features/logs/eventConfig';
+import { updateUserVip } from './features/auth/userVip';
 
 export default function StoreProvider({
 	children,
@@ -36,6 +37,19 @@ export default function StoreProvider({
 	const router = useRouter();
 
 	useEffect(() => {
+		const getUserVip = async (token: any) => {
+			try {
+				const res = await apiClient.get('/user/vip/info', {
+					headers: {
+						Authorization: 'Bearer ' + token,
+					},
+				});
+				const data = res.data;
+				let new_data = JSON.parse(data.data);
+				console.log(data, new_data);
+				storeRef.current?.dispatch(updateUserVip({ ...data, data: new_data }));
+			} catch (err) {}
+		};
 		const relogin = async (token: any) => {
 			try {
 				const res = await apiClient.get('/auth/relogin', {
@@ -91,14 +105,15 @@ export default function StoreProvider({
 			} catch (err) {}
 		};
 		const isStay = localStorage.getItem('access_token');
-		const isTheme =
-			typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
+		// const isTheme =
+		// 	typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
 		if (isStay) {
 			relogin(isStay);
+			getUserVip(isStay);
 		}
-		if (!isTheme) {
-			localStorage.setItem('theme', 'false');
-		}
+		// if (!isTheme) {
+		// 	localStorage.setItem('theme', 'false');
+		// }
 		getUserBetLog();
 		getUserRank();
 		getMessageLog();

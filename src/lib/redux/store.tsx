@@ -10,6 +10,7 @@ import userBetLog from './features/logs/userBetLog';
 import userRanks from './features/rank/userRanks';
 import messageLog from './features/logs/messageLog';
 import eventConfig from './features/logs/eventConfig';
+import userVip from './features/auth/userVip';
 
 export const makeStore = () => {
 	return configureStore({
@@ -25,6 +26,7 @@ export const makeStore = () => {
 			userRanks: userRanks,
 			messageLog: messageLog,
 			eventConfig: eventConfig,
+			userVip: userVip,
 		},
 	});
 };
