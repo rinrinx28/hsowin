@@ -35,7 +35,7 @@ export default function VipClaimPage() {
 		<div className="min-h-screen flex w-full justify-center items-center">
 			<div className="max-w-7xl w-full flex flex-col gap-5 items-center select-none">
 				{(user?.vip ?? 0) > 0 && (
-					<h1 className="text-4xl">Điểm Danh VIP Hàng Ngày</h1>
+					<h1 className="lg:text-4xl text-xl">Điểm Danh VIP Hàng Ngày</h1>
 				)}
 				{(user?.vip ?? 0) > 0 && (
 					<TableClaimVip
@@ -128,12 +128,12 @@ function TableClaimVip({ setMsg, showModel }: { setMsg: any; showModel: any }) {
 		} catch (err) {}
 	};
 	return (
-		<div className="grid grid-cols-7 gap-4 p-4">
+		<div className="grid lg:grid-cols-7 md:grid-cols-3 sm:grid-cols-3 grid-cols-2 gap-4 p-4">
 			{userVip &&
 				userVip?.data?.map((d, i) => {
 					return (
 						<button
-							className="size-36 flex items-end justify-end hover:scale-125 duration-300 hover:z-10 bg-cover border border-current p-2 rounded-lg"
+							className="size-32 flex items-end justify-end hover:scale-125 duration-300 hover:z-10 bg-cover border border-current p-2 rounded-lg"
 							key={d?.date}
 							style={{
 								backgroundImage: `url("/image/vip/claim/${

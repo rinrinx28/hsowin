@@ -47,7 +47,12 @@ function LoginPage() {
 					Authorization: 'Bearer ' + data?.access_token,
 				},
 			});
-			dispatch(updateUserVip({ ...res_info.data }));
+			dispatch(
+				updateUserVip({
+					...res_info.data,
+					data: JSON.parse(res_info.data.data),
+				}),
+			);
 			router.push('/');
 		} catch (err: any) {
 			const modal = document.getElementById(

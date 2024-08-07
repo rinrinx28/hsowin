@@ -26,7 +26,7 @@ const NavBar = () => {
 	return (
 		<div className="w-full flex justify-center items-center sticky top-0 z-[1000] backdrop-blur-md">
 			<div className="navbar max-w-7xl rounded-md shadow-lg">
-				<div className="navbar-start">
+				<div className="navbar-start ml-2">
 					<div className="drawer lg:hidden z-50">
 						<input
 							id="my-drawer-2"
