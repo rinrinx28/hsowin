@@ -80,18 +80,25 @@ export default function VipClaimPage() {
 							đầu tiên kích hoạt <span className="text-primary">VIP</span>
 						</span>
 						<span>
-							- Để nhận quà mỗi ngày thì người chơi phải thắng số thỏi vàng trên{' '}
-							<span className="text-primary">100</span> đối với các{' '}
-							<span className="text-primary">VIP 1,2,3</span> và{' '}
-							<span className="text-primary">500</span> đối với các{' '}
-							<span className="text-primary">VIP còn lại</span>
-						</span>
-						<span>
 							- Sau <span className="text-primary">7 ngày</span> liên tục không
 							tham gia hoạt động <span className="text-primary">VIP</span> sẽ bị{' '}
 							<span className="text-primary">mất quyền lợi VIP</span>
 						</span>
 					</p>
+					<p>- Để nhận mỗi ngày thì phải đánh:</p>
+					<div className="grid grid-cols-2">
+						{[
+							'VIP 1 > 100 thỏi vàng',
+							'VIP 2 > 500 thỏi vàng',
+							'VIP 3 > 2000 thỏi vàng',
+							'VIP 4 > 4000  thỏi vàng',
+							'VIP 5 > 10000 thỏi vàng',
+							'VIP 6 > 35000 thỏi vàng',
+							'VIP 7 > 50000 thỏi vàng',
+						].map((s) => {
+							return <p key={s}>{s}</p>;
+						})}
+					</div>
 				</div>
 			</dialog>
 		</div>
@@ -207,6 +214,20 @@ function TableReviewClaimVip() {
 				- Khi lên VIP bạn sẽ trông ngầu hơn khi chém gió và đặc biệt rất dễ tán
 				gái nhé
 			</p>
+			<p>- Để nhận mỗi ngày thì phải đánh:</p>
+			<div className="grid grid-cols-2">
+				{[
+					'VIP 1 > 100 thỏi vàng',
+					'VIP 2 > 500 thỏi vàng',
+					'VIP 3 > 2000 thỏi vàng',
+					'VIP 4 > 4000  thỏi vàng',
+					'VIP 5 > 10000 thỏi vàng',
+					'VIP 6 > 35000 thỏi vàng',
+					'VIP 7 > 50000 thỏi vàng',
+				].map((s) => {
+					return <p key={s}>{s}</p>;
+				})}
+			</div>
 		</div>
 	);
 }

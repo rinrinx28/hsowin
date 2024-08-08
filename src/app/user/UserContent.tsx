@@ -424,9 +424,12 @@ function NapThe() {
 }
 
 function NapBanking() {
+	const evenConfig = useAppSelector((state) => state.eventConfig);
 	const user = useAppSelector((state) => state.user);
 	const [msg, setMsg] = useState('');
 	const [amount, setAmount] = useState('0');
+	const [vip, setVip] = useState([]);
+	const [prize, setPrize] = useState([]);
 	const router = useRouter();
 
 	const handleNapBank = async () => {
@@ -496,6 +499,17 @@ function NapBanking() {
 			return modal.showModal();
 		}
 	}, []);
+
+	useEffect(() => {
+		if (evenConfig) {
+			const e_value_vip = evenConfig.find((e) => e.name === 'e-value-vip');
+			const e_value_vip_claim = evenConfig.find(
+				(e) => e.name === 'e-value-vip-claim',
+			);
+			setVip(JSON.parse(e_value_vip?.option ?? '[]'));
+			setPrize(JSON.parse(e_value_vip_claim?.option ?? '[]'));
+		}
+	}, [evenConfig]);
 	return (
 		<div className="flex flex-col gap-5 items-start lg:p-4 w-full">
 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
@@ -605,16 +619,7 @@ function NapBanking() {
 									</tr>
 								</thead>
 								<tbody className="text-center">
-									{[
-										{ price: 1e3 * 50, prize: 10 },
-										{ price: 1e3 * 400, prize: 20 },
-										{ price: 1e3 * 1000, prize: 40 },
-										{ price: 1e3 * 3000, prize: 100 },
-										{ price: 1e3 * 5000, prize: 300 },
-										{ price: 1e3 * 15000, prize: 500 },
-										{ price: 1e3 * 50000, prize: 1000 },
-									].map((vip, i) => {
-										const { price, prize } = vip;
+									{vip?.map((v: any, i: number) => {
 										return (
 											<tr key={`${i}-vip`}>
 												<td>VIP {i + 1}</td>
@@ -622,9 +627,9 @@ function NapBanking() {
 													{new Intl.NumberFormat('vi', {
 														currency: 'VND',
 														style: 'currency',
-													}).format(price)}
+													}).format(v)}
 												</td>
-												<td>{prize} Thỏi/ngày</td>
+												<td>{prize[i]} Thỏi/ngày</td>
 											</tr>
 										);
 									})}
@@ -640,6 +645,20 @@ function NapBanking() {
 							- Khi lên VIP bạn sẽ trông ngầu hơn khi chém gió và đặc biệt rất
 							dễ tán gái nhé
 						</p>
+						<p>- Để nhận mỗi ngày thì phải đánh:</p>
+						<div className="grid grid-cols-2">
+							{[
+								'VIP 1 > 100 thỏi vàng',
+								'VIP 2 > 500 thỏi vàng',
+								'VIP 3 > 2000 thỏi vàng',
+								'VIP 4 > 4000  thỏi vàng',
+								'VIP 5 > 10000 thỏi vàng',
+								'VIP 6 > 35000 thỏi vàng',
+								'VIP 7 > 50000 thỏi vàng',
+							].map((s) => {
+								return <p key={s}>{s}</p>;
+							})}
+						</div>
 					</div>
 					<div className="modal-action">
 						<form method="dialog">
