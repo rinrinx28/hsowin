@@ -430,6 +430,7 @@ function NapBanking() {
 	const [amount, setAmount] = useState('0');
 	const [vip, setVip] = useState([]);
 	const [prize, setPrize] = useState([]);
+	const [rule, setRule] = useState([]);
 	const router = useRouter();
 
 	const handleNapBank = async () => {
@@ -506,6 +507,10 @@ function NapBanking() {
 			const e_value_vip_claim = evenConfig.find(
 				(e) => e.name === 'e-value-vip-claim',
 			);
+			const e_rule_vip_claim = evenConfig.find(
+				(e) => e.name === 'e-rule-vip-claim',
+			);
+			setRule(JSON.parse(e_rule_vip_claim?.option ?? '[]'));
 			setVip(JSON.parse(e_value_vip?.option ?? '[]'));
 			setPrize(JSON.parse(e_value_vip_claim?.option ?? '[]'));
 		}
@@ -647,16 +652,13 @@ function NapBanking() {
 						</p>
 						<p>- Để nhận mỗi ngày thì phải đánh:</p>
 						<div className="grid grid-cols-2">
-							{[
-								'VIP 1 > 100 thỏi vàng',
-								'VIP 2 > 500 thỏi vàng',
-								'VIP 3 > 2000 thỏi vàng',
-								'VIP 4 > 4000  thỏi vàng',
-								'VIP 5 > 10000 thỏi vàng',
-								'VIP 6 > 35000 thỏi vàng',
-								'VIP 7 > 50000 thỏi vàng',
-							].map((s) => {
-								return <p key={s}>{s}</p>;
+							{rule?.map((s, i: number) => {
+								return (
+									<p key={s}>
+										VIP {i + 1} từ {new Intl.NumberFormat('vi').format(s)} thỏi
+										vàng
+									</p>
+								);
 							})}
 						</div>
 					</div>
