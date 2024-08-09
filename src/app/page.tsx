@@ -87,6 +87,11 @@ export default function Home() {
 										<li>
 											<Link href={'/user?type=RUTBANKING'}>Rút Về Bank</Link>
 										</li>
+										{(user?.vip ?? 0) > 0 && (
+											<li>
+												<Link href={'/vip'}>Điểm Danh VIP</Link>
+											</li>
+										)}
 									</ul>
 								</div>
 								<button

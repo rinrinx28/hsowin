@@ -430,7 +430,6 @@ function NapBanking() {
 	const [amount, setAmount] = useState('0');
 	const [vip, setVip] = useState([]);
 	const [prize, setPrize] = useState([]);
-	const [rule, setRule] = useState([]);
 	const router = useRouter();
 
 	const handleNapBank = async () => {
@@ -507,10 +506,6 @@ function NapBanking() {
 			const e_value_vip_claim = evenConfig.find(
 				(e) => e.name === 'e-value-vip-claim',
 			);
-			const e_rule_vip_claim = evenConfig.find(
-				(e) => e.name === 'e-rule-vip-claim',
-			);
-			setRule(JSON.parse(e_rule_vip_claim?.option ?? '[]'));
 			setVip(JSON.parse(e_value_vip?.option ?? '[]'));
 			setPrize(JSON.parse(e_value_vip_claim?.option ?? '[]'));
 		}
@@ -650,17 +645,6 @@ function NapBanking() {
 							- Khi lên VIP bạn sẽ trông ngầu hơn khi chém gió và đặc biệt rất
 							dễ tán gái nhé
 						</p>
-						<p>- Để nhận mỗi ngày thì phải đánh:</p>
-						<div className="grid grid-cols-2">
-							{rule?.map((s, i: number) => {
-								return (
-									<p key={s}>
-										VIP {i + 1} từ {new Intl.NumberFormat('vi').format(s)} thỏi
-										vàng
-									</p>
-								);
-							})}
-						</div>
 					</div>
 					<div className="modal-action">
 						<form method="dialog">
