@@ -11,8 +11,6 @@ const apiClient = axios.create({
 	// timeout: 1000,
 	headers: {
 		'Content-Type': 'application/json',
-		Accept: 'application/json',
-		Origin: 'https://hsowin.vip', // Thay đổi thành domain của client
 	},
 });
 

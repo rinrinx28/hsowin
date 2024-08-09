@@ -105,15 +105,10 @@ export default function StoreProvider({
 			} catch (err) {}
 		};
 		const isStay = localStorage.getItem('access_token');
-		// const isTheme =
-		// 	typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
 		if (isStay) {
 			relogin(isStay);
 			getUserVip(isStay);
 		}
-		// if (!isTheme) {
-		// 	localStorage.setItem('theme', 'false');
-		// }
 		getUserBetLog();
 		getUserRank();
 		getMessageLog();
