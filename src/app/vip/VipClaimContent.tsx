@@ -4,7 +4,6 @@ import apiClient from '@/lib/apiClient';
 import { updateUser } from '@/lib/redux/features/auth/user';
 import { updateUserVip } from '@/lib/redux/features/auth/userVip';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function VipClaimPage() {
@@ -12,8 +11,6 @@ export default function VipClaimPage() {
 	const user = useAppSelector((state) => state.user);
 	const [msg, setMsg] = useState('');
 	const [rule, setRule] = useState([]);
-	const dispath = useAppDispatch();
-	const router = useRouter();
 
 	const showModel = () => {
 		const modal = document.getElementById(
