@@ -6,11 +6,7 @@ const VipClaimContent = dynamic(() => import('./VipClaimContent'), {
 });
 
 function VipClaimPage() {
-	return (
-		<Suspense>
-			<VipClaimContent />
-		</Suspense>
-	);
+	return <Suspense>{/* <VipClaimContent /> */}</Suspense>;
 }
 
 export default VipClaimPage;
