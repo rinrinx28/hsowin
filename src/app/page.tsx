@@ -7,7 +7,7 @@ import TableUser from '@/components/TableUser';
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hook';
 import { updateUserGame } from '@/lib/redux/features/Minigame/userGameSlice';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Typewriter from 'typewriter-effect';
 
 const slogans = [
@@ -19,7 +19,9 @@ const slogans = [
 
 export default function Home() {
 	const user = useAppSelector((state) => state.user);
+	const evenConfig = useAppSelector((state) => state.eventConfig);
 	const userGame = useAppSelector((state) => state.userGame);
+	const [bank, setBank] = useState('');
 	const dispatch = useAppDispatch();
 
 	const showTutorial = () => {
@@ -37,10 +39,12 @@ export default function Home() {
 				'wellcome',
 			) as HTMLDialogElement | null;
 			if (modal) {
+				const e_bank_gold = evenConfig.find((e) => e.name === 'e-bank-gold');
+				setBank(`${(e_bank_gold?.value ?? 0) * 100}%`);
 				modal.showModal();
 			}
 		}
-	}, [user]);
+	}, [user, evenConfig]);
 
 	return (
 		<div className="min-w-[300px] flex flex-col gap-5 py-5 px-2 transition-all">
@@ -308,7 +312,7 @@ export default function Home() {
 						<Link
 							href={'/login'}
 							className="text-nowrap link link-hover text-primary font-semibold capitalize ">
-							Nạp Thỏi Vàng khuyễn mãi lên đến x0,48% qua ví/atm
+							Nạp Thỏi Vàng khuyễn mãi lên đến x{bank} qua ví/atm
 						</Link>
 					</div>
 					<div className="modal-action">

@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 
 export default function VipClaimPage() {
 	const evenConfig = useAppSelector((state) => state.eventConfig);
-	const user = useAppSelector((state) => state.user);
 	const [msg, setMsg] = useState('');
 	const [rule, setRule] = useState([]);
 
@@ -42,16 +41,11 @@ export default function VipClaimPage() {
 	return (
 		<div className="min-h-screen flex w-full justify-center items-center">
 			<div className="max-w-7xl w-full flex flex-col gap-5 items-center select-none">
-				{(user?.vip ?? 0) > 0 && (
-					<h1 className="lg:text-4xl text-xl">Điểm Danh VIP Hàng Ngày</h1>
-				)}
-				{(user?.vip ?? 0) > 0 && (
-					<TableClaimVip
-						setMsg={setMsg}
-						showModel={showModel}
-					/>
-				)}
-				{(user?.vip ?? 0) < 1 && <TableReviewClaimVip />}
+				<h1 className="lg:text-4xl text-xl">Điểm Danh VIP Hàng Ngày</h1>
+				<TableClaimVip
+					setMsg={setMsg}
+					showModel={showModel}
+				/>
 			</div>
 
 			<dialog
