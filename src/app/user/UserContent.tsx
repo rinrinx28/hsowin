@@ -480,12 +480,12 @@ function NapBanking() {
 				router.push(url);
 				return;
 			}
-		} catch (err) {
+		} catch (err: any) {
 			const modal = document.getElementById(
 				'err-bank',
 			) as HTMLDialogElement | null;
 			if (modal) {
-				setMsg('Đã xảy ra lỗi, xin vui lòng thử lại sau chút lát!');
+				setMsg(err?.response?.data?.message);
 				return modal.showModal();
 			}
 		}
