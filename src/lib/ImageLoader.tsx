@@ -4,5 +4,5 @@ const urlConfig = {
 };
 
 export default function ImageLoader(src: string) {
-	return `${urlConfig.dev}/${src}`;
+	return `${urlConfig.https}/${src}`;
 }
