@@ -2,8 +2,9 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import moment from 'moment';
-import { useAppDispatch } from './redux/hook';
+import { useAppDispatch, useAppSelector } from './redux/hook';
 import { updateMsgOne } from './redux/features/logs/messageLog';
+import { updateHistoryServer } from './redux/features/logs/historyServer';
 moment().format();
 
 const urlConfig = {
@@ -43,6 +44,10 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 			dispatch(updateMsgOne(data));
 		});
 
+		socket.on('noti-system', (data) => {
+			dispatch(updateMsgOne(data));
+		});
+
 		socket.on('message-user-re', (data) => {
 			if (data?.status) {
 				dispatch(updateMsgOne(data?.msg));
@@ -55,11 +60,17 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 			}
 		});
 
+		socket.on('jackpot-up', (data) => {
+			dispatch(updateHistoryServer(data));
+		});
+
 		return () => {
 			socket.disconnect();
 			socket.off('noti-bet');
 			socket.off('message-user-re');
 			socket.off('message-system-re');
+			socket.off('jackpot-up');
+			socket.off('noti-system');
 		};
 	}, [dispatch]);
 

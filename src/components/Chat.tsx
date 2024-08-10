@@ -73,7 +73,7 @@ export default function ChatBox() {
 				className="overflow-auto h-[950px] bg-base-200 rounded-lg p-4"
 				ref={chatEndRef}>
 				{messageLog
-					?.filter((i) => i.server === userGame || i.server === 'all')
+					?.filter((i: any) => i.server === userGame || i.server === 'all')
 					?.map((msg, i) => {
 						const { uid, content, username } = msg;
 						return (

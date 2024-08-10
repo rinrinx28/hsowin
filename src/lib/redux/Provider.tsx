@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { updateEventConfig } from './features/logs/eventConfig';
 import { updateUserVip } from './features/auth/userVip';
+import { updateHistoryServer } from './features/logs/historyServer';
 
 export default function StoreProvider({
 	children,
@@ -37,6 +38,13 @@ export default function StoreProvider({
 	const router = useRouter();
 
 	useEffect(() => {
+		const getHistoryServer = async () => {
+			try {
+				const res = await apiClient.get('/bet-log/history/server/24');
+				const data = res.data;
+				storeRef.current?.dispatch(updateHistoryServer(data));
+			} catch (err) {}
+		};
 		const getUserVip = async (token: any) => {
 			try {
 				const res = await apiClient.get('/user/vip/info', {
@@ -73,7 +81,6 @@ export default function StoreProvider({
 				storeRef.current?.dispatch(updateAll(data?.data));
 			} catch (err) {}
 		};
-
 		const getUserRank = async () => {
 			try {
 				const res = await apiClient.get('/user/rank');
@@ -81,7 +88,6 @@ export default function StoreProvider({
 				storeRef.current?.dispatch(updateUserRanks(data?.data));
 			} catch (err) {}
 		};
-
 		const getMessageLog = async () => {
 			try {
 				const res = await apiClient.get('/message/all?page=1&limit=10');
@@ -96,7 +102,6 @@ export default function StoreProvider({
 				);
 			} catch (err) {}
 		};
-
 		const getEventConfig = async () => {
 			try {
 				const res = await apiClient.get('/user/config');
@@ -113,6 +118,7 @@ export default function StoreProvider({
 		getUserRank();
 		getMessageLog();
 		getEventConfig();
+		getHistoryServer();
 		return () => {};
 	}, [router]);
 

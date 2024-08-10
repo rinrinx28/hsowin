@@ -41,6 +41,7 @@ export const Minigame = () => {
 	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
 	const logBet = useAppSelector((state) => state.logBetGame);
 	const counter = useAppSelector((state) => state.countDownTime.value);
+	const historyServer = useAppSelector((state) => state.historyServer);
 
 	useEffect(() => {
 		const getDataMiniserver = async (server: string) => {
@@ -60,12 +61,6 @@ export const Minigame = () => {
 				dispatch(updateLogBet(data_logBet));
 				dispatch(updateMainBet(data_mainBet ?? null));
 				dispatch(count(0));
-				if (data_mainBet) {
-					socket.emit('value-bet-users', {
-						betId: data_mainBet._id,
-						server: userGame,
-					});
-				}
 			} catch (error) {
 				console.error('Error fetching bet logs:', error);
 			}
@@ -134,48 +129,9 @@ export const Minigame = () => {
 		socket.on('status-sv', handleStatusSv);
 		socket.on('status-24/24', handleStatus24);
 
-		socket.on('value-bet-users-re', (data) => {
-			if (data?.status) {
-				if (data?.data?.data === userGame) {
-					dispatch(updateMainBet({ ...mainBet, ...data?.data?.result }));
-				}
-			}
-		});
-		socket.on('value-bet-user-re', (data) => {
-			if (data?.status) {
-				let result = data?.data?.result;
-				if (userGame === data?.data?.server && mainBet) {
-					let result_bet: BetLog = {
-						t: 0,
-						x: 0,
-						c: 0,
-						l: 0,
-						0: 0,
-						1: 0,
-					};
-					if ('CXCTLXLT'.indexOf(result) > -1) {
-						let split_res: any = result.toLowerCase().split('');
-						if (split_res.length > 1) {
-							result_bet[split_res[0]] = data?.data?.amount / 2;
-							result_bet[split_res[1]] = data?.data?.amount / 2;
-						} else {
-							result_bet[split_res[0]] = data?.data?.amount;
-						}
-					}
-					if (
-						['1', '2', '3'].includes(data?.server) &&
-						'01'.indexOf(result) > -1
-					) {
-						result_bet[result] = data?.data?.amount;
-					}
-					const newMainBet = { ...mainBet };
-					for (const key of Object.keys(newMainBet)) {
-						if (key in result_bet) {
-							newMainBet[key] += result_bet[key];
-						}
-					}
-					dispatch(updateMainBet({ ...mainBet, ...newMainBet }));
-				}
+		socket.on('mainBet-up', (data) => {
+			if (data?.server === userGame) {
+				dispatch(updateMainBet({ ...mainBet, ...data }));
 			}
 		});
 
@@ -183,8 +139,7 @@ export const Minigame = () => {
 			socket.off('status-boss');
 			socket.off('status-sv');
 			socket.off('status-24/24');
-			socket.off('value-bet-users-re');
-			socket.off('value-bet-user-re');
+			socket.off('mainBet-up');
 		};
 	}, [socket, dispatch, logBet, userGame, mainBet]);
 
@@ -261,11 +216,11 @@ export const Minigame = () => {
 							<p>
 								Đen:{' '}
 								<span className="text-red-500 font-medium">
-									{mainBet?.[1] ?? 0}
+									{JSON.parse(mainBet?.resultUser ?? '{}')['1'] ?? 0}
 								</span>{' '}
 								- Đỏ:{' '}
 								<span className="text-red-500 font-medium">
-									{mainBet?.[0] ?? 0}
+									{JSON.parse(mainBet?.resultUser ?? '{}')['0'] ?? 0}
 								</span>
 							</p>
 						</>
@@ -274,26 +229,37 @@ export const Minigame = () => {
 							<p>
 								Chẳn:{' '}
 								<span className="text-red-500 font-medium">
-									{mainBet?.c ?? 0}
+									{JSON.parse(mainBet?.resultUser ?? '{}')['c'] ?? 0}
 								</span>{' '}
 								- Lẻ:{' '}
 								<span className="text-red-500 font-medium">
-									{mainBet?.l ?? 0}
+									{JSON.parse(mainBet?.resultUser ?? '{}')['l'] ?? 0}
 								</span>
 							</p>
 							<p>
 								Tài:{' '}
 								<span className="text-red-500 font-medium">
-									{mainBet?.t ?? 0}
+									{JSON.parse(mainBet?.resultUser ?? '{}')['t'] ?? 0}
 								</span>{' '}
 								- Xỉu:{' '}
 								<span className="text-red-500 font-medium">
-									{mainBet?.x ?? 0}
+									{JSON.parse(mainBet?.resultUser ?? '{}')['x'] ?? 0}
 								</span>
 							</p>
 						</>
 					)}
+					{mainBet?.timeBoss && (
+						<p>Thời gian Boss Chết: {changeStringToHour(mainBet.timeBoss)}</p>
+					)}
 					<p>Thời gian hoạt động: {userGame !== '24' ? '8h - 24h' : '24/24'}</p>
+					{historyServer && historyServer.server === userGame && (
+						<p>
+							Jackpot:{' '}
+							<span className="text-yellow-300 font-extrabold">
+								{new Intl.NumberFormat('vi').format(historyServer.jackpot ?? 0)}
+							</span>
+						</p>
+					)}
 				</div>
 				{userGame?.endsWith('mini') || userGame === '24' ? (
 					<>
@@ -835,3 +801,8 @@ export const BetMinigame = () => {
 		</div>
 	);
 };
+
+function changeStringToHour(str: string) {
+	let new_str = str.split('');
+	return new_str[0] + new_str[1] + ':' + new_str[2] + new_str[3];
+}

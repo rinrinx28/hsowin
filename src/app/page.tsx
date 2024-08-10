@@ -9,6 +9,8 @@ import { updateUserGame } from '@/lib/redux/features/Minigame/userGameSlice';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Typewriter from 'typewriter-effect';
+import ImageLoader from '@/lib/ImageLoader';
+import Image from 'next/image';
 
 const slogans = [
 	'Mini Game Đỏ Đen Hồi Sinh Ngọc Rồng',
@@ -20,6 +22,7 @@ const slogans = [
 export default function Home() {
 	const user = useAppSelector((state) => state.user);
 	const evenConfig = useAppSelector((state) => state.eventConfig);
+	const new_logo = ImageLoader('image/new.gif');
 	const userGame = useAppSelector((state) => state.userGame);
 	const [bank, setBank] = useState('');
 	const dispatch = useAppDispatch();
@@ -287,32 +290,40 @@ export default function Home() {
 				id="wellcome"
 				className="modal">
 				<div className="modal-box">
-					<h3 className="font-bold text-lg">Hướng dẫn</h3>
+					<h3 className="font-bold text-lg">Chương Trình Khuyến Mãi</h3>
 					<div className="py-4 flex flex-col gap-2">
 						<Link
 							href={'/login'}
-							className="text-nowrap link link-hover text-primary font-semibold capitalize ">
-							Nhận ngay 10 thỏi vàng khi tạo tài khoản trên web{' '}
+							className="text-nowrap flex flex-row items-center gap-2 link link-hover text-primary font-semibold capitalize ">
+							<Image
+								src={new_logo}
+								alt="new_logo_1"
+								width={50}
+								height={50}
+							/>
+							Nhận ngay 10 thỏi vàng khi tạo tài khoản trên web
 						</Link>
-						{/* <Link
-							href={'/login'}
-							className="text-nowrap link link-hover text-primary font-semibold capitalize ">
-							Cập nhật gift code
-						</Link> */}
 						<Link
 							href={'/login'}
-							className="text-nowrap link link-hover text-primary font-semibold capitalize ">
+							className="text-nowrap flex flex-row items-center gap-2 link link-hover text-primary font-semibold capitalize ">
+							<Image
+								src={new_logo}
+								alt="new_logo_2"
+								width={50}
+								height={50}
+							/>
 							Tặng thỏi vàng miễn phí mỗi ngày
 						</Link>
-						{/* <Link
-							href={'/login'}
-							className="text-nowrap link link-hover text-primary font-semibold capitalize ">
-							Ra mắt vòng quay nhận vàng miễn phí
-						</Link> */}
 						<Link
 							href={'/login'}
-							className="text-nowrap link link-hover text-primary font-semibold capitalize ">
-							Nạp Thỏi Vàng khuyễn mãi lên đến x{bank} qua ví/atm
+							className="text-nowrap flex flex-row items-center gap-2 link link-hover text-primary font-semibold capitalize ">
+							<Image
+								src={new_logo}
+								alt="new_logo_3"
+								width={50}
+								height={50}
+							/>
+							Nạp Thỏi Vàng khuyễn mãi lên đến x{bank} qua ví/ATM
 						</Link>
 					</div>
 					<div className="modal-action">
