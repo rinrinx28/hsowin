@@ -202,6 +202,16 @@ export const Minigame = () => {
 							<span className="loading loading-dots loading-sm"></span>
 						)}
 					</div>
+					{mainBet?.timeBoss ? (
+						<p>Thời gian Boss Chết: {changeStringToHour(mainBet.timeBoss)}</p>
+					) : (
+						['1-mini', '2-mini', '3-mini'].includes(mainBet?.server ?? '') && (
+							<p>
+								Thời gian Boss Chết:{' '}
+								<span className="loading loading-dots loading-sm"></span>
+							</p>
+						)
+					)}
 					{['1', '2', '3'].includes(userGame) ? (
 						<>
 							<p>
@@ -238,9 +248,6 @@ export const Minigame = () => {
 								</span>
 							</p>
 						</>
-					)}
-					{mainBet?.timeBoss && (
-						<p>Thời gian Boss Chết: {changeStringToHour(mainBet.timeBoss)}</p>
 					)}
 					<p>Thời gian hoạt động: {userGame !== '24' ? '8h - 24h' : '24/24'}</p>
 					{historyServer && historyServer.server === userGame && (
@@ -765,7 +772,7 @@ export const BetMinigame = () => {
 					disabled={isPause}
 					onClick={handlerBetUser}>
 					{isPause ? (
-						<span className="loading loading-ring loading-md"></span>
+						<span className="loading loading-infinity loading-md"></span>
 					) : (
 						'Chơi Ngay'
 					)}
