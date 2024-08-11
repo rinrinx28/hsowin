@@ -202,6 +202,50 @@ export default UserContent;
 
 function ProfileUser() {
 	const user = useAppSelector((state) => state.user);
+	const [pwd, setPwd] = useState({ old_pwd: '', new_pwd: '', conf_pwd: '' });
+	const [msg, setMsg] = useState('');
+	const router = useRouter();
+
+	const handleChangePassword = async () => {
+		try {
+			if (pwd.new_pwd !== pwd.conf_pwd)
+				throw new Error('Xin vui lòng kiểm tra lại nhập mật khẩu mới!');
+			const res = await apiClient.post(
+				'/user/change-password',
+				{
+					new_pwd: pwd.new_pwd,
+					old_pwd: pwd.old_pwd,
+				},
+				{
+					headers: {
+						Authorization: 'Bearer ' + user.token,
+					},
+				},
+			);
+			if (res.data?.status === 400) throw new Error(res?.data?.message);
+			setMsg(res.data);
+			setTimeout(() => {
+				closeModel();
+				router.push('/');
+				// Delete all token user
+				localStorage.removeItem('access_token');
+				window.location.reload();
+			}, 1e3 * 2);
+			return;
+		} catch (err: any) {
+			setMsg(err?.message);
+			return;
+		}
+	};
+
+	const closeModel = () => {
+		const modal = document.getElementById(
+			'changePassword',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			modal.close();
+		}
+	};
 
 	return (
 		<div className="flex flex-col gap-5 items-center lg:w-1/2 lg:p-4">
@@ -264,9 +308,110 @@ function ProfileUser() {
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
-					Đổi Mật Khẩu
+					<button
+						onClick={() => {
+							const modal = document.getElementById(
+								'changePassword',
+							) as HTMLDialogElement | null;
+							if (modal) {
+								return modal.showModal();
+							}
+						}}
+						className="btn btn-ghost btn-sm">
+						Đổi Mật Khẩu
+					</button>
 				</li>
 			</ul>
+
+			<dialog
+				id="changePassword"
+				className="modal">
+				<div className="modal-box">
+					<form method="dialog">
+						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+							✕
+						</button>
+					</form>
+					<h3 className="font-bold text-lg">Đổi Mật Khẩu</h3>
+					<div className="py-4 flex flex-col gap-4 justify-start items-center">
+						<label className="input input-bordered flex w-full items-center gap-2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+								fill="currentColor"
+								className="h-4 w-4 opacity-70">
+								<path
+									fillRule="evenodd"
+									d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
+									clipRule="evenodd"
+								/>
+							</svg>
+							<input
+								type="password"
+								className="grow"
+								placeholder="Nhập mật khẩu cũ"
+								defaultValue={pwd.old_pwd}
+								onChange={(e) =>
+									setPwd((p) => ({ ...p, old_pwd: e.target.value }))
+								}
+							/>
+						</label>
+						<label className="input input-bordered w-full flex items-center gap-2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+								fill="currentColor"
+								className="h-4 w-4 opacity-70">
+								<path
+									fillRule="evenodd"
+									d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
+									clipRule="evenodd"
+								/>
+							</svg>
+							<input
+								type="password"
+								className="grow"
+								placeholder="Nhập mật khẩu mới"
+								defaultValue={pwd.new_pwd}
+								onChange={(e) =>
+									setPwd((p) => ({ ...p, new_pwd: e.target.value }))
+								}
+							/>
+						</label>
+						<label
+							className={`input input-bordered ${
+								pwd.new_pwd !== pwd.conf_pwd ? 'input-error' : ''
+							} w-full flex items-center gap-2`}>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+								fill="currentColor"
+								className="h-4 w-4 opacity-70">
+								<path
+									fillRule="evenodd"
+									d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
+									clipRule="evenodd"
+								/>
+							</svg>
+							<input
+								type="password"
+								className={`grow`}
+								placeholder="Nhập lại mật khẩu mới"
+								defaultValue={pwd.conf_pwd}
+								onChange={(e) =>
+									setPwd((p) => ({ ...p, conf_pwd: e.target.value }))
+								}
+							/>
+						</label>
+						<p>{msg}</p>
+						<button
+							onClick={handleChangePassword}
+							className="btn btn-outline">
+							Đổi Mật Khẩu
+						</button>
+					</div>
+				</div>
+			</dialog>
 		</div>
 	);
 }
