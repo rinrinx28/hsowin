@@ -506,6 +506,7 @@ export const BetMinigame = () => {
 		socket.on('re-bet-user-ce-boss', (data) => {
 			if (data?.status) {
 				if (data?.data[0]?.uid === user?._id) {
+					setPause(false);
 					const { gold = 0, ...rs } = user;
 					dispatch(updateUser({ ...rs, gold: gold - betInfo.amount }));
 					dispatch(resetBet());
