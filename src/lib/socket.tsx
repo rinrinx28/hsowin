@@ -78,10 +78,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		return () => {
 			socket.disconnect();
 			socket.off('noti-bet');
-			socket.off('message-user-re');
+			socket.off('noti-system');
 			socket.off('message-system-re');
 			socket.off('jackpot-up');
-			socket.off('noti-system');
 		};
 	}, [dispatch]);
 
@@ -230,7 +229,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		});
 
 		return () => {
-			socket.off('message-system-re');
+			socket.off('message-user-re');
 			//TODO ———————————————[Handle mini game event]———————————————
 			socket.off('status-boss');
 			socket.off('status-sv');
