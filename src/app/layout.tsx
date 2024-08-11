@@ -57,7 +57,7 @@ export default function RootLayout({
 					}}
 				/>
 			</head>
-			<body className={`${inter.className} pt-4`}>
+			<body className={`${inter.className} transition-wh duration-300 ease`}>
 				<Providers>
 					<SocketProvider>
 						<NavBar />

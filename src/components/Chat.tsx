@@ -22,7 +22,6 @@ export default function ChatBox() {
 	const [chat, setChat] = useState<ChatBox | any>(null);
 	const socket = useSocket();
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
-	const dispatch = useAppDispatch();
 
 	const handlerChatUser = () => {
 		if (!user.isLogin) {
@@ -194,7 +193,11 @@ export default function ChatBox() {
 				className="modal">
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
-					<p className="py-4">Xin vui lòng nhập tin nhắn</p>
+					<p
+						className="py-4"
+						id="msg">
+						Xin vui lòng nhập tin nhắn
+					</p>
 					<div className="modal-action">
 						<form method="dialog">
 							{/* if there is a button in form, it will close the modal */}

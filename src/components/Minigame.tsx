@@ -35,7 +35,7 @@ import { updateUser } from '@/lib/redux/features/auth/user';
 import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 
 export const Minigame = () => {
-	const socket = useSocket();
+	// const socket = useSocket();
 	const dispatch = useAppDispatch();
 	const userGame = useAppSelector((state) => state.userGame);
 	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
@@ -70,78 +70,78 @@ export const Minigame = () => {
 			getDataMiniserver(userGame);
 		}
 		return () => {};
-	}, [userGame, dispatch, socket]);
+	}, [userGame, dispatch]);
 
-	useEffect(() => {
-		//TODO ———————————————[Handle mini game event]———————————————
+	// useEffect(() => {
+	// 	//TODO ———————————————[Handle mini game event]———————————————
 
-		const handleStatusBoss = (data: StatusBoss) => {
-			if (data?.type === 'old' && data?.server === userGame) {
-				const new_mainBet = data?.boss;
-				const old_bet = [
-					...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
-					new_mainBet,
-				];
-				const sort_bet = old_bet.sort(
-					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-				);
-				dispatch(updateMainBet(null));
-				dispatch(updateLogBet(sort_bet));
-			}
-			if (data?.type === 'new' && data?.server === userGame) {
-				dispatch(updateMainBet(data?.boss));
-			}
-		};
+	// 	const handleStatusBoss = (data: StatusBoss) => {
+	// 		if (data?.type === 'old' && data?.server === userGame) {
+	// 			const new_mainBet = data?.boss;
+	// 			const old_bet = [
+	// 				...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
+	// 				new_mainBet,
+	// 			];
+	// 			const sort_bet = old_bet.sort(
+	// 				(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
+	// 			);
+	// 			dispatch(updateMainBet(null));
+	// 			dispatch(updateLogBet(sort_bet));
+	// 		}
+	// 		if (data?.type === 'new' && data?.server === userGame) {
+	// 			dispatch(updateMainBet(data?.boss));
+	// 		}
+	// 	};
 
-		const handleStatusSv = (data: StatusSv) => {
-			if (data?.type === 'old' && data?.server === userGame) {
-				const new_mainBet = data?.sv;
-				const old_bet = [
-					...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
-					new_mainBet,
-				];
-				const sort_bet = old_bet.sort(
-					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-				);
-				dispatch(updateMainBet(null));
-				dispatch(updateLogBet(sort_bet));
-			}
-			if (data?.type === 'new' && data?.server === userGame) {
-				dispatch(updateMainBet({ ...data?.sv, timeBoss: data?.timeBoss }));
-			}
-		};
+	// 	const handleStatusSv = (data: StatusSv) => {
+	// 		if (data?.type === 'old' && data?.server === userGame) {
+	// 			const new_mainBet = data?.sv;
+	// 			const old_bet = [
+	// 				...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
+	// 				new_mainBet,
+	// 			];
+	// 			const sort_bet = old_bet.sort(
+	// 				(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
+	// 			);
+	// 			dispatch(updateMainBet(null));
+	// 			dispatch(updateLogBet(sort_bet));
+	// 		}
+	// 		if (data?.type === 'new' && data?.server === userGame) {
+	// 			dispatch(updateMainBet({ ...data?.sv, timeBoss: data?.timeBoss }));
+	// 		}
+	// 	};
 
-		const handleStatus24 = (data: Status24) => {
-			if (data?.server === userGame) {
-				const old_bet = [
-					...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
-					data?.old_bet,
-				];
-				const sort_bet = old_bet.sort(
-					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-				);
-				dispatch(updateLogBet(sort_bet));
-				dispatch(updateMainBet(data?.new_bet));
-			}
-		};
+	// 	const handleStatus24 = (data: Status24) => {
+	// 		if (data?.server === userGame) {
+	// 			const old_bet = [
+	// 				...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
+	// 				data?.old_bet,
+	// 			];
+	// 			const sort_bet = old_bet.sort(
+	// 				(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
+	// 			);
+	// 			dispatch(updateLogBet(sort_bet));
+	// 			dispatch(updateMainBet(data?.new_bet));
+	// 		}
+	// 	};
 
-		socket.on('status-boss', handleStatusBoss);
-		socket.on('status-sv', handleStatusSv);
-		socket.on('status-24/24', handleStatus24);
+	// 	socket.on('status-boss', handleStatusBoss);
+	// 	socket.on('status-sv', handleStatusSv);
+	// 	socket.on('status-24/24', handleStatus24);
 
-		socket.on('mainBet-up', (data) => {
-			if (data?.server === userGame) {
-				dispatch(updateMainBet({ ...mainBet, ...data }));
-			}
-		});
+	// 	socket.on('mainBet-up', (data) => {
+	// 		if (data?.server === userGame) {
+	// 			dispatch(updateMainBet({ ...mainBet, ...data }));
+	// 		}
+	// 	});
 
-		return () => {
-			socket.off('status-boss');
-			socket.off('status-sv');
-			socket.off('status-24/24');
-			socket.off('mainBet-up');
-		};
-	}, [socket, dispatch, logBet, userGame, mainBet]);
+	// 	return () => {
+	// 		socket.off('status-boss');
+	// 		socket.off('status-sv');
+	// 		socket.off('status-24/24');
+	// 		socket.off('mainBet-up');
+	// 	};
+	// }, [socket, dispatch, logBet, userGame, mainBet]);
 
 	useEffect(() => {
 		const loop = setInterval(() => {
@@ -155,15 +155,6 @@ export const Minigame = () => {
 			clearInterval(loop);
 		};
 	}, [mainBet, dispatch]);
-
-	// useEffect(() => {
-	// 	if (counter === 7) {
-	// 		socket.emit('result-data-bet', {
-	// 			betId: mainBet?._id,
-	// 			counter: counter,
-	// 		});
-	// 	}
-	// }, [socket, counter, mainBet]);
 
 	return (
 		<div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 card bg-base-100 shadow-xl border border-current">
@@ -347,6 +338,7 @@ export const BetMinigame = () => {
 	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
 	const userBetLog = useAppSelector((state) => state.userBetLog);
 	const [msg, setMsg] = useState({ isShow: false, msg: '' });
+	const [isPause, setPause] = useState(false);
 	const dispatch = useAppDispatch();
 
 	const handleTypeMiniserver = (e: any) => {
@@ -369,12 +361,11 @@ export const BetMinigame = () => {
 			showModelLogin();
 			return;
 		}
-		if (user)
-			if (betInfo.amount < 1 && betInfo.type.length < 1) {
-				showModelBet('Xin vui lòng kiểm tra dự đoán và đặt tiền cược!');
-				return;
-			}
-
+		if (betInfo.amount < 1 || betInfo.type.length < 1) {
+			showModelBet('Xin vui lòng kiểm tra dự đoán và đặt tiền cược!');
+			return;
+		}
+		setPause(true);
 		if (type === 'BOSS') {
 			const data: CreateUserBet = {
 				amount: betInfo.amount,
@@ -419,81 +410,80 @@ export const BetMinigame = () => {
 	}, [userGame, dispatch]);
 
 	useEffect(() => {
-		//TODO ———————————————[Event Bet Res Reuslt]———————————————
-		socket.on('re-bet-user-res-sv', (data) => {
-			const userBets: userBet[] = data?.data;
-			if (user?.isLogin) {
-				const target = userBets.filter((bet) => bet.uid === user?._id);
-				let amount = 0;
-				for (const bet of target) {
-					amount += bet.receive;
-				}
-				const { gold = 0, totalBet = 0, ...rs } = user;
-				dispatch(
-					updateUser({
-						...rs,
-						gold: gold + amount,
-						totalBet: totalBet + amount,
-					}),
-				);
-			}
-			if (data?.server === userGame) {
-				// Update Table UserBetLog
-				const new_userBetLog = userBetLog.map((bet) => {
-					let target = userBets.find((b) => b._id === bet._id);
-					if (target) {
-						target.isEnd = true;
-						return target;
-					}
-					return bet;
-				});
-				dispatch(updateAll(new_userBetLog));
-			}
-		});
+		// //TODO ———————————————[Event Bet Res Reuslt]———————————————
+		// socket.on('re-bet-user-res-sv', (data) => {
+		// 	const userBets: userBet[] = data?.data;
+		// 	if (user?.isLogin) {
+		// 		const target = userBets.filter((bet) => bet.uid === user?._id);
+		// 		let amount = 0;
+		// 		for (const bet of target) {
+		// 			amount += bet.receive;
+		// 		}
+		// 		const { gold = 0, totalBet = 0, ...rs } = user;
+		// 		dispatch(
+		// 			updateUser({
+		// 				...rs,
+		// 				gold: gold + amount,
+		// 				totalBet: totalBet + amount,
+		// 			}),
+		// 		);
+		// 	}
+		// 	if (data?.server === userGame) {
+		// 		// Update Table UserBetLog
+		// 		const new_userBetLog = userBetLog.map((bet) => {
+		// 			let target = userBets.find((b) => b._id === bet._id);
+		// 			if (target) {
+		// 				target.isEnd = true;
+		// 				return target;
+		// 			}
+		// 			return bet;
+		// 		});
+		// 		dispatch(updateAll(new_userBetLog));
+		// 	}
+		// });
 
-		socket.on('re-bet-user-res-boss', (data) => {
-			const userBets: userBet[] = data?.data;
-			if (user?.isLogin) {
-				const target = userBets.filter((bet) => bet.uid === user?._id);
-				let amount = 0;
-				for (const bet of target) {
-					amount += bet.receive;
-				}
-				const { gold = 0, totalBet = 0, ...rs } = user;
-				dispatch(
-					updateUser({
-						...rs,
-						gold: gold + amount,
-						totalBet: totalBet + amount,
-					}),
-				);
-			}
-			if (data?.server === userGame) {
-				// Update Table UserBetLog
-				const new_userBetLog = userBetLog.map((bet) => {
-					let target = userBets.find((b) => b._id === bet._id);
-					if (target) {
-						target.isEnd = true;
-						return target;
-					}
+		// socket.on('re-bet-user-res-boss', (data) => {
+		// 	const userBets: userBet[] = data?.data;
+		// 	if (user?.isLogin) {
+		// 		const target = userBets.filter((bet) => bet.uid === user?._id);
+		// 		let amount = 0;
+		// 		for (const bet of target) {
+		// 			amount += bet.receive;
+		// 		}
+		// 		const { gold = 0, totalBet = 0, ...rs } = user;
+		// 		dispatch(
+		// 			updateUser({
+		// 				...rs,
+		// 				gold: gold + amount,
+		// 				totalBet: totalBet + amount,
+		// 			}),
+		// 		);
+		// 	}
+		// 	if (data?.server === userGame) {
+		// 		// Update Table UserBetLog
+		// 		const new_userBetLog = userBetLog.map((bet) => {
+		// 			let target = userBets.find((b) => b._id === bet._id);
+		// 			if (target) {
+		// 				target.isEnd = true;
+		// 				return target;
+		// 			}
 
-					return bet;
-				});
-				dispatch(updateAll(new_userBetLog));
-			}
-		});
+		// 			return bet;
+		// 		});
+		// 		dispatch(updateAll(new_userBetLog));
+		// 	}
+		// });
 
 		//TODO ———————————————[Handle Event Bet create]———————————————
 
 		socket.on('re-bet-user-ce-sv', (data) => {
-			if (user?.isLogin && user?._id === data?.data[0]?.uid) {
-				showModelBet(data?.message);
-			}
 			if (data?.status) {
-				if (data?.data[0]?.uid === user._id) {
+				if (data?.data[0]?.uid === user?._id) {
+					setPause(false);
 					const { gold = 0, ...rs } = user;
 					dispatch(updateUser({ ...rs, gold: gold - betInfo.amount }));
 					dispatch(resetBet());
+					showModelBet(data?.message);
 				}
 				// Update Table User BetLog
 				if (data?.server === userGame) {
@@ -505,7 +495,8 @@ export const BetMinigame = () => {
 					dispatch(updateAll(updatedUserBetLog));
 				}
 			} else {
-				if (data?.data[0]?.uid === user._id) {
+				if (data?.data[0]?.uid === user?._id) {
+					setPause(false);
 					showModelBet(data?.message);
 					dispatch(resetBet());
 				}
@@ -513,14 +504,12 @@ export const BetMinigame = () => {
 		});
 
 		socket.on('re-bet-user-ce-boss', (data) => {
-			if (user?.isLogin && user?._id === data?.data[0]?.uid) {
-				showModelBet(data?.message);
-			}
 			if (data?.status) {
-				if (data?.data[0]?.uid === user._id) {
+				if (data?.data[0]?.uid === user?._id) {
 					const { gold = 0, ...rs } = user;
 					dispatch(updateUser({ ...rs, gold: gold - betInfo.amount }));
 					dispatch(resetBet());
+					showModelBet(data?.message);
 				}
 				if (data?.server === userGame) {
 					// Update Table User BetLog
@@ -531,7 +520,8 @@ export const BetMinigame = () => {
 					dispatch(updateAll(updatedUserBetLog));
 				}
 			} else {
-				if (data?.data[0]?.uid === user._id) {
+				if (data?.data[0]?.uid === user?._id) {
+					setPause(false);
 					showModelBet(data?.message);
 					dispatch(resetBet());
 				}
@@ -541,8 +531,8 @@ export const BetMinigame = () => {
 		return () => {
 			socket.off('re-bet-user-ce-sv');
 			socket.off('re-bet-user-ce-boss');
-			socket.off('re-bet-user-res-sv');
-			socket.off('re-bet-user-res-boss');
+			// socket.off('re-bet-user-res-sv');
+			// socket.off('re-bet-user-res-boss');
 		};
 	}, [socket, dispatch, user, betInfo, userBetLog, userGame]);
 
@@ -771,8 +761,13 @@ export const BetMinigame = () => {
 				<button
 					id="btn-bet"
 					className="btn btn-outline"
+					disabled={isPause}
 					onClick={handlerBetUser}>
-					Chơi Ngay
+					{isPause ? (
+						<span className="loading loading-ring loading-md"></span>
+					) : (
+						'Chơi Ngay'
+					)}
 				</button>
 
 				<dialog
