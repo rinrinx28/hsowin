@@ -318,7 +318,7 @@ function ProfileUser() {
 							}
 						}}
 						className="btn btn-ghost btn-sm">
-						Đổi Mật Khẩu
+						Nhấn để đổi mật khẩu
 					</button>
 				</li>
 			</ul>
