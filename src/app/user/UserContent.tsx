@@ -308,6 +308,7 @@ function ProfileUser() {
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+					<p>Mật Khẩu: ********</p>
 					<button
 						onClick={() => {
 							const modal = document.getElementById(
@@ -317,8 +318,8 @@ function ProfileUser() {
 								return modal.showModal();
 							}
 						}}
-						className="btn btn-ghost btn-sm">
-						Nhấn để đổi mật khẩu
+						className="btn btn-ghost btn-sm text-yellow-300">
+						(Nhấn để đổi mật khẩu)
 					</button>
 				</li>
 			</ul>
