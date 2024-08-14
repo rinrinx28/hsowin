@@ -1,11 +1,13 @@
 'use client';
 import apiClient from '@/lib/apiClient';
-import { useAppSelector } from '@/lib/redux/hook';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { TranslateKey } from '@/lib/unit/translateKey';
 import moment from 'moment';
 import Link from 'next/link';
+import { updateUser } from '@/lib/redux/features/auth/user';
+import { updateMission } from '@/lib/redux/features/auth/missionDaily';
 
 const UserContent = () => {
 	const user = useAppSelector((state) => state.user);
@@ -46,6 +48,15 @@ const UserContent = () => {
 		}
 		if (type === 'LICHSUBANK') {
 			setMenu('LICHSUBANK');
+		}
+		if (type === 'CHUYENVANG') {
+			setMenu('CHUYENVANG');
+		}
+		if (type === 'EXCHANGEGOLD') {
+			setMenu('EXCHANGEGOLD');
+		}
+		if (type === 'MISSIONDAILY') {
+			setMenu('MISSIONDAILY');
 		}
 	}, [searchParams]);
 
@@ -111,32 +122,12 @@ const UserContent = () => {
 							</li>
 							<li
 								className="text-xl btn btn-ghost"
-								onClick={() => {
-									const modal = document.getElementById(
-										'lock_user',
-									) as HTMLDialogElement | null;
-									if (modal) {
-										setMsg(
-											'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
-										);
-										return modal.showModal();
-									}
-								}}>
-								Chuyển Vàng Cho Người Chơi
+								onClick={() => setMenu('EXCHANGEGOLD')}>
+								Đổi Lục Bảo - Thỏi Vàng
 							</li>
 							<li
 								className="text-xl btn btn-ghost"
-								onClick={() => {
-									const modal = document.getElementById(
-										'lock_user',
-									) as HTMLDialogElement | null;
-									if (modal) {
-										setMsg(
-											'Xin lỗi tính năng tạm đang được phát triển, vui lòng thử lại sau!',
-										);
-										return modal.showModal();
-									}
-								}}>
+								onClick={() => setMenu('MISSIONDAILY')}>
 								Nhiệm Vụ Hàng Ngày
 							</li>
 							<li className="bg-base-300 text-sm lg:flex hidden flex-col justify-center items-start px-2 py-2 w-full rounded-lg">
@@ -176,7 +167,8 @@ const UserContent = () => {
 				{menu === 'RUTBANKING' && <RutBanking />}
 				{menu === 'LICHSUCUOC' && <HistoryUserBet />}
 				{menu === 'LICHSUBANK' && <HistoryUserBank />}
-				{menu === 'CHUYENVANG' && <TradeOtherUser />}
+				{menu === 'EXCHANGEGOLD' && <ExchangeGold />}
+				{menu === 'MISSIONDAILY' && <MissionDaily />}
 			</div>
 			<dialog
 				id="lock_user"
@@ -233,7 +225,7 @@ function ProfileUser() {
 			}, 1e3 * 2);
 			return;
 		} catch (err: any) {
-			setMsg(err?.message);
+			setMsg(err?.response?.data?.message);
 			return;
 		}
 	};
@@ -915,12 +907,12 @@ function RutBanking() {
 					return modal.showModal();
 				}
 			}
-		} catch (err) {
+		} catch (err: any) {
 			const modal = document.getElementById(
 				'err-bank',
 			) as HTMLDialogElement | null;
 			if (modal) {
-				setMsg('Đã xảy ra lỗi, xin vui lòng thử lại sau chút lát!');
+				setMsg(err?.response?.data?.message);
 				return modal.showModal();
 			}
 		}
@@ -1431,56 +1423,79 @@ function HistoryRutBank({ data }: { data: any[] }) {
 	);
 }
 
-interface TypeTradeUser {
-	type?: string;
-	amount?: any;
-	user?: any;
-}
-
-function TradeOtherUser() {
+function ExchangeGold() {
 	const user = useAppSelector((state) => state.user);
 	const [msg, setMsg] = useState('');
-	const [info, setInfo] = useState<TypeTradeUser>({ type: 'uid' });
+	const [info, setInfo] = useState({
+		amount: 0,
+		receive: 0,
+	});
+	const [percent, setPercent] = useState(0);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
+	const dispatch = useAppDispatch();
 
-	const handleNapBank = async () => {
+	const handleExchangeGold = async () => {
 		try {
-			const modal = document.getElementById('lock') as HTMLDialogElement | null;
-			if (modal) {
-				return modal.showModal();
-			}
-			if (!containsLettersAndSpecialChars(info?.amount)) {
-				const modal = document.getElementById(
-					'err-trade',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg('Xin vui lòng chỉ nhập chữ số ở trường Nhập Số Tiền');
-					return modal.showModal();
-				}
-			}
-		} catch (err) {
-			const modal = document.getElementById(
-				'err-trade',
-			) as HTMLDialogElement | null;
-			if (modal) {
-				setMsg('Đã xảy ra lỗi, xin vui lòng thử lại sau chút lát!');
-				return modal.showModal();
-			}
+			if (!containsLettersAndSpecialChars(String(info.amount)))
+				return showModel(
+					'Xin vui lòng chỉ nhập chữ số ở trường Nhập Số Lục Bảo',
+				);
+			const res = await apiClient.post(
+				'/user/exchange-gold',
+				{
+					diamon: Number(info.amount),
+				},
+				{
+					headers: {
+						Authorization: 'Bearer ' + user.token,
+					},
+				},
+			);
+			showModel(res.data.message);
+			dispatch(updateUser({ ...user, ...res.data.data }));
+		} catch (err: any) {
+			showModel(err?.response?.data?.message);
 		}
 	};
+
+	const showModel = (message: string) => {
+		const modal = document.getElementById(
+			'err-trade',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			setMsg(message);
+			return modal.showModal();
+		}
+	};
+
+	useEffect(() => {
+		if (eventConfig) {
+			const diamon = eventConfig.find(
+				(e) => e.name === 'e-percent-diamon-trade',
+			);
+			setPercent(diamon?.value ?? 0);
+		}
+	}, [eventConfig]);
 
 	return (
 		<div className="flex flex-col gap-5 items-start p-4 w-full">
 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
-				Chuyển Thỏi Vàng
+				Đổi Lục Bảo - Thỏi Vàng
 			</h1>
 			<div className="flex flex-col gap-2 w-full p-4 rounded-md bg-base-300">
 				<p>
-					Bạn chỉ có thể chuyển tới những người chơi ở{' '}
-					<span className="text-error">Server {user?.server}</span>
+					Mức tỉ lệ quy đổi hiện tại là:
+					<span className="text-info"> {percent} lục bảo/1 thỏi vàng</span>
+				</p>
+				<p>
+					Số Lục Bảo hiện có:{' '}
+					<span className="text-info">
+						{user?.diamon} lục bảo = {(user?.diamon ?? 0) / percent} thỏi vàng
+					</span>
 				</p>
 			</div>
 			<div className="flex flex-col gap-4 items-center justify-center w-full">
-				<label className="label w-3/4">
+				<label className="label w-full">
 					<p>ID Tài Khoản:</p>
 					<input
 						type="text"
@@ -1491,7 +1506,7 @@ function TradeOtherUser() {
 					/>
 				</label>
 
-				<label className="label w-3/4">
+				<label className="label w-full">
 					<p>Tên Tài Khoản:</p>
 					<input
 						type="text"
@@ -1502,45 +1517,36 @@ function TradeOtherUser() {
 					/>
 				</label>
 
-				<label className="label w-3/4">
-					<p>Hình Thức:</p>
-					<select
-						defaultValue={'uid'}
-						className="select select-bordered w-full max-w-md select-md"
-						onChange={(e) => setInfo((i) => ({ ...i, type: e.target.value }))}>
-						<option value="name">Tên Hiển Thị</option>
-						<option value={'username'}>Tên tài khoản</option>
-						<option
-							selected
-							value={'uid'}>
-							ID Tài Khoản
-						</option>
-					</select>
-				</label>
-
-				<label className="label w-3/4">
-					<p>Nhập Thông tin người nhận:</p>
+				<label className="label w-full">
+					<p>Nhập Số Lục Bảo:</p>
 					<input
 						type="text"
 						className="input input-bordered w-full max-w-md"
-						onChange={(e) => setInfo((i) => ({ ...i, user: e.target.value }))}
+						onChange={(e) =>
+							setInfo((i) => ({
+								...i,
+								amount: Number(e.target.value),
+								receive: Number(e.target.value) / percent,
+							}))
+						}
 					/>
 				</label>
 
-				<label className="label w-3/4">
-					<p>Nhập Số Thỏi Vàng:</p>
+				<label className="label w-full">
+					<p>Nhập Số Vàng Nhận:</p>
 					<input
 						type="text"
 						className="input input-bordered w-full max-w-md"
-						onChange={(e) => setInfo((i) => ({ ...i, amount: e.target.value }))}
+						disabled
+						value={info.receive}
 					/>
 				</label>
 
-				<div className="flex flex-col gap-2 w-3/4">
+				<div className="flex flex-col gap-2 w-full">
 					<button
 						className="btn btn-lg"
-						onClick={handleNapBank}>
-						CHUYỂN NGAY
+						onClick={handleExchangeGold}>
+						Đổi Ngay
 					</button>
 				</div>
 			</div>
@@ -1562,6 +1568,176 @@ function TradeOtherUser() {
 			</dialog>
 			<dialog
 				id="err-trade"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<p className="py-4">{msg}</p>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+		</div>
+	);
+}
+
+function MissionDaily() {
+	const [prizes, setPrize] = useState([]);
+	const [value, setValue] = useState([]);
+	const [data, setData] = useState<any>([]);
+	const [msg, setMsg] = useState('');
+	const mission = useAppSelector((state) => state.missionDaily);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
+	const user = useAppSelector((state) => state.user);
+	const dispatch = useAppDispatch();
+
+	const handleClaimMission = async (index: number) => {
+		try {
+			const res = await apiClient.post(
+				'/user/mission/claim',
+				{
+					index: index,
+				},
+				{
+					headers: {
+						Authorization: 'Bearer ' + user?.token,
+					},
+				},
+			);
+			const data = res.data;
+			dispatch(updateUser({ ...user, ...data?.data }));
+			dispatch(updateMission({ ...mission, ...data?.mission }));
+			showModel(data.message);
+		} catch (err: any) {
+			showModel(err?.response?.data?.message);
+		}
+	};
+
+	const showModel = (message: string) => {
+		const modal = document.getElementById(
+			'err-mission',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			setMsg(message);
+			return modal.showModal();
+		}
+	};
+
+	useEffect(() => {
+		if (eventConfig) {
+			const value_mission = eventConfig.find(
+				(e) => e.name === 'e-value-mission-daily',
+			);
+			const claim_mission = eventConfig.find(
+				(e) => e.name === 'e-claim-mission-daily',
+			);
+			setValue(JSON.parse(value_mission?.option ?? '[]'));
+			setPrize(JSON.parse(claim_mission?.option ?? '[]'));
+		}
+	}, [eventConfig]);
+
+	useEffect(() => {
+		if (mission) {
+			setData(JSON.parse(mission?.data ?? '[]'));
+		}
+	}, [mission]);
+
+	return (
+		<div className="flex flex-col gap-5 items-start p-4 w-full">
+			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
+				Nhiệm Vụ Hằng Ngày
+			</h1>
+			<div className="flex flex-col gap-2 w-full p-4 rounded-md bg-base-300">
+				<p>
+					Tổng điểm bạn hiện có là:
+					<span className="text-info"> {user?.totalBet ?? 0} điểm</span> (Điểm
+					được tính dựa trên tổng cược bạn thắng trong ngày)
+				</p>
+			</div>
+			<div className="overflow-auto hidden-scroller">
+				<ul className="timeline">
+					{prizes?.map((p: any, i: number) => {
+						return (
+							<li key={`${p} - ${i}`}>
+								{i !== 0 && (
+									<hr
+										className={`${
+											(user?.totalBet ?? 0) >= value[i] && 'bg-primary'
+										}`}
+									/>
+								)}
+								<button
+									className={`${
+										i % 2 === 0 ? 'timeline-start' : 'timeline-end'
+									} timeline-box btn`}
+									onClick={() => handleClaimMission(i)}
+									disabled={
+										data[i]?.isClaim ? true : (user?.totalBet ?? 0) < value[i]
+									}>
+									{data[i]?.isClaim
+										? true
+										: (user?.totalBet ?? 0) < value[i]
+										? ''
+										: 'Nhận'}{' '}
+									{p} Thỏi vàng
+								</button>
+								<div className="timeline-middle">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										fill="currentColor"
+										className={`${
+											(user?.totalBet ?? 0) >= value[i] && 'text-primary'
+										} h-5 w-5`}>
+										<path
+											fillRule="evenodd"
+											d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+											clipRule="evenodd"
+										/>
+									</svg>
+								</div>
+
+								{prizes.length - 1 !== i && (
+									<hr
+										className={`${
+											(user?.totalBet ?? 0) >= value[i] && 'bg-primary'
+										}`}
+									/>
+								)}
+							</li>
+						);
+					})}
+				</ul>
+			</div>
+			<table className="table table-lg table-pin-rows table-pin-cols border border-current rounded-xl">
+				{/* head */}
+				<thead className="text-sm  text-center">
+					<tr>
+						<th>Tổng Điểm</th>
+						<th>Phần Thưởng</th>
+						<th>Trạng Thái</th>
+					</tr>
+				</thead>
+				<tbody className="text-sm text-center text-nowrap">
+					{/* row 1 */}
+					{value?.map((item: any, i: number) => {
+						return (
+							<tr
+								key={item}
+								className="hover">
+								<td>{item}</td>
+								<td>{prizes[i]} Thỏi vàng</td>
+								<td>{data[i].isClaim ? 'Đã nhận' : 'Chưa Nhận'}</td>
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+			<dialog
+				id="err-mission"
 				className="modal">
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>

@@ -96,6 +96,16 @@ const NavBar = () => {
 										<li>
 											<Link href={'/user?type=LICHSUBANK'}>Lịch Sử Bank</Link>
 										</li>
+										<li>
+											<Link href={'/user?type=EXCHANGEGOLD'}>
+												Đổi Lục Bảo - Thỏi Vàng
+											</Link>
+										</li>
+										<li>
+											<Link href={'/user?type=MISSIONDAILY'}>
+												Nhiệm Vụ Hàng Ngày
+											</Link>
+										</li>
 									</>
 								)}
 							</ul>

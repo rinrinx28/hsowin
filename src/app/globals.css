@@ -290,3 +290,15 @@
   /* Apply the "flicker" animation to the .fire class */
   animation: flicker 2s infinite;
 }
+
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hidden-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hidden-scroller {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}

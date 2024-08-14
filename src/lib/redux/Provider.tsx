@@ -17,6 +17,7 @@ import moment from 'moment';
 import { updateEventConfig } from './features/logs/eventConfig';
 import { updateUserVip } from './features/auth/userVip';
 import { updateHistoryServer } from './features/logs/historyServer';
+import { updateMission } from './features/auth/missionDaily';
 
 export default function StoreProvider({
 	children,
@@ -45,6 +46,17 @@ export default function StoreProvider({
 				storeRef.current?.dispatch(updateHistoryServer(data));
 			} catch (err) {}
 		};
+		const getUserMission = async (token: any) => {
+			try {
+				const res = await apiClient.get('/user/mission', {
+					headers: {
+						Authorization: 'Bearer ' + token,
+					},
+				});
+				const data = res.data;
+				storeRef.current?.dispatch(updateMission({ ...data }));
+			} catch (err) {}
+		};
 		const getUserVip = async (token: any) => {
 			try {
 				const res = await apiClient.get('/user/vip/info', {
@@ -54,7 +66,6 @@ export default function StoreProvider({
 				});
 				const data = res.data;
 				let new_data = JSON.parse(data.data);
-				console.log(data, new_data);
 				storeRef.current?.dispatch(updateUserVip({ ...data, data: new_data }));
 			} catch (err) {}
 		};
@@ -113,6 +124,7 @@ export default function StoreProvider({
 		if (isStay) {
 			relogin(isStay);
 			getUserVip(isStay);
+			getUserMission(isStay);
 		}
 		getUserBetLog();
 		getUserRank();

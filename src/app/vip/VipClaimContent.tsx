@@ -131,7 +131,10 @@ function TableClaimVip({ setMsg, showModel }: { setMsg: any; showModel: any }) {
 				dispath(updateUserVip({ ...result?.data?.vip, data: new_data }));
 			}
 			return;
-		} catch (err) {}
+		} catch (err: any) {
+			setMsg(err?.response?.data?.message);
+			showModel();
+		}
 	};
 	return (
 		<div className="grid lg:grid-cols-7 md:grid-cols-3 sm:grid-cols-3 grid-cols-2 gap-4 p-4">

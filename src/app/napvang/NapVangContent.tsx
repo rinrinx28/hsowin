@@ -103,7 +103,13 @@ export default function PageNapVang() {
 				setMsg('Đã hủy đơn nạp thành công!');
 				return modal.showModal();
 			}
-		} catch (err) {}
+		} catch (err: any) {
+			const modal = document.getElementById('lock') as HTMLDialogElement | null;
+			if (modal) {
+				setMsg(err?.response?.data?.message);
+				return modal.showModal();
+			}
+		}
 	};
 
 	useEffect(() => {
