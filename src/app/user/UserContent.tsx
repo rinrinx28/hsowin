@@ -1682,7 +1682,7 @@ function MissionDaily() {
 										: (user?.totalBet ?? 0) < value[i]
 										? ''
 										: 'Nhận'}{' '}
-									{p} Thỏi vàng
+									{value[i]} Điểm
 								</button>
 								<div className="timeline-middle">
 									<svg
@@ -1728,7 +1728,7 @@ function MissionDaily() {
 							<tr
 								key={item}
 								className="hover">
-								<td>{item}</td>
+								<td>{new Intl.NumberFormat('vi').format(item)}</td>
 								<td>{prizes[i]} Thỏi vàng</td>
 								<td>{data[i].isClaim ? 'Đã nhận' : 'Chưa Nhận'}</td>
 							</tr>
