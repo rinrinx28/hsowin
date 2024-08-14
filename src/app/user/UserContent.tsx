@@ -1438,7 +1438,7 @@ function ExchangeGold() {
 		try {
 			if (!containsLettersAndSpecialChars(String(info.amount)))
 				return showModel(
-					'Xin vui lòng chỉ nhập chữ số ở trường Nhập Số Lục Bảo',
+					'Xin vui lòng chỉ nhập số nguyên ở trường Nhập Số Lục Bảo',
 				);
 			const res = await apiClient.post(
 				'/user/exchange-gold',
@@ -1490,7 +1490,9 @@ function ExchangeGold() {
 				<p>
 					Số Lục Bảo hiện có:{' '}
 					<span className="text-info">
-						{user?.diamon} lục bảo = {(user?.diamon ?? 0) / percent} thỏi vàng
+						{new Intl.NumberFormat('vi').format(user?.diamon ?? 0)} lục bảo ={' '}
+						{new Intl.NumberFormat('vi').format((user?.diamon ?? 0) / percent)}{' '}
+						thỏi vàng
 					</span>
 				</p>
 			</div>
@@ -1538,7 +1540,7 @@ function ExchangeGold() {
 						type="text"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={info.receive}
+						value={new Intl.NumberFormat('vi').format(info.receive)}
 					/>
 				</label>
 
@@ -1657,7 +1659,7 @@ function MissionDaily() {
 					được tính dựa trên tổng cược bạn thắng trong ngày)
 				</p>
 			</div>
-			<div className="overflow-auto hidden-scroller">
+			<div className="overflow-auto">
 				<ul className="timeline">
 					{prizes?.map((p: any, i: number) => {
 						return (
