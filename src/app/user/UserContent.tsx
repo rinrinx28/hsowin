@@ -1682,7 +1682,7 @@ function MissionDaily() {
 										: (user?.totalBet ?? 0) < value[i]
 										? ''
 										: 'Nhận'}{' '}
-									{value[i]} Điểm
+									{value[i]} Thỏi vàng
 								</button>
 								<div className="timeline-middle">
 									<svg
