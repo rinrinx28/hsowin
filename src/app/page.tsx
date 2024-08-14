@@ -95,11 +95,6 @@ export default function Home() {
 											<Link href={'/user?type=RUTBANKING'}>Rút Về Bank</Link>
 										</li>
 										<li>
-											<Link href={'/user?type=CHUYENVANG'}>
-												Chuyển Vàng Cho Người Chơi
-											</Link>
-										</li>
-										<li>
 											<Link href={'/user?type=EXCHANGEGOLD'}>
 												Đổi Lục Bảo - Thỏi Vàng
 											</Link>
