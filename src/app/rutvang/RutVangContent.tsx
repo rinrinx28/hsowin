@@ -145,7 +145,7 @@ export default function PageRutVang() {
 
 	return (
 		<div>
-			<div className="min-h-screen flex flex-col justify-center items-center">
+			<div className="min-h-screen flex flex-col justify-center items-center p-2">
 				<div className="max-w-7xl w-full flex flex-col gap-2">
 					<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
 						RÚT VÀNG
@@ -163,7 +163,7 @@ export default function PageRutVang() {
 							Hệ thống tự động hủy đơn sau 10 phút nếu chưa giao dịch thành công
 						</p>
 					</div>
-					<div className="flex flex-row gap-5 justify-between">
+					<div className="flex lg:flex-row flex-wrap gap-5 justify-between">
 						<div className="flex flex-col gap-2 border border-current p-8 rounded-lg">
 							<h2 className="text-center border-b border-current pb-2 flex flex-row gap-2 justify-center items-center">
 								Số dư: {new Intl.NumberFormat('vi').format(user?.gold ?? 0)}{' '}
