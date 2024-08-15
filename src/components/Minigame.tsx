@@ -592,7 +592,7 @@ export const BetMinigame = () => {
 					<option
 						value={'XIEN'}
 						disabled={['1', '2', '3'].includes(userGame)}>
-						Xiên (10tv được 32tv)
+						{`Xiên (10tv được 32tv)`}
 					</option>
 					<option
 						value={'GUEST'}
