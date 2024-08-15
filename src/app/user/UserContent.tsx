@@ -1714,7 +1714,7 @@ function MissionDaily() {
 					})}
 				</ul>
 			</div>
-			<table className="table table-lg table-pin-rows table-pin-cols border border-current rounded-xl">
+			<table className="table table-pin-rows table-pin-cols">
 				{/* head */}
 				<thead className="text-sm  text-center">
 					<tr>
