@@ -294,10 +294,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	}, [diemDanhStore, dispatch]);
 
 	useEffect(() => {
-		if (user?.token || user?.isLogin) {
-			socket.emit('diem-danh-got', { uid: user._id, token: user?.token });
-		}
-	}, [user]);
+		socket.emit('diem-danh-got', { uid: '', token: '' });
+	}, []);
 
 	return (
 		<SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
