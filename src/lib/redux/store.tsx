@@ -3,7 +3,7 @@ import LogBetGameSlice from './features/Minigame/LogBetGameSlice';
 import userGameSlice from './features/Minigame/userGameSlice';
 import MainBetGameSlice from './features/Minigame/MainBetGameSlice';
 import countDownTimeSlice from './features/Minigame/countDownTimeSlice';
-import user from './features/auth/user';
+import users from './features/auth/user';
 import typeGame from './features/Minigame/typeGame';
 import betInfo from './features/Minigame/betInfo';
 import userBetLog from './features/logs/userBetLog';
@@ -21,7 +21,7 @@ export const makeStore = () => {
 			logBetGame: LogBetGameSlice,
 			mainBetGame: MainBetGameSlice,
 			countDownTime: countDownTimeSlice,
-			user: user,
+			user: users,
 			typeGame: typeGame,
 			betInfo: betInfo,
 			userBetLog: userBetLog,

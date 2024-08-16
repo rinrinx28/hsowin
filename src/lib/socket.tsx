@@ -107,10 +107,10 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		const handleStatusBoss = (data: StatusBoss) => {
 			if (data?.type === 'old' && data?.server === userGame) {
 				const new_mainBet = data?.boss;
-				const old_bet = [
-					...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
-					new_mainBet,
-				];
+				// const sort_logBet = logBet.sort(
+				// 	(a, b) => moment(a.updatedAt).unix() - moment(b.updatedAt).unix(),
+				// );
+				const old_bet = [new_mainBet, ...logBet].slice(0, logBet.length);
 				const sort_bet = old_bet.sort(
 					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
 				);
@@ -125,10 +125,10 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		const handleStatusSv = (data: StatusSv) => {
 			if (data?.type === 'old' && data?.server === userGame) {
 				const new_mainBet = data?.sv;
-				const old_bet = [
-					...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
-					new_mainBet,
-				];
+				// const sort_logBet = logBet.sort(
+				// 	(a, b) => moment(a.updatedAt).unix() - moment(b.updatedAt).unix(),
+				// );
+				const old_bet = [new_mainBet, ...logBet].slice(0, logBet.length);
 				const sort_bet = old_bet.sort(
 					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
 				);
@@ -142,10 +142,11 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
 		const handleStatus24 = (data: Status24) => {
 			if (data?.server === userGame) {
-				const old_bet = [
-					...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
-					data?.old_bet,
-				];
+				const new_mainBet = data?.old_bet;
+				// const sort_logBet = logBet?.sort(
+				// 	(a, b) => moment(a.updatedAt).unix() - moment(b.updatedAt).unix(),
+				// );
+				const old_bet = [new_mainBet, ...logBet].slice(0, logBet.length);
 				const sort_bet = old_bet.sort(
 					(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
 				);
