@@ -13,6 +13,7 @@ import eventConfig from './features/logs/eventConfig';
 import userVip from './features/auth/userVip';
 import historyServer from './features/logs/historyServer';
 import missionDaily from './features/auth/missionDaily';
+import diemDanhStore from './features/logs/diemdanh';
 
 export const makeStore = () => {
 	return configureStore({
@@ -31,6 +32,7 @@ export const makeStore = () => {
 			userVip: userVip,
 			historyServer: historyServer,
 			missionDaily: missionDaily,
+			diemDanhStore: diemDanhStore,
 		},
 	});
 };

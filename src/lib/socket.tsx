@@ -16,6 +16,13 @@ import { updateMainBet } from './redux/features/Minigame/MainBetGameSlice';
 import { updateLogBet } from './redux/features/Minigame/LogBetGameSlice';
 import { updateUser } from './redux/features/auth/user';
 import { updateAll } from './redux/features/logs/userBetLog';
+import {
+	DiemDanhGot,
+	DiemDanhLive,
+	DiemDanhRe,
+	DiemDanhResult,
+} from './dto/dto.socket';
+import { updateDiemDanh } from './redux/features/logs/diemdanh';
 moment().format();
 
 const urlConfig = {
@@ -53,6 +60,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 	const mainBet = useAppSelector((state) => state.mainBetGame) as BetLog | null;
 	const logBet = useAppSelector((state) => state.logBetGame);
 	const userBetLog = useAppSelector((state) => state.userBetLog);
+	const diemDanhStore = useAppSelector((state) => state.diemDanhStore);
 
 	useEffect(() => {
 		socket.connect();
@@ -229,6 +237,33 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 			}
 		});
 
+		//TODO ———————————————[Event Diem Danh]———————————————
+		// socket.on('diem-danh-got-re', (data: DiemDanhGot) => {
+		// 	dispatch(updateDiemDanh({ ...diemDanhStore, count: data.length }));
+		// });
+		socket.on('diem-danh-re', (data: DiemDanhRe) => {
+			if (data.uid === user._id) {
+				const modal = document.getElementById(
+					're-home-page',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					let div = document.getElementById(
+						'info-diem-danh-re',
+					) as HTMLDivElement;
+					div.innerHTML = `<p>${data.msg}</p>`;
+					modal.showModal();
+				}
+			}
+			dispatch(updateDiemDanh({ count: data.length }));
+		});
+		// socket.on('diem-danh-live', (data: DiemDanhLive))
+		socket.on('diem-danh-result', (data: DiemDanhResult) => {
+			if (user._id === data._id) {
+				let { clan, ...new_data } = data;
+				dispatch(updateUser({ ...user, ...new_data }));
+			}
+		});
+
 		return () => {
 			socket.off('message-user-re');
 			//TODO ———————————————[Handle mini game event]———————————————
@@ -239,8 +274,30 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 			//TODO ———————————————[Event Bet Res Reuslt]———————————————
 			socket.off('re-bet-user-res-sv');
 			socket.off('re-bet-user-res-boss');
+			//TODO ———————————————[Event Diem Danh]———————————————
+			// socket.off('diem-danh-got-re');
+			socket.off('diem-danh-re');
+			// socket.off('diem-danh-live');
+			socket.off('diem-danh-result');
 		};
 	}, [dispatch, user, logBet, userGame, mainBet, userBetLog]);
+
+	useEffect(() => {
+		//TODO ———————————————[Event Diem Danh]———————————————
+		socket.on('diem-danh-got-re', (data: DiemDanhGot) => {
+			dispatch(updateDiemDanh({ ...diemDanhStore, count: data.length }));
+		});
+		return () => {
+			//TODO ———————————————[Event Diem Danh]———————————————
+			socket.off('diem-danh-got-re');
+		};
+	}, [diemDanhStore, dispatch]);
+
+	useEffect(() => {
+		if (user?.token || user?.isLogin) {
+			socket.emit('diem-danh-got', { uid: user._id, token: user?.token });
+		}
+	}, [user]);
 
 	return (
 		<SocketContext.Provider value={socket}>{children}</SocketContext.Provider>

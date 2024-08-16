@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import Typewriter from 'typewriter-effect';
 import ImageLoader from '@/lib/ImageLoader';
 import Image from 'next/image';
+import moment from 'moment';
+import { useSocket } from '@/lib/socket';
 
 const slogans = [
 	'Mini Game Đỏ Đen Hồi Sinh Ngọc Rồng',
@@ -22,10 +24,14 @@ const slogans = [
 export default function Home() {
 	const user = useAppSelector((state) => state.user);
 	const evenConfig = useAppSelector((state) => state.eventConfig);
+	const diemDanhStore = useAppSelector((state) => state.diemDanhStore);
 	const new_logo = ImageLoader('image/new.gif');
 	const userGame = useAppSelector((state) => state.userGame);
 	const [bank, setBank] = useState('');
 	const dispatch = useAppDispatch();
+	const [winner, setWinner] = useState(0);
+	const [delay, setDelay] = useState(0);
+	const socket = useSocket();
 
 	const showTutorial = () => {
 		const modal = document.getElementById(
@@ -34,6 +40,20 @@ export default function Home() {
 		if (modal) {
 			modal.showModal();
 		}
+	};
+
+	const showError = () => {
+		const modal = document.getElementById(
+			'err-home-page',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			modal.showModal();
+		}
+	};
+
+	const handleDiemdanh = () => {
+		if (!user.token || !user?._id || !user?.isLogin) return showError();
+		socket.emit('diem-danh', { uid: user._id, token: user.token });
 	};
 
 	useEffect(() => {
@@ -48,6 +68,19 @@ export default function Home() {
 			}
 		}
 	}, [user, evenConfig]);
+
+	useEffect(() => {
+		if (evenConfig) {
+			const e_winner_diem_danh = evenConfig.find(
+				(e) => e.name === 'e-number-winner-diem-danh',
+			);
+			setWinner(e_winner_diem_danh?.value ?? 0);
+			const e_time_delay_diem_danh = evenConfig.find(
+				(e) => e.name === 'e-time-delay-diem-danh',
+			);
+			setDelay(e_time_delay_diem_danh?.value ?? 0);
+		}
+	}, [evenConfig]);
 
 	return (
 		<div className="min-w-[300px] flex flex-col gap-5 py-5 px-2 transition-all">
@@ -348,18 +381,71 @@ export default function Home() {
 				id="penning"
 				className="modal">
 				<div className="modal-box">
-					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
-					<div className="py-4 flex flex-col gap-2">
+					<form method="dialog">
+						{/* if there is a button in form, it will close the modal */}
+						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+							✕
+						</button>
+					</form>
+					<h3 className="font-bold text-lg">ĐIỂM DANH NHẬN VÀNG</h3>
+					<div
+						className="py-4 flex flex-col justify-center items-center gap-2"
+						id="info-diem-danh">
 						<p>
-							Xin lỗi tính năng đang được phát triển, xin vui lòng thử lại sau
+							Đang có{' '}
+							<span
+								className="text-red-300 font-extrabold"
+								id="length-diem-danh">
+								{diemDanhStore.count ?? 0}
+							</span>{' '}
+							người điểm danh
 						</p>
+						<p>
+							Điểm danh hoàn toàn miễn phí ai cũng có thể tham gia với phần quà
+							ngẫu nhiên là thỏi vàng Trao giải{' '}
+							<span>{moment.utc(delay).format('mm:ss')} phút</span> 1 lần cho{' '}
+							<span>{winner}</span> người may mắn
+						</p>
+						<button
+							className="btn btn-outline"
+							onClick={handleDiemdanh}>
+							Điểm Danh
+						</button>
 					</div>
-					<div className="modal-action">
-						<form method="dialog">
-							{/* if there is a button in form, it will close the modal */}
-							<button className="btn">Đóng</button>
-						</form>
+				</div>
+			</dialog>
+			<dialog
+				id="err-home-page"
+				className="modal">
+				<div className="modal-box">
+					<form method="dialog">
+						{/* if there is a button in form, it will close the modal */}
+						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+							✕
+						</button>
+					</form>
+					<h3 className="font-bold text-lg">Thông báo người chơi</h3>
+					<div
+						className="py-4 flex flex-col justify-center items-center gap-2"
+						id="info-diem-danh">
+						<p>Bạn không thể điểm danh, xin vui lòng đăng nhập/đăng ký</p>
 					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="re-home-page"
+				className="modal">
+				<div className="modal-box">
+					<form method="dialog">
+						{/* if there is a button in form, it will close the modal */}
+						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+							✕
+						</button>
+					</form>
+					<h3 className="font-bold text-lg">Thông báo người chơi</h3>
+					<div
+						className="py-4 flex flex-col justify-center items-center gap-2"
+						id="info-diem-danh-re"></div>
 				</div>
 			</dialog>
 		</div>
