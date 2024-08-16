@@ -184,7 +184,7 @@ export default function PageNapVang() {
 							Hệ thống tự động hủy đơn sau 10 phút nếu chưa giao dịch thành công
 						</p>
 					</div>
-					<div className="flex lg:flex-row flex-wrap gap-5 justify-between">
+					<div className="flex lg:flex-row flex-col gap-5 justify-between">
 						<div className="flex flex-col w-full gap-2 border border-current p-8 rounded-lg">
 							<h2 className="text-center border-b border-current pb-2 flex flex-row gap-2 justify-center items-center">
 								Số dư: {new Intl.NumberFormat('vi').format(user?.gold ?? 0)}{' '}
@@ -241,7 +241,7 @@ export default function PageNapVang() {
 								Nạp Ngay
 							</button>
 						</div>
-						<div className="flex flex-col gap-2 border border-current p-8 rounded-lg max-w-2xl w-full">
+						<div className="flex flex-col gap-2 border border-current p-8 rounded-lg lg:max-w-2xl w-full">
 							<h2 className="text-center border-b border-current pb-2">
 								Vị trí nhân vật nhận vàng
 							</h2>
