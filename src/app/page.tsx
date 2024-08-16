@@ -420,7 +420,9 @@ export default function Home() {
 								{prize} thỏi vàng
 							</span>{' '}
 							hoặc{' '}
-							<span className="text-primary font-extrabold">20 Lục Bảo</span>
+							<span className="text-primary font-extrabold">
+								{prize * 3} Lục Bảo
+							</span>
 						</p>
 						<p>
 							Trao giải{' '}
