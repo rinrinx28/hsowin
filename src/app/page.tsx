@@ -387,7 +387,7 @@ export default function Home() {
 			<dialog
 				id="penning"
 				className="modal">
-				<div className="modal-box">
+				<div className="modal-box lg:max-w-3xl">
 					<form method="dialog">
 						{/* if there is a button in form, it will close the modal */}
 						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -401,7 +401,7 @@ export default function Home() {
 						<p>
 							Đang có{' '}
 							<span
-								className="text-red-300 font-extrabold"
+								className="text-primary font-extrabold"
 								id="length-diem-danh">
 								{diemDanhStore.count ?? 0}
 							</span>{' '}
@@ -409,18 +409,32 @@ export default function Home() {
 						</p>
 						<p>
 							Điểm danh hoàn toàn miễn phí ai cũng có thể tham gia với phần quà
-							ngẫu nhiên là thỏi vàng Trao giải{' '}
-							<span>{moment.utc(delay).format('mm:ss')} phút</span> 1 lần cho{' '}
-							<span>{winner}</span> người may mắn
+							ngẫu nhiên là thỏi vàng
 						</p>
 						<p>
-							Khi đạt đủ {mem} người hệ thống tự động sẽ thông báo cho toàn
-							server và tiến thành trao giải thưởng
+							Trao giải{' '}
+							<span className="text-primary font-extrabold">
+								{moment.utc(delay).format('mm:ss')} phút
+							</span>{' '}
+							1 lần cho{' '}
+							<span className="text-primary font-extrabold">
+								{winner} người may mắn
+							</span>
+						</p>
+						<p>
+							Hệ thống sẽ trao giải nếu có từ{' '}
+							<span className="text-primary font-extrabold">{mem} người</span>{' '}
+							điểm danh trở lên
+						</p>
+						<p>
+							Thời gian diễn ra{' '}
+							<span className="text-primary font-extrabold">24/7</span> hàng
+							ngày
 						</p>
 						<button
 							className="btn btn-outline"
 							onClick={handleDiemdanh}>
-							Điểm Danh
+							Tham Gia Điểm Danh
 						</button>
 					</div>
 				</div>
