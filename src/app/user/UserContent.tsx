@@ -826,25 +826,18 @@ function RutBanking() {
 
 	const handleRutBank = async () => {
 		try {
-			if (!containsLettersAndSpecialChars(info?.amount)) {
-				const modal = document.getElementById(
-					'err-bank',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg('Xin vui lòng chỉ nhập chữ số ở trường Nhập Số Tiền');
-					return modal.showModal();
-				}
-			}
+			if (!containsLettersAndSpecialChars(info?.amount))
+				return showErrorBank(
+					'Xin vui lòng chỉ nhập chữ số ở trường Nhập Số Tiền',
+				);
 
-			if (!info.accountName || !info.accountNumber || !info.type) {
-				const modal = document.getElementById(
-					'err-bank',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg(`Xin vui lòng kiểm tra lại thông tin rút tiền!`);
-					return modal.showModal();
-				}
-			}
+			if (!info.accountName || !info.accountNumber || !info.type)
+				return showErrorBank(`Xin vui lòng kiểm tra lại thông tin rút tiền!`);
+
+			if (!info.bankName)
+				return showErrorBank(
+					'Xin vui lòng kiểm tra lại tên ngân hàng/ví điện tử',
+				);
 
 			if (
 				(user?.limitedTrade ?? 0) -
@@ -852,35 +845,14 @@ function RutBanking() {
 						(eventConfig?.find((e) => e.name === 'e-withdraw-bank')?.value ??
 							0) <
 				0
-			) {
-				const modal = document.getElementById(
-					'err-bank',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg('Bạn không được phép rút quá hạn mức hôm nay');
-					return modal.showModal();
-				}
-			}
+			)
+				return showErrorBank('Bạn không được phép rút quá hạn mức hôm nay');
 
-			if (Number(info.amount) < 50000) {
-				const modal = document.getElementById(
-					'err-bank',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg(`Xin vui lòng rút trên 50.000 ₫`);
-					return modal.showModal();
-				}
-			}
+			if (Number(info.amount) < 50000)
+				return showErrorBank(`Xin vui lòng rút trên 50.000 ₫`);
 
-			if (Number(info.amount) > 1000000) {
-				const modal = document.getElementById(
-					'err-bank',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg(`Bạn không thể rút trên 1.000.000 ₫`);
-					return modal.showModal();
-				}
-			}
+			if (Number(info.amount) > 1000000)
+				return showErrorBank(`Bạn không thể rút trên 1.000.000 ₫`);
 
 			const res = await apiClient.post(
 				'/user/bank/withdraw',
@@ -915,6 +887,16 @@ function RutBanking() {
 				setMsg(err?.response?.data?.message);
 				return modal.showModal();
 			}
+		}
+	};
+
+	const showErrorBank = (message: string) => {
+		const modal = document.getElementById(
+			'err-bank',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			setMsg(message);
+			return modal.showModal();
 		}
 	};
 
@@ -976,7 +958,18 @@ function RutBanking() {
 					<select
 						defaultValue={'OTHER'}
 						className="select select-bordered w-full max-w-md select-md"
-						onChange={(e) => setInfo((i) => ({ ...i, type: e.target.value }))}>
+						onChange={(e) => {
+							let value = e.target.value;
+							if (value === 'OTHER') {
+								setInfo((i) => {
+									delete i.type;
+									delete i.bankName;
+									return i;
+								});
+							} else {
+								setInfo((i) => ({ ...i, type: e.target.value }));
+							}
+						}}>
 						<option
 							selected
 							value="OTHER">
