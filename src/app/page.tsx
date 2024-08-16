@@ -31,6 +31,7 @@ export default function Home() {
 	const dispatch = useAppDispatch();
 	const [winner, setWinner] = useState(0);
 	const [delay, setDelay] = useState(0);
+	const [mem, setMem] = useState(0);
 	const socket = useSocket();
 
 	const showTutorial = () => {
@@ -75,10 +76,16 @@ export default function Home() {
 				(e) => e.name === 'e-number-winner-diem-danh',
 			);
 			setWinner(e_winner_diem_danh?.value ?? 0);
+
 			const e_time_delay_diem_danh = evenConfig.find(
 				(e) => e.name === 'e-time-delay-diem-danh',
 			);
 			setDelay(e_time_delay_diem_danh?.value ?? 0);
+
+			const e_limited_diem_danh = evenConfig.find(
+				(e) => e.name === 'e-limited-diem-danh',
+			);
+			setMem(e_limited_diem_danh?.value ?? 0);
 		}
 	}, [evenConfig]);
 
@@ -407,8 +414,8 @@ export default function Home() {
 							<span>{winner}</span> người may mắn
 						</p>
 						<p>
-							Khi đạt đủ 30 người hệ thống tự động sẽ thông báo cho toàn server
-							và tiến thành trao giải thưởng
+							Khi đạt đủ {mem} người hệ thống tự động sẽ thông báo cho toàn
+							server và tiến thành trao giải thưởng
 						</p>
 						<button
 							className="btn btn-outline"
