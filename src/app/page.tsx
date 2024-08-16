@@ -406,6 +406,10 @@ export default function Home() {
 							<span>{moment.utc(delay).format('mm:ss')} phút</span> 1 lần cho{' '}
 							<span>{winner}</span> người may mắn
 						</p>
+						<p>
+							Khi đạt đủ 30 người hệ thống tự động sẽ thông báo cho toàn server
+							và tiến thành trao giải thưởng
+						</p>
 						<button
 							className="btn btn-outline"
 							onClick={handleDiemdanh}>
