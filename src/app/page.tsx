@@ -32,6 +32,7 @@ export default function Home() {
 	const [winner, setWinner] = useState(0);
 	const [delay, setDelay] = useState(0);
 	const [mem, setMem] = useState(0);
+	const [prize, setPrize] = useState(0);
 	const socket = useSocket();
 
 	const showTutorial = () => {
@@ -86,6 +87,11 @@ export default function Home() {
 				(e) => e.name === 'e-limited-diem-danh',
 			);
 			setMem(e_limited_diem_danh?.value ?? 0);
+
+			const e_prize_diem_danh = evenConfig.find(
+				(e) => e.name === 'e-prize-diem-danh',
+			);
+			setPrize(e_prize_diem_danh?.value ?? 0);
 		}
 	}, [evenConfig]);
 
@@ -407,9 +413,14 @@ export default function Home() {
 							</span>{' '}
 							người điểm danh
 						</p>
+						<p>Điểm danh hoàn toàn miễn phí ai cũng có thể tham gia!</p>
 						<p>
-							Điểm danh hoàn toàn miễn phí ai cũng có thể tham gia với phần quà
-							ngẫu nhiên là thỏi vàng
+							Phần quà hấp dẫn, với mỗi người trúng sẽ nhận được{' '}
+							<span className="text-primary font-extrabold">
+								{prize} thỏi vàng
+							</span>{' '}
+							hoặc{' '}
+							<span className="text-primary font-extrabold">20 Lục Bảo</span>
 						</p>
 						<p>
 							Trao giải{' '}
