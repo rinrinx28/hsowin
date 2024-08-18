@@ -1,15 +1,17 @@
 'use client';
 
 import apiClient from '@/lib/apiClient';
-import { updateUser } from '@/lib/redux/features/auth/user';
+import user, { updateUser } from '@/lib/redux/features/auth/user';
 import { updateUserVip } from '@/lib/redux/features/auth/userVip';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 export default function VipClaimPage() {
 	const evenConfig = useAppSelector((state) => state.eventConfig);
 	const [msg, setMsg] = useState('');
 	const [rule, setRule] = useState([]);
+	const user = useAppSelector((state) => state.user);
 
 	const showModel = () => {
 		const modal = document.getElementById(
@@ -42,10 +44,13 @@ export default function VipClaimPage() {
 		<div className="min-h-screen flex w-full justify-center items-center">
 			<div className="max-w-7xl w-full flex flex-col gap-5 items-center select-none">
 				<h1 className="lg:text-4xl text-xl">Điểm Danh VIP Hàng Ngày</h1>
-				<TableClaimVip
-					setMsg={setMsg}
-					showModel={showModel}
-				/>
+				{user?.isLogin && (
+					<TableClaimVip
+						setMsg={setMsg}
+						showModel={showModel}
+					/>
+				)}
+				{!user?.isLogin && <TableReviewClaimVip />}
 			</div>
 
 			<dialog
@@ -142,16 +147,18 @@ function TableClaimVip({ setMsg, showModel }: { setMsg: any; showModel: any }) {
 				userVip?.data?.map((d, i) => {
 					return (
 						<button
-							className="size-32 flex items-end justify-end hover:scale-125 duration-300 hover:z-10 bg-cover border border-current p-2 rounded-lg"
 							key={d?.date}
+							className={`size-32 flex items-end hover:scale-125 hover:z-50 duration-300 justify-end bg-cover border border-current p-2 rounded-lg`}
 							style={{
 								backgroundImage: `url("/image/vip/claim/${
 									d?.isClaim ? 'open.png' : 'claim.png'
 								}")`,
 							}}
-							onClick={() => handleClaim(d?.date)}
-							disabled={d?.isClaim || d?.isNext}>
-							Ngày {i + 1}
+							onClick={() => handleClaim(d?.date)}>
+							{moment(d?.date).format('DD/MM/YYYY') ===
+							moment().format('DD/MM/YYYY')
+								? 'Hôm Nay'
+								: `Ngày ${i + 1}`}
 						</button>
 					);
 				})}
