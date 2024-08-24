@@ -30,7 +30,7 @@ export default function PageNapVang() {
 	const handleNapVang = async () => {
 		try {
 			console.log(info);
-			if (!user.isLogin) {
+			if (!user?.isLogin) {
 				const modal = document.getElementById(
 					'noti',
 				) as HTMLDialogElement | null;
@@ -200,7 +200,7 @@ export default function PageNapVang() {
 										placeholder="Type here"
 										className="input input-bordered w-full max-w-md"
 										disabled
-										value={`Server ${user.server}`}
+										value={`Server ${user?.server}`}
 									/>
 								</label>
 								<label className="label w-full text-nowrap gap-2">

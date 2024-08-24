@@ -71,7 +71,7 @@ const UserContent = () => {
 		<div className="min-h-screen flex justify-center mt-10 p-8">
 			<div
 				className={`lg:max-w-7xl w-full lg:flex justify-between gap-10 ${
-					!user.isLogin ? 'skeleton' : ''
+					!user?.isLogin ? 'skeleton' : ''
 				}`}>
 				<div className="hidden lg:flex flex-col gap-5 items-start flex-nowrap text-nowrap p-4 border-r border-current">
 					<div className="flex-none lg:block">
@@ -131,32 +131,8 @@ const UserContent = () => {
 								Nhiệm Vụ Hàng Ngày
 							</li>
 							<li className="bg-base-300 text-sm lg:flex hidden flex-col justify-center items-start px-2 py-2 w-full rounded-lg">
-								<p>
-									Hạn mức hôm nay: {Math.ceil(user?.limitedTrade ?? 0)}{' '}
-									<span className="text-xs">
-										{new Intl.NumberFormat('vi', {
-											currency: 'VND',
-											style: 'currency',
-										}).format(
-											(user?.limitedTrade ?? 0) /
-												(eventConfig?.find((e) => e.name === 'e-withdraw-bank')
-													?.value ?? 0),
-										)}
-									</span>
-								</p>
-								<p>
-									Hạn mức đã sử dụng: {Math.ceil(user?.trade ?? 0)}
-									<span className="text-xs">
-										{new Intl.NumberFormat('vi', {
-											currency: 'VND',
-											style: 'currency',
-										}).format(
-											(user?.trade ?? 0) /
-												(eventConfig?.find((e) => e.name === 'e-withdraw-bank')
-													?.value ?? 0),
-										)}
-									</span>
-								</p>
+								<p>Hạn mức hôm nay: {Math.ceil(user?.limitedTrade ?? 0)}</p>
+								<p>Hạn mức đã sử dụng: {Math.ceil(user?.trade ?? 0)}</p>
 							</li>
 						</ul>
 					</div>
@@ -210,7 +186,7 @@ function ProfileUser() {
 				},
 				{
 					headers: {
-						Authorization: 'Bearer ' + user.token,
+						Authorization: 'Bearer ' + user?.token,
 					},
 				},
 			);
@@ -247,15 +223,15 @@ function ProfileUser() {
 			<ul className="flex flex-col gap-4 items-start justify-start w-full">
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>ID Tài Khoản:</p>
-					<p className="font-semibold">{user._id}</p>
+					<p className="font-semibold">{user?._id}</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Tên Tài Khoản:</p>
-					<p className="font-semibold">{user.username}</p>
+					<p className="font-semibold">{user?.username}</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Email Tài Khoản:</p>
-					<p className="font-semibold">{user.email}</p>
+					<p className="font-semibold">{user?.email}</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Tên hiển thị:</p>
@@ -281,13 +257,13 @@ function ProfileUser() {
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Số Thỏi Vàng:</p>
 					<p className="text-yellow-500 font-semibold">
-						{new Intl.NumberFormat('vi').format(user.gold ?? 0)}
+						{new Intl.NumberFormat('vi').format(user?.gold ?? 0)}
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Lục Bảo hiện có:</p>
 					<p className="text-green-500 font-semibold">
-						{new Intl.NumberFormat('vi').format(user.diamon ?? 0)}
+						{new Intl.NumberFormat('vi').format(user?.diamon ?? 0)}
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
@@ -450,7 +426,7 @@ function NapThe() {
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={user._id}
+						value={user?._id}
 					/>
 				</label>
 
@@ -461,7 +437,7 @@ function NapThe() {
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={user.username}
+						value={user?.username}
 					/>
 				</label>
 
@@ -602,7 +578,7 @@ function NapBanking() {
 			const res = await apiClient.post(
 				'/session/banking/create',
 				{
-					uid: user._id,
+					uid: user?._id,
 					amount: Number(amount),
 					username: user?.username,
 				},
@@ -688,7 +664,7 @@ function NapBanking() {
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={user._id}
+						value={user?._id}
 					/>
 				</label>
 
@@ -699,7 +675,7 @@ function NapBanking() {
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={user.username}
+						value={user?.username}
 					/>
 				</label>
 
@@ -857,12 +833,12 @@ function RutBanking() {
 			const res = await apiClient.post(
 				'/user/bank/withdraw',
 				{
-					uid: user._id,
+					uid: user?._id,
 					...info,
 				},
 				{
 					headers: {
-						Authorization: 'Bearer ' + user.token,
+						Authorization: 'Bearer ' + user?.token,
 					},
 				},
 			);
@@ -949,7 +925,7 @@ function RutBanking() {
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={user._id}
+						value={user?._id}
 					/>
 				</label>
 
@@ -994,16 +970,17 @@ function RutBanking() {
 								value="OTHER">
 								Chọn Ngân Hàng
 							</option>
-							{ListBank.map((bank) => {
-								const { name, code } = bank;
-								return (
-									<option
-										key={bank.id}
-										value={`${bank.name}-${code}`}>
-										{code} - {name}
-									</option>
-								);
-							})}
+							{ListBank.length > 0 &&
+								ListBank?.map((bank) => {
+									const { name, code } = bank;
+									return (
+										<option
+											key={bank.id}
+											value={`${bank.name}-${code}`}>
+											{code} - {name}
+										</option>
+									);
+								})}
 						</select>
 					</label>
 				)}
@@ -1160,63 +1137,66 @@ function HistoryUserBet() {
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
 						{/* row 1 */}
-						{userBet
-							?.filter((u: any) => u.server === watch)
-							.map((userBet: any) => {
-								let {
-									amount,
-									isEnd,
-									receive,
-									server,
-									uid,
-									createdAt = new Date(),
-									betId,
-									_id,
-									name,
-								} = userBet;
-								let result = userBet?.result;
-								let resultBet = userBet?.resultBet?.split('-');
-								let new_result =
-									result in TranslateKey ? TranslateKey[`${result}`] : result;
-								let new_resultBet = !resultBet
-									? userBet?.resultBet
-									: resultBet[0] in TranslateKey
-									? TranslateKey[`${resultBet[0]}`]
-									: resultBet[0];
-								return (
-									<tr
-										className="hover"
-										key={userBet?._id}>
-										<td>{server?.replace('-mini', ' Sao')}</td>
-										<td>
-											{uid === user?._id ? user?.name ?? user?.username : name}
-										</td>
-										<td>{new Intl.NumberFormat('vi').format(amount ?? 0)}</td>
-										<td>{new_result ?? result ?? ''}</td>
-										<td>
-											{new_resultBet &&
-											!['1', '2', '3'].includes(userBet?.server)
-												? `${new_resultBet}-${resultBet[1]}`
-												: userBet?.resultBet === '0'
-												? 'Khỉ Đỏ'
-												: userBet?.resultBet === '1'
-												? 'Khỉ Đen'
-												: ''}
-										</td>
-										<td>{new Intl.NumberFormat('vi').format(receive ?? 0)}</td>
-										<td>
-											{isEnd && receive > 0 ? (
-												'Đã Thanh Toán'
-											) : !isEnd ? (
-												<span className="loading loading-dots loading-sm"></span>
-											) : (
-												'Đã Thua'
-											)}
-										</td>
-										<td>{moment(createdAt).format('DD/MM/YYYY HH:mm')}</td>
-									</tr>
-								);
-							})}
+						{userBet.length > 0 &&
+							userBet
+								?.filter((u: any) => u.server === watch)
+								.map((userBet: any) => {
+									let {
+										amount,
+										isEnd,
+										receive,
+										server,
+										uid,
+										createdAt = new Date(),
+										name,
+									} = userBet;
+									let result = userBet?.result;
+									let resultBet = userBet?.resultBet?.split('-');
+									let new_result =
+										result in TranslateKey ? TranslateKey[`${result}`] : result;
+									let new_resultBet = !resultBet
+										? userBet?.resultBet
+										: resultBet[0] in TranslateKey
+										? TranslateKey[`${resultBet[0]}`]
+										: resultBet[0];
+									return (
+										<tr
+											className="hover"
+											key={userBet?._id}>
+											<td>{server?.replace('-mini', ' Sao')}</td>
+											<td>
+												{uid === user?._id
+													? user?.name ?? user?.username
+													: name}
+											</td>
+											<td>{new Intl.NumberFormat('vi').format(amount ?? 0)}</td>
+											<td>{new_result ?? result ?? ''}</td>
+											<td>
+												{new_resultBet &&
+												!['1', '2', '3'].includes(userBet?.server)
+													? `${new_resultBet}-${resultBet[1]}`
+													: userBet?.resultBet === '0'
+													? 'Khỉ Đỏ'
+													: userBet?.resultBet === '1'
+													? 'Khỉ Đen'
+													: ''}
+											</td>
+											<td>
+												{new Intl.NumberFormat('vi').format(receive ?? 0)}
+											</td>
+											<td>
+												{isEnd && receive > 0 ? (
+													'Đã Thanh Toán'
+												) : !isEnd ? (
+													<span className="loading loading-dots loading-sm"></span>
+												) : (
+													'Đã Thua'
+												)}
+											</td>
+											<td>{moment(createdAt).format('DD/MM/YYYY HH:mm')}</td>
+										</tr>
+									);
+								})}
 					</tbody>
 				</table>
 			</div>
@@ -1266,7 +1246,7 @@ function HistoryUserBank() {
 				setBank(res.data);
 			} catch (err) {}
 		};
-		if (user.isLogin) {
+		if (user?.isLogin) {
 			getNapBankLog(fil);
 		}
 	}, [fil, user]);
@@ -1440,7 +1420,7 @@ function ExchangeGold() {
 				},
 				{
 					headers: {
-						Authorization: 'Bearer ' + user.token,
+						Authorization: 'Bearer ' + user?.token,
 					},
 				},
 			);
@@ -1497,7 +1477,7 @@ function ExchangeGold() {
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={user._id}
+						value={user?._id}
 					/>
 				</label>
 
@@ -1508,7 +1488,7 @@ function ExchangeGold() {
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={user.username}
+						value={user?.username}
 					/>
 				</label>
 
@@ -1533,7 +1513,7 @@ function ExchangeGold() {
 						type="text"
 						className="input input-bordered w-full max-w-md"
 						disabled
-						value={new Intl.NumberFormat('vi').format(info.receive)}
+						value={new Intl.NumberFormat('vi').format(info?.receive)}
 					/>
 				</label>
 
@@ -1654,57 +1634,58 @@ function MissionDaily() {
 			</div>
 			<div className="overflow-auto">
 				<ul className="timeline">
-					{prizes?.map((p: any, i: number) => {
-						return (
-							<li key={`${p} - ${i}`}>
-								{i !== 0 && (
-									<hr
-										className={`${
-											(user?.totalBet ?? 0) >= value[i] && 'bg-primary'
-										}`}
-									/>
-								)}
-								<button
-									className={`${
-										i % 2 === 0 ? 'timeline-start' : 'timeline-end'
-									} timeline-box btn`}
-									onClick={() => handleClaimMission(i)}
-									disabled={
-										data[i]?.isClaim ? true : (user?.totalBet ?? 0) < value[i]
-									}>
-									{data[i]?.isClaim
-										? true
-										: (user?.totalBet ?? 0) < value[i]
-										? ''
-										: 'Nhận'}{' '}
-									{prizes[i]} Thỏi vàng
-								</button>
-								<div className="timeline-middle">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 20 20"
-										fill="currentColor"
-										className={`${
-											(user?.totalBet ?? 0) >= value[i] && 'text-primary'
-										} h-5 w-5`}>
-										<path
-											fillRule="evenodd"
-											d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-											clipRule="evenodd"
+					{prizes.length > 0 &&
+						prizes?.map((p: any, i: number) => {
+							return (
+								<li key={`${p} - ${i}`}>
+									{i !== 0 && (
+										<hr
+											className={`${
+												(user?.totalBet ?? 0) >= value[i] && 'bg-primary'
+											}`}
 										/>
-									</svg>
-								</div>
-
-								{prizes.length - 1 !== i && (
-									<hr
+									)}
+									<button
 										className={`${
-											(user?.totalBet ?? 0) >= value[i] && 'bg-primary'
-										}`}
-									/>
-								)}
-							</li>
-						);
-					})}
+											i % 2 === 0 ? 'timeline-start' : 'timeline-end'
+										} timeline-box btn`}
+										onClick={() => handleClaimMission(i)}
+										disabled={
+											data[i]?.isClaim ? true : (user?.totalBet ?? 0) < value[i]
+										}>
+										{data[i]?.isClaim
+											? true
+											: (user?.totalBet ?? 0) < value[i]
+											? ''
+											: 'Nhận'}{' '}
+										{prizes[i]} Thỏi vàng
+									</button>
+									<div className="timeline-middle">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 20 20"
+											fill="currentColor"
+											className={`${
+												(user?.totalBet ?? 0) >= value[i] && 'text-primary'
+											} h-5 w-5`}>
+											<path
+												fillRule="evenodd"
+												d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+												clipRule="evenodd"
+											/>
+										</svg>
+									</div>
+
+									{prizes.length - 1 !== i && (
+										<hr
+											className={`${
+												(user?.totalBet ?? 0) >= value[i] && 'bg-primary'
+											}`}
+										/>
+									)}
+								</li>
+							);
+						})}
 				</ul>
 			</div>
 			<table className="table table-pin-rows table-pin-cols">

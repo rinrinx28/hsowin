@@ -30,7 +30,7 @@ export default function PageRutVang() {
 
 	const handleRutVang = async () => {
 		try {
-			if (!user.isLogin) {
+			if (!user?.isLogin) {
 				const modal = document.getElementById(
 					'noti',
 				) as HTMLDialogElement | null;
@@ -76,7 +76,7 @@ export default function PageRutVang() {
 				),
 			);
 			dispatch(
-				updateUser({ ...user, gold: (user.gold ?? 0) - Number(info.amount) }),
+				updateUser({ ...user, gold: (user?.gold ?? 0) - Number(info.amount) }),
 			);
 			const modal = document.getElementById('lock') as HTMLDialogElement | null;
 			if (modal) {
@@ -179,7 +179,7 @@ export default function PageRutVang() {
 										placeholder="Type here"
 										className="input input-bordered w-full max-w-md"
 										disabled
-										value={`Server ${user.server}`}
+										value={`Server ${user?.server}`}
 									/>
 								</label>
 								<label className="label w-full text-nowrap gap-2">

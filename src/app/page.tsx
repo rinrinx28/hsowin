@@ -54,17 +54,17 @@ export default function Home() {
 	};
 
 	const handleDiemdanh = () => {
-		if (!user.token || !user?._id || !user?.isLogin) return showError();
-		socket.emit('diem-danh', { uid: user._id, token: user.token });
+		if (!user?.token || !user?._id || !user?.isLogin) return showError();
+		socket.emit('diem-danh', { uid: user?._id, token: user?.token });
 	};
 
 	useEffect(() => {
-		if (!user.isLogin) {
+		if (!user?.isLogin) {
 			const modal = document.getElementById(
 				'wellcome',
 			) as HTMLDialogElement | null;
 			if (modal) {
-				const e_bank_gold = evenConfig.find((e) => e.name === 'e-bank-gold');
+				const e_bank_gold = evenConfig?.find((e) => e.name === 'e-bank-gold');
 				setBank(`${(e_bank_gold?.value ?? 0) * 100}%`);
 				modal.showModal();
 			}
@@ -73,22 +73,22 @@ export default function Home() {
 
 	useEffect(() => {
 		if (evenConfig) {
-			const e_winner_diem_danh = evenConfig.find(
+			const e_winner_diem_danh = evenConfig?.find(
 				(e) => e.name === 'e-number-winner-diem-danh',
 			);
 			setWinner(e_winner_diem_danh?.value ?? 0);
 
-			const e_time_delay_diem_danh = evenConfig.find(
+			const e_time_delay_diem_danh = evenConfig?.find(
 				(e) => e.name === 'e-time-delay-diem-danh',
 			);
 			setDelay(e_time_delay_diem_danh?.value ?? 0);
 
-			const e_limited_diem_danh = evenConfig.find(
+			const e_limited_diem_danh = evenConfig?.find(
 				(e) => e.name === 'e-limited-diem-danh',
 			);
 			setMem(e_limited_diem_danh?.value ?? 0);
 
-			const e_prize_diem_danh = evenConfig.find(
+			const e_prize_diem_danh = evenConfig?.find(
 				(e) => e.name === 'e-prize-diem-danh',
 			);
 			setPrize(e_prize_diem_danh?.value ?? 0);

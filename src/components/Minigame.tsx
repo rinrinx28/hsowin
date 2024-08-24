@@ -72,7 +72,7 @@ export const Minigame = () => {
 	// 		if (data?.type === 'old' && data?.server === userGame) {
 	// 			const new_mainBet = data?.boss;
 	// 			const old_bet = [
-	// 				...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
+	// 				...(logBet?.length > 9 ? logBet?.slice(0, -1) : logBet),
 	// 				new_mainBet,
 	// 			];
 	// 			const sort_bet = old_bet.sort(
@@ -90,7 +90,7 @@ export const Minigame = () => {
 	// 		if (data?.type === 'old' && data?.server === userGame) {
 	// 			const new_mainBet = data?.sv;
 	// 			const old_bet = [
-	// 				...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
+	// 				...(logBet?.length > 9 ? logBet?.slice(0, -1) : logBet),
 	// 				new_mainBet,
 	// 			];
 	// 			const sort_bet = old_bet.sort(
@@ -107,7 +107,7 @@ export const Minigame = () => {
 	// 	const handleStatus24 = (data: Status24) => {
 	// 		if (data?.server === userGame) {
 	// 			const old_bet = [
-	// 				...(logBet.length > 9 ? logBet.slice(0, -1) : logBet),
+	// 				...(logBet?.length > 9 ? logBet?.slice(0, -1) : logBet),
 	// 				data?.old_bet,
 	// 			];
 	// 			const sort_bet = old_bet.sort(
@@ -196,7 +196,7 @@ export const Minigame = () => {
 						)}
 					</div>
 					{mainBet?.timeBoss ? (
-						<p>Thời gian Boss Chết: {changeStringToHour(mainBet.timeBoss)}</p>
+						<p>Thời gian Boss Chết: {changeStringToHour(mainBet?.timeBoss)}</p>
 					) : (
 						['1-mini', '2-mini', '3-mini'].includes(mainBet?.server ?? '') && (
 							<p>
@@ -243,11 +243,13 @@ export const Minigame = () => {
 						</>
 					)}
 					<p>Thời gian hoạt động: {userGame !== '24' ? '8h - 24h' : '24/24'}</p>
-					{historyServer && historyServer.server === userGame && (
+					{historyServer && historyServer?.server === userGame && (
 						<p>
 							Jackpot:{' '}
 							<span className="text-yellow-300 font-extrabold">
-								{new Intl.NumberFormat('vi').format(historyServer.jackpot ?? 0)}
+								{new Intl.NumberFormat('vi').format(
+									historyServer?.jackpot ?? 0,
+								)}
 							</span>
 						</p>
 					)}
