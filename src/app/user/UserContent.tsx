@@ -406,11 +406,15 @@ function NapThe() {
 				</p>
 				<p>
 					Mỗi <span className="font-semibold">lượt nạp</span> được{' '}
-					<span className="text-error">tặng kim cương</span>
+					<span className="text-error">tặng Lục Bảo</span>
 				</p>
 				<p>
-					Kim cương <span className="text-error">đổi</span> vàng{' '}
-					<span className="link link-warning link-hover">tại đây</span>
+					Lục Bảo <span className="text-error">đổi</span> vàng{' '}
+					<Link
+						href={'/user?type=EXCHANGEGOLD'}
+						className="link link-warning link-hover">
+						tại đây
+					</Link>
 				</p>
 				<p>
 					Sai serial hoặc mệnh giá sẽ không được hỗ trợ giải quyết khiếu nại!
@@ -637,11 +641,15 @@ function NapBanking() {
 				</p>
 				<p>
 					Mỗi <span className="font-semibold">lượt nạp</span> được{' '}
-					<span className="text-error">tặng kim cương</span>
+					<span className="text-error">tặng Lục Bảo</span>
 				</p>
 				<p>
-					Kim cương <span className="text-error">đổi</span> thỏi vàng{' '}
-					<span className="link link-warning link-hover">tại đây</span>
+					Lục Bảo <span className="text-error">đổi</span> thỏi vàng{' '}
+					<Link
+						href={'/user?type=EXCHANGEGOLD'}
+						className="link link-warning link-hover">
+						tại đây
+					</Link>
 				</p>
 				<p>
 					Mỗi lần nạp khách hàng vui lòng tạo đơn nạp mới và thực hiện chuyển

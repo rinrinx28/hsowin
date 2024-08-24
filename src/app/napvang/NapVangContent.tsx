@@ -24,6 +24,8 @@ export default function PageNapVang() {
 	});
 	const [bot, setBot] = useState([]);
 	const [session, setSession] = useState<any[]>([]);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
+	const [config, setConfig] = useState({ min: 0 });
 	const [msg, setMsg] = useState('');
 	const router = useRouter();
 
@@ -164,6 +166,18 @@ export default function PageNapVang() {
 		};
 	}, [user, socket]);
 
+	useEffect(() => {
+		if (eventConfig) {
+			const min_deposit_gold = eventConfig.find(
+				(e) => e.name === 'e-min-deposit-gold',
+			);
+			setConfig((e) => ({
+				...e,
+				min: min_deposit_gold?.value ?? 0,
+			}));
+		}
+	}, [eventConfig]);
+
 	return (
 		<div>
 			<div className="min-h-screen flex flex-col justify-center items-center p-2">
@@ -234,6 +248,7 @@ export default function PageNapVang() {
 										}
 									/>
 								</label>
+								<p>Bạn phải nạp trên {config.min} thỏi vàng</p>
 							</div>
 							<button
 								className="btn"

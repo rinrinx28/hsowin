@@ -24,6 +24,8 @@ export default function PageRutVang() {
 	});
 	const [bot, setBot] = useState([]);
 	const [session, setSession] = useState<any[]>([]);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
+	const [config, setConfig] = useState({ min: 0, max: 0 });
 	const [msg, setMsg] = useState('');
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -143,6 +145,22 @@ export default function PageRutVang() {
 		};
 	}, [user, socket]);
 
+	useEffect(() => {
+		if (eventConfig) {
+			const max_withdraw_gold = eventConfig.find(
+				(e) => e.name === 'e-max-withdraw-gold',
+			);
+			const min_withdraw_gold = eventConfig.find(
+				(e) => e.name === 'e-min-withdraw-gold',
+			);
+			setConfig((e) => ({
+				...e,
+				min: min_withdraw_gold?.value ?? 0,
+				max: max_withdraw_gold?.value ?? 0,
+			}));
+		}
+	}, [eventConfig]);
+
 	return (
 		<div>
 			<div className="min-h-screen flex flex-col justify-center items-center p-2">
@@ -213,6 +231,10 @@ export default function PageRutVang() {
 										}
 									/>
 								</label>
+								<p>
+									Bạn có thể rút từ {config?.min} đến {config.max} thỏi vàng mỗi
+									lần!
+								</p>
 							</div>
 							<button
 								className="btn"
