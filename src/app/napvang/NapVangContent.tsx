@@ -248,7 +248,7 @@ export default function PageNapVang() {
 										}
 									/>
 								</label>
-								<p>Bạn phải nạp trên {config.min} thỏi vàng</p>
+								<p>Bạn cần phải nạp tối thiểu {config.min} thỏi vàng!</p>
 							</div>
 							<button
 								className="btn"
