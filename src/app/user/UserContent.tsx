@@ -11,7 +11,6 @@ import { updateMission } from '@/lib/redux/features/auth/missionDaily';
 
 const UserContent = () => {
 	const user = useAppSelector((state) => state.user);
-	const eventConfig = useAppSelector((state) => state.eventConfig);
 	const [menu, setMenu] = useState('INFO');
 	const searchParams = useSearchParams();
 	const [msg, setMsg] = useState('');
@@ -61,8 +60,7 @@ const UserContent = () => {
 	}, [searchParams]);
 
 	useEffect(() => {
-		let token = localStorage.getItem('access_token');
-		if (!token) {
+		if (!user?.isLogin) {
 			router.push('/');
 		}
 	}, [user, router]);
@@ -1562,12 +1560,13 @@ function ExchangeGold() {
 function MissionDaily() {
 	const [prizes, setPrize] = useState([]);
 	const [value, setValue] = useState([]);
-	const [data, setData] = useState<any>([]);
+	const [data, setData] = useState<Array<any>>([]);
 	const [msg, setMsg] = useState('');
 	const mission = useAppSelector((state) => state.missionDaily);
 	const eventConfig = useAppSelector((state) => state.eventConfig);
 	const user = useAppSelector((state) => state.user);
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 
 	const handleClaimMission = async (index: number) => {
 		try {
@@ -1620,6 +1619,12 @@ function MissionDaily() {
 		}
 	}, [mission]);
 
+	useEffect(() => {
+		if (!user?.isLogin) {
+			router.push('/');
+		}
+	}, [user, router]);
+
 	return (
 		<div className="flex flex-col gap-5 items-start p-4 w-full">
 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
@@ -1635,6 +1640,7 @@ function MissionDaily() {
 			<div className="overflow-auto">
 				<ul className="timeline">
 					{prizes.length > 0 &&
+						data.length > 0 &&
 						prizes?.map((p: any, i: number) => {
 							return (
 								<li key={`${p} - ${i}`}>
@@ -1699,17 +1705,18 @@ function MissionDaily() {
 				</thead>
 				<tbody className="text-sm text-center text-nowrap">
 					{/* row 1 */}
-					{value?.map((item: any, i: number) => {
-						return (
-							<tr
-								key={item}
-								className="hover">
-								<td>{new Intl.NumberFormat('vi').format(item)}</td>
-								<td>{prizes[i]} Thỏi vàng</td>
-								<td>{data[i].isClaim ? 'Đã nhận' : 'Chưa Nhận'}</td>
-							</tr>
-						);
-					})}
+					{data.length > 0 &&
+						value?.map((item: any, i: number) => {
+							return (
+								<tr
+									key={item}
+									className="hover">
+									<td>{new Intl.NumberFormat('vi').format(item)}</td>
+									<td>{prizes[i]} Thỏi vàng</td>
+									<td>{data[i]?.isClaim ? 'Đã nhận' : 'Chưa Nhận'}</td>
+								</tr>
+							);
+						})}
 				</tbody>
 			</table>
 			<dialog
