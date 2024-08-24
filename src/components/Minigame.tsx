@@ -7,14 +7,7 @@ import Hand from './icons/hand';
 import { useEffect } from 'react';
 import apiClient from '@/lib/apiClient';
 import moment from 'moment';
-import {
-	BetLog,
-	CreateUserBet,
-	Status24,
-	StatusBoss,
-	StatusSv,
-	userBet,
-} from './dto/dto';
+import { BetLog, CreateUserBet } from './dto/dto';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { useSocket } from '@/lib/socket';
 import { count } from '@/lib/redux/features/Minigame/countDownTimeSlice';
@@ -373,24 +366,29 @@ export const BetMinigame = () => {
 			return;
 		}
 		setPause(true);
-		if (type === 'BOSS') {
-			const data: CreateUserBet = {
-				amount: betInfo.amount,
-				betId: mainBet?._id,
-				result: betInfo.type,
-				server: userGame,
-				uid: user._id,
-			};
-			socket.emit('bet-user-ce-boss', data);
+		if (userGame === mainBet?.server) {
+			if (type === 'BOSS') {
+				const data: CreateUserBet = {
+					amount: betInfo.amount,
+					betId: mainBet?._id,
+					result: betInfo.type,
+					server: userGame,
+					uid: user._id,
+				};
+				socket.emit('bet-user-ce-boss', data);
+			} else {
+				const data: CreateUserBet = {
+					amount: betInfo.amount,
+					betId: mainBet?._id,
+					result: betInfo.type,
+					server: userGame,
+					uid: user._id,
+				};
+				socket.emit('bet-user-ce-sv', data);
+			}
 		} else {
-			const data: CreateUserBet = {
-				amount: betInfo.amount,
-				betId: mainBet?._id,
-				result: betInfo.type,
-				server: userGame,
-				uid: user._id,
-			};
-			socket.emit('bet-user-ce-sv', data);
+			showModelBet('Đã xảy ra lỗi, xin vui lòng tải lại trang!');
+			return;
 		}
 	};
 
@@ -735,7 +733,6 @@ export const BetMinigame = () => {
 						defaultValue={betInfo.amount ?? 0}
 						onChange={(e) => {
 							dispatch(changeAmountInput(Number(e.target.value)));
-							console.log(Number(e.target.value), betInfo.amount);
 						}}
 						// disabled
 					/>
