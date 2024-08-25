@@ -137,9 +137,9 @@ export default function Home() {
 										<li>
 											<Link href={'/user'}>Thông Tin Cá Nhân</Link>
 										</li>
-										<li>
+										{/* <li>
 											<Link href={'/user?type=RUTBANKING'}>Rút Về Bank</Link>
-										</li>
+										</li> */}
 										<li>
 											<Link href={'/user?type=EXCHANGEGOLD'}>
 												Đổi Lục Bảo - Thỏi Vàng

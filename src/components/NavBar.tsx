@@ -62,9 +62,9 @@ const NavBar = () => {
 								<li>
 									<Link href={'/'}>Trang Chủ</Link>
 								</li>
-								<li>
+								{/* <li>
 									<Link href={'/user?type=NAPBANKING'}>Mua Vàng</Link>
-								</li>
+								</li> */}
 								<li>
 									<Link href={'/napvang'}>Nạp Vàng</Link>
 								</li>
@@ -82,20 +82,20 @@ const NavBar = () => {
 										<li>
 											<Link href={'/user?type=INFO'}>Thông tin tài khoản</Link>
 										</li>
-										<li>
+										{/* <li>
 											<Link href={'/user?type=NAPBANKING'}>Nạp Bank/Momo</Link>
 										</li>
 										<li>
 											<Link href={'/user?type=RUTBANKING'}>
 												Rút Về Bank/Momo
 											</Link>
-										</li>
+										</li> */}
 										<li>
 											<Link href={'/user?type=LICHSUCUOC'}>Lịch Sử Cược</Link>
 										</li>
-										<li>
+										{/* <li>
 											<Link href={'/user?type=LICHSUBANK'}>Lịch Sử Bank</Link>
-										</li>
+										</li> */}
 										<li>
 											<Link href={'/user?type=EXCHANGEGOLD'}>
 												Đổi Lục Bảo - Thỏi Vàng
@@ -128,9 +128,9 @@ const NavBar = () => {
 							<li>
 								<Link href={'/'}>Trang Chủ</Link>
 							</li>
-							<li>
+							{/* <li>
 								<Link href={'/user?type=NAPBANKING'}>Mua Vàng</Link>
-							</li>
+							</li> */}
 							<li>
 								<Link href={'/napvang'}>Nạp Vàng</Link>
 							</li>

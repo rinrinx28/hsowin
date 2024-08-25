@@ -20,34 +20,34 @@ const UserContent = () => {
 		const id = searchParams.get('id');
 		const status = searchParams.get('status');
 		const type = searchParams.get('type');
-		if (status === 'CANCELLED') {
-			try {
-				apiClient.post(
-					`/session/banking/update?orderId=${id}`,
-					{},
-					{
-						headers: {
-							Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-						},
-					},
-				);
-			} catch (err) {}
-		}
-		if (type === 'NAPBANKING') {
-			setMenu('NAPBANKING');
-		}
-		if (type === 'RUTBANKING') {
-			setMenu('RUTBANKING');
-		}
+		// if (status === 'CANCELLED') {
+		// 	try {
+		// 		apiClient.post(
+		// 			`/session/banking/update?orderId=${id}`,
+		// 			{},
+		// 			{
+		// 				headers: {
+		// 					Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+		// 				},
+		// 			},
+		// 		);
+		// 	} catch (err) {}
+		// }
+		// if (type === 'NAPBANKING') {
+		// 	setMenu('NAPBANKING');
+		// }
+		// if (type === 'RUTBANKING') {
+		// 	setMenu('RUTBANKING');
+		// }
 		if (type === 'INFO') {
 			setMenu('INFO');
 		}
 		if (type === 'LICHSUCUOC') {
 			setMenu('LICHSUCUOC');
 		}
-		if (type === 'LICHSUBANK') {
-			setMenu('LICHSUBANK');
-		}
+		// if (type === 'LICHSUBANK') {
+		// 	setMenu('LICHSUBANK');
+		// }
 		if (type === 'CHUYENVANG') {
 			setMenu('CHUYENVANG');
 		}
@@ -136,11 +136,11 @@ const UserContent = () => {
 					</div>
 				</div>
 				{menu === 'INFO' && <ProfileUser />}
-				{menu === 'NAPTHE' && <NapThe />}
-				{menu === 'NAPBANKING' && <NapBanking />}
-				{menu === 'RUTBANKING' && <RutBanking />}
+				{/* {menu === 'NAPTHE' && <NapThe />} */}
+				{/* {menu === 'NAPBANKING' && <NapBanking />}
+				{menu === 'RUTBANKING' && <RutBanking />} */}
 				{menu === 'LICHSUCUOC' && <HistoryUserBet />}
-				{menu === 'LICHSUBANK' && <HistoryUserBank />}
+				{/* {menu === 'LICHSUBANK' && <HistoryUserBank />} */}
 				{menu === 'EXCHANGEGOLD' && <ExchangeGold />}
 				{menu === 'MISSIONDAILY' && <MissionDaily />}
 			</div>
