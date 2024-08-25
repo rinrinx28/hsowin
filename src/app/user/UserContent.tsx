@@ -1525,7 +1525,7 @@ function ExchangeGold() {
 				</label>
 
 				<label className="label w-full">
-					<p>Nhập Số Thỏi Vàng Nhận:</p>
+					<p>Số Thỏi Vàng Nhận:</p>
 					<input
 						type="text"
 						className="input input-bordered w-full max-w-md"
