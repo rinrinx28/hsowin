@@ -1,6 +1,6 @@
 const urlConfig = {
 	dev: 'http://localhost:3000',
-	https: 'https://hsowin.vip',
+	https: 'https://hsgame.me',
 };
 
 export default function ImageLoader(src: string) {

@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 		type: 'website',
 		description:
 			'HỆ THỐNG MINI GAME, Kiếm Vàng Ngọc Rồng Giao Dịch Tự Động Uy Tín',
-		images: 'https://hsowin.vip/image/icon.png',
+		images: 'https://hsgame.me/image/icon.png',
 		title: 'Hsowin VIP',
-		url: 'https://hsowin.vip/',
+		url: 'https://hsgame.me/',
 	},
 	keywords: [
 		'Trò chơi điện tử ngọc rồng',

@@ -100,7 +100,7 @@ export default function Home() {
 			<div className="flex justify-center">
 				<div className="max-w-6xl">
 					<div className="flex flex-col justify-center items-center text-center">
-						<h1 className="text-3xl font-bold">HSOWIN.VIP</h1>
+						<h1 className="text-3xl font-bold">HSGAME.ME</h1>
 						<div className="py-3 mb-4 text-xl border-b border-current">
 							<Typewriter
 								options={{
@@ -263,7 +263,7 @@ export default function Home() {
 						<Link
 							href={'/'}
 							className="link">
-							https://hsowin.vip/
+							https://hsgame.me/
 						</Link>
 					</h3>
 					<h3 className="font-semibold">
