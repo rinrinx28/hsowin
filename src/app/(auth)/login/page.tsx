@@ -18,7 +18,9 @@ function LoginPage() {
 	const [loginInfo, setLogin] = useState<Info>({ username: '', password: '' });
 	const [isStay, setStay] = useState(true);
 	const [msg, setMsg] = useState('');
-	const logo_hsowin = ImageLoader('/image/hsowin_logo.gif');
+	// const logo_hsowin = ImageLoader(
+	// 	'/image/avatar/Arcade_Miss_Fortune_profileicon.webp',
+	// );
 	const user = useAppSelector((state) => state.user);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -74,7 +76,7 @@ function LoginPage() {
 	return (
 		<div className="min-h-screen flex justify-center items-center">
 			<div className="card bg-base-100 lg:w-1/3 w-full shadow-xl border border-current">
-				<figure>
+				{/* <figure>
 					<Image
 						alt="hsowin_logo"
 						src={logo_hsowin}
@@ -82,7 +84,7 @@ function LoginPage() {
 						width={400}
 						height={400}
 					/>
-				</figure>
+				</figure> */}
 				<div className="card-body gap-6">
 					<h2 className="card-title justify-center">Đăng Nhập</h2>
 					<form
