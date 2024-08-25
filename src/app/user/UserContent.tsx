@@ -83,7 +83,7 @@ const UserContent = () => {
 								onClick={() => setMenu('INFO')}>
 								Thông tin tài khoản
 							</li>
-							<li
+							{/* <li
 								className="text-xl btn btn-ghost"
 								onClick={() => {
 									const modal = document.getElementById(
@@ -107,17 +107,17 @@ const UserContent = () => {
 								className="text-xl btn btn-ghost"
 								onClick={() => setMenu('RUTBANKING')}>
 								Rút Về Bank/Momo
-							</li>
+							</li> */}
 							<li
 								className="text-xl btn btn-ghost"
 								onClick={() => setMenu('LICHSUCUOC')}>
 								Lịch Sử Cược
 							</li>
-							<li
+							{/* <li
 								className="text-xl btn btn-ghost"
 								onClick={() => setMenu('LICHSUBANK')}>
 								Lịch Sử Bank
-							</li>
+							</li> */}
 							<li
 								className="text-xl btn btn-ghost"
 								onClick={() => setMenu('EXCHANGEGOLD')}>
