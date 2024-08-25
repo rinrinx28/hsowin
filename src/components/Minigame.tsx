@@ -175,7 +175,7 @@ export const Minigame = () => {
 					{historyServer && historyServer?.server === userGame && (
 						<p>
 							Jackpot:{' '}
-							<span className="text-yellow-300 font-extrabold">
+							<span className="text-green-500 font-extrabold">
 								{new Intl.NumberFormat('vi').format(
 									historyServer?.jackpot ?? 0,
 								)}
