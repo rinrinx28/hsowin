@@ -245,10 +245,7 @@ function ProfileUser() {
 					<p className="text-current">
 						30 ngày qua đã nạp:{' '}
 						<span className="text-yellow-500 font-extrabold">
-							{new Intl.NumberFormat('vi', {
-								currency: 'VND',
-								style: 'currency',
-							}).format(Number(user?.totalBank) ?? 0)}
+							{new Intl.NumberFormat('vi').format(Number(user?.totalBank) ?? 0)}
 						</span>
 					</p>
 				</li>
@@ -267,10 +264,7 @@ function ProfileUser() {
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Tháng này đã hiến:</p>
 					<p className="text-yellow-500 font-extrabold">
-						{new Intl.NumberFormat('vi', {
-							currency: 'VND',
-							style: 'currency',
-						}).format(Number(user?.totalBank) ?? 0)}
+						{new Intl.NumberFormat('vi').format(Number(user?.totalBank) ?? 0)}
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
@@ -1514,7 +1508,7 @@ function ExchangeGold() {
 				</label>
 
 				<label className="label w-full">
-					<p>Nhập Số Vàng Nhận:</p>
+					<p>Nhập Số Thỏi Vàng Nhận:</p>
 					<input
 						type="text"
 						className="input input-bordered w-full max-w-md"
