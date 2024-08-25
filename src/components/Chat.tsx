@@ -112,7 +112,7 @@ export default function ChatBox() {
 										} gap-2 items-center`}>
 										{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
 										{msg?.meta && (JSON.parse(msg?.meta)?.vip ?? 0) > 0 && (
-											<p className="fire font-extrabold text-yellow-300">
+											<p className="fire font-extrabold text-red-500">
 												VIP {JSON.parse(msg?.meta)?.vip}
 											</p>
 										)}

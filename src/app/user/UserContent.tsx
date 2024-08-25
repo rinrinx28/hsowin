@@ -8,6 +8,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import { updateUser } from '@/lib/redux/features/auth/user';
 import { updateMission } from '@/lib/redux/features/auth/missionDaily';
+import { GiEmerald, GiGoldBar } from 'react-icons/gi';
 
 const UserContent = () => {
 	const user = useAppSelector((state) => state.user);
@@ -238,21 +239,29 @@ function ProfileUser() {
 				<li className="w-full gap-2 rounded-md bg-base-300 flex flex-col justify-start p-1 lg:p-4 items-start">
 					<p className="">
 						Thông Tin VIP:{' '}
-						<span className="fire font-extrabold text-yellow-300">
+						<span className="fire font-extrabold text-red-500">
 							VIP {user?.vip ?? 0}
 						</span>
 					</p>
-					<p className="text-current">
-						30 ngày qua đã nạp:{' '}
-						<span className="text-yellow-500 font-extrabold">
+					<p className="text-current flex flex-row gap-3 items-center">
+						30 ngày qua đã nạp:
+						<span className="text-green-500 font-extrabold">
 							{new Intl.NumberFormat('vi').format(Number(user?.totalBank) ?? 0)}
 						</span>
+						<GiGoldBar
+							size={24}
+							className="text-green-500"
+						/>{' '}
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Số Thỏi Vàng:</p>
-					<p className="text-yellow-500 font-semibold">
-						{new Intl.NumberFormat('vi').format(user?.gold ?? 0)}
+					<p className="text-green-500 font-semibold flex flex-row gap-3 items-center">
+						{new Intl.NumberFormat('vi').format(user?.gold ?? 0)}{' '}
+						<GiGoldBar
+							size={24}
+							className="text-green-500"
+						/>
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
@@ -260,11 +269,19 @@ function ProfileUser() {
 					<p className="text-green-500 font-semibold">
 						{new Intl.NumberFormat('vi').format(user?.diamon ?? 0)}
 					</p>
+					<GiEmerald
+						size={24}
+						className="text-green-500"
+					/>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
 					<p>Tháng này đã hiến:</p>
-					<p className="text-yellow-500 font-extrabold">
-						{new Intl.NumberFormat('vi').format(Number(user?.totalBank) ?? 0)}
+					<p className="text-green-500 font-extrabold flex flex-row gap-3 items-center">
+						{new Intl.NumberFormat('vi').format(Number(user?.totalBank) ?? 0)}{' '}
+						<GiGoldBar
+							size={24}
+							className="text-green-500"
+						/>
 					</p>
 				</li>
 				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
@@ -278,7 +295,7 @@ function ProfileUser() {
 								return modal.showModal();
 							}
 						}}
-						className="btn btn-ghost btn-sm text-yellow-300">
+						className="btn btn-ghost btn-sm text-green-500">
 						(Nhấn để đổi mật khẩu)
 					</button>
 				</li>
