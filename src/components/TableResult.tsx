@@ -28,7 +28,7 @@ export default function TableResult() {
 	};
 
 	const showDialogCancelUserBet = (uid: any) => {
-		if (uid !== user._id) return;
+		if (uid !== user?._id) return;
 
 		const modal = document.getElementById(
 			'error_bet_2',
@@ -44,7 +44,7 @@ export default function TableResult() {
 		userBetId: any,
 		server: string,
 	) => {
-		if (uid !== user._id) return;
+		if (uid !== user?._id) return;
 		if (!uid || !betId || !userBetId) return;
 		if (['1', '2', '3'].includes(server)) {
 			socket.emit('bet-user-del-boss', { uid, betId, userBetId });

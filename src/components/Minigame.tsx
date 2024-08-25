@@ -65,77 +65,6 @@ export const Minigame = () => {
 		return () => {};
 	}, [userGame, dispatch]);
 
-	// useEffect(() => {
-	// 	//TODO ———————————————[Handle mini game event]———————————————
-
-	// 	const handleStatusBoss = (data: StatusBoss) => {
-	// 		if (data?.type === 'old' && data?.server === userGame) {
-	// 			const new_mainBet = data?.boss;
-	// 			const old_bet = [
-	// 				...(logBet?.length > 9 ? logBet?.slice(0, -1) : logBet),
-	// 				new_mainBet,
-	// 			];
-	// 			const sort_bet = old_bet.sort(
-	// 				(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-	// 			);
-	// 			dispatch(updateMainBet(null));
-	// 			dispatch(updateLogBet(sort_bet));
-	// 		}
-	// 		if (data?.type === 'new' && data?.server === userGame) {
-	// 			dispatch(updateMainBet(data?.boss));
-	// 		}
-	// 	};
-
-	// 	const handleStatusSv = (data: StatusSv) => {
-	// 		if (data?.type === 'old' && data?.server === userGame) {
-	// 			const new_mainBet = data?.sv;
-	// 			const old_bet = [
-	// 				...(logBet?.length > 9 ? logBet?.slice(0, -1) : logBet),
-	// 				new_mainBet,
-	// 			];
-	// 			const sort_bet = old_bet.sort(
-	// 				(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-	// 			);
-	// 			dispatch(updateMainBet(null));
-	// 			dispatch(updateLogBet(sort_bet));
-	// 		}
-	// 		if (data?.type === 'new' && data?.server === userGame) {
-	// 			dispatch(updateMainBet({ ...data?.sv, timeBoss: data?.timeBoss }));
-	// 		}
-	// 	};
-
-	// 	const handleStatus24 = (data: Status24) => {
-	// 		if (data?.server === userGame) {
-	// 			const old_bet = [
-	// 				...(logBet?.length > 9 ? logBet?.slice(0, -1) : logBet),
-	// 				data?.old_bet,
-	// 			];
-	// 			const sort_bet = old_bet.sort(
-	// 				(a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix(),
-	// 			);
-	// 			dispatch(updateLogBet(sort_bet));
-	// 			dispatch(updateMainBet(data?.new_bet));
-	// 		}
-	// 	};
-
-	// 	socket.on('status-boss', handleStatusBoss);
-	// 	socket.on('status-sv', handleStatusSv);
-	// 	socket.on('status-24/24', handleStatus24);
-
-	// 	socket.on('mainBet-up', (data) => {
-	// 		if (data?.server === userGame) {
-	// 			dispatch(updateMainBet({ ...mainBet, ...data }));
-	// 		}
-	// 	});
-
-	// 	return () => {
-	// 		socket.off('status-boss');
-	// 		socket.off('status-sv');
-	// 		socket.off('status-24/24');
-	// 		socket.off('mainBet-up');
-	// 	};
-	// }, [socket, dispatch, logBet, userGame, mainBet]);
-
 	useEffect(() => {
 		const loop = setInterval(() => {
 			let now = moment().unix();
@@ -359,11 +288,11 @@ export const BetMinigame = () => {
 	};
 
 	const handlerBetUser = () => {
-		if (!user.isLogin) {
+		if (!user?.isLogin) {
 			showModelLogin();
 			return;
 		}
-		if (betInfo.amount < 1 || betInfo.type.length < 1) {
+		if ((betInfo?.amount ?? 0) < 1 || betInfo?.type.length < 1) {
 			showModelBet('Xin vui lòng kiểm tra dự đoán và đặt tiền cược!');
 			return;
 		}
@@ -371,20 +300,20 @@ export const BetMinigame = () => {
 		if (userGame === mainBet?.server) {
 			if (type === 'BOSS') {
 				const data: CreateUserBet = {
-					amount: betInfo.amount,
+					amount: betInfo?.amount ?? 0,
 					betId: mainBet?._id,
-					result: betInfo.type,
+					result: betInfo?.type,
 					server: userGame,
-					uid: user._id,
+					uid: user?._id,
 				};
 				socket.emit('bet-user-ce-boss', data);
 			} else {
 				const data: CreateUserBet = {
-					amount: betInfo.amount,
+					amount: betInfo?.amount ?? 0,
 					betId: mainBet?._id,
-					result: betInfo.type,
+					result: betInfo?.type,
 					server: userGame,
-					uid: user._id,
+					uid: user?._id,
 				};
 				socket.emit('bet-user-ce-sv', data);
 			}
@@ -417,70 +346,6 @@ export const BetMinigame = () => {
 	}, [userGame, dispatch]);
 
 	useEffect(() => {
-		// //TODO ———————————————[Event Bet Res Reuslt]———————————————
-		// socket.on('re-bet-user-res-sv', (data) => {
-		// 	const userBets: userBet[] = data?.data;
-		// 	if (user?.isLogin) {
-		// 		const target = userBets.filter((bet) => bet.uid === user?._id);
-		// 		let amount = 0;
-		// 		for (const bet of target) {
-		// 			amount += bet.receive;
-		// 		}
-		// 		const { gold = 0, totalBet = 0, ...rs } = user;
-		// 		dispatch(
-		// 			updateUser({
-		// 				...rs,
-		// 				gold: gold + amount,
-		// 				totalBet: totalBet + amount,
-		// 			}),
-		// 		);
-		// 	}
-		// 	if (data?.server === userGame) {
-		// 		// Update Table UserBetLog
-		// 		const new_userBetLog = userBetLog.map((bet) => {
-		// 			let target = userBets.find((b) => b._id === bet._id);
-		// 			if (target) {
-		// 				target.isEnd = true;
-		// 				return target;
-		// 			}
-		// 			return bet;
-		// 		});
-		// 		dispatch(updateAll(new_userBetLog));
-		// 	}
-		// });
-
-		// socket.on('re-bet-user-res-boss', (data) => {
-		// 	const userBets: userBet[] = data?.data;
-		// 	if (user?.isLogin) {
-		// 		const target = userBets.filter((bet) => bet.uid === user?._id);
-		// 		let amount = 0;
-		// 		for (const bet of target) {
-		// 			amount += bet.receive;
-		// 		}
-		// 		const { gold = 0, totalBet = 0, ...rs } = user;
-		// 		dispatch(
-		// 			updateUser({
-		// 				...rs,
-		// 				gold: gold + amount,
-		// 				totalBet: totalBet + amount,
-		// 			}),
-		// 		);
-		// 	}
-		// 	if (data?.server === userGame) {
-		// 		// Update Table UserBetLog
-		// 		const new_userBetLog = userBetLog.map((bet) => {
-		// 			let target = userBets.find((b) => b._id === bet._id);
-		// 			if (target) {
-		// 				target.isEnd = true;
-		// 				return target;
-		// 			}
-
-		// 			return bet;
-		// 		});
-		// 		dispatch(updateAll(new_userBetLog));
-		// 	}
-		// });
-
 		//TODO ———————————————[Handle Event Bet create]———————————————
 
 		socket.on('re-bet-user-ce-sv', (data) => {
@@ -488,17 +353,19 @@ export const BetMinigame = () => {
 				if (data?.data[0]?.uid === user?._id) {
 					setPause(false);
 					const { gold = 0, ...rs } = user;
-					dispatch(updateUser({ ...rs, gold: gold - betInfo.amount }));
+					dispatch(
+						updateUser({ ...rs, gold: gold - (betInfo?.amount ?? 0 ?? 0) }),
+					);
 					dispatch(resetBet());
 					showModelBet(data?.message);
 				}
 				// Update Table User BetLog
 				if (data?.server === userGame) {
 					// Update Table User BetLog
-					const updatedUserBetLog = [data?.data[0], ...userBetLog].slice(
-						0,
-						userBetLog.length,
-					);
+					const updatedUserBetLog = [
+						data?.data[0],
+						...(userBetLog ?? []),
+					].slice(0, userBetLog.length);
 					dispatch(updateAll(updatedUserBetLog));
 				}
 			} else {
@@ -515,16 +382,16 @@ export const BetMinigame = () => {
 				if (data?.data[0]?.uid === user?._id) {
 					setPause(false);
 					const { gold = 0, ...rs } = user;
-					dispatch(updateUser({ ...rs, gold: gold - betInfo.amount }));
+					dispatch(updateUser({ ...rs, gold: gold - (betInfo?.amount ?? 0) }));
 					dispatch(resetBet());
 					showModelBet(data?.message);
 				}
 				if (data?.server === userGame) {
 					// Update Table User BetLog
-					const updatedUserBetLog = [data?.data[0], ...userBetLog].slice(
-						0,
-						userBetLog.length,
-					);
+					const updatedUserBetLog = [
+						data?.data[0],
+						...(userBetLog ?? []),
+					].slice(0, userBetLog.length);
 					dispatch(updateAll(updatedUserBetLog));
 				}
 			} else {
@@ -549,7 +416,7 @@ export const BetMinigame = () => {
 			'amount-bet',
 		) as HTMLInputElement;
 		if (input_amount) {
-			input_amount.value = `${betInfo.amount}`;
+			input_amount.value = `${betInfo?.amount ?? 0}`;
 		}
 	}, [betInfo]);
 
@@ -692,14 +559,14 @@ export const BetMinigame = () => {
 					}`}>
 					<button
 						className={`btn btn-primary uppercase ${
-							betInfo.type === '1' ? '' : 'btn-outline'
+							betInfo?.type === '1' ? '' : 'btn-outline'
 						}`}
 						onClick={() => handlerBetType('1')}>
 						Núi Khỉ Đen
 					</button>
 					<button
 						className={`btn btn-error uppercase ${
-							betInfo.type === '0' ? '' : 'btn-outline'
+							betInfo?.type === '0' ? '' : 'btn-outline'
 						}`}
 						onClick={() => handlerBetType('0')}>
 						Núi Khỉ Đỏ
@@ -732,7 +599,7 @@ export const BetMinigame = () => {
 						type="text"
 						className="px-4 font-medium border-l-2"
 						placeholder="Nhập số vàng chơi"
-						defaultValue={betInfo.amount ?? 0}
+						defaultValue={betInfo?.amount ?? 0 ?? 0}
 						onChange={(e) => {
 							dispatch(changeAmountInput(Number(e.target.value)));
 						}}

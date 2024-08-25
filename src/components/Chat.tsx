@@ -3,9 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Send from './icons/send';
 import Chat from './icons/chat';
 import Link from 'next/link';
-import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
+import { useAppSelector } from '@/lib/redux/hook';
 import { useSocket } from '@/lib/socket';
-import { updateMsgOne } from '@/lib/redux/features/logs/messageLog';
 import Image from 'next/image';
 
 interface ChatBox {
@@ -24,7 +23,7 @@ export default function ChatBox() {
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
 
 	const handlerChatUser = () => {
-		if (!user.isLogin) {
+		if (!user?.isLogin) {
 			const modal = document.getElementById(
 				'auth_chat',
 			) as HTMLDialogElement | null;
@@ -126,7 +125,7 @@ export default function ChatBox() {
 															className="tooltip"
 															data-tip={`Khứa này top ${index + 1}`}>
 															<Image
-																src={`/image/rank/${index + 1}_user.webp`}
+																src={`/image/rank/${index + 1}_user?.webp`}
 																width={44}
 																height={44}
 																alt={`${index + 1}_user_rank_image`}
