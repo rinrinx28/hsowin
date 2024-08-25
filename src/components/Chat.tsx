@@ -68,7 +68,7 @@ export default function ChatBox() {
 				</div>
 			</div>
 			<div
-				className="overflow-auto h-[950px] bg-base-200 rounded-lg p-4"
+				className="overflow-auto h-[950px] bg-base-100 rounded-lg p-4"
 				ref={chatEndRef}>
 				{messageLog
 					?.filter((i: any) => i.server === userGame || i.server === 'all')
@@ -86,7 +86,7 @@ export default function ChatBox() {
 											<div
 												className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
 												style={{
-													backgroundImage: `url("/image/avatar/Dueling_Spatulas_profileicon.webp")`,
+													backgroundImage: `url("/image/avatar/Arcade_Miss_Fortune_profileicon.webp")`,
 												}}></div>
 										</div>
 									</div>

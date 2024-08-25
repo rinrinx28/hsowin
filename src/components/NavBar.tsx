@@ -108,7 +108,7 @@ const NavBar = () => {
 						className="btn btn-ghost text-xl">
 						<Image
 							alt="hsowin_logo"
-							src={'/image/avatar/Dueling_Spatulas_profileicon.webp'}
+							src={'/image/avatar/Arcade_Miss_Fortune_profileicon.webp'}
 							className="rounded-full"
 							width={50}
 							height={50}

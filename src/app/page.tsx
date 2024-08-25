@@ -100,8 +100,8 @@ export default function Home() {
 			<div className="flex justify-center">
 				<div className="max-w-6xl">
 					<div className="flex flex-col justify-center items-center text-center">
-						<h1 className="text-3xl font-bold">HSGAME.ME</h1>
-						<div className="py-3 mb-4 text-xl border-b border-current">
+						<h1 className="text-3xl font-bold text-primary">HSGAME.ME</h1>
+						<div className="py-3 mb-4 text-xl text-current border-b border-current">
 							<Typewriter
 								options={{
 									strings: slogans,
@@ -209,28 +209,28 @@ export default function Home() {
 								<button
 									onClick={() => dispatch(updateUserGame('1'))}
 									className={`${
-										userGame === '1' ? 'btn-success' : 'btn-outline'
+										userGame === '1' ? 'btn-primary' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv1
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('2'))}
 									className={`${
-										userGame === '2' ? 'btn-success' : 'btn-outline'
+										userGame === '2' ? 'btn-primary' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv2
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('3'))}
 									className={`${
-										userGame === '3' ? 'btn-success' : 'btn-outline'
+										userGame === '3' ? 'btn-primary' : 'btn-outline'
 									} btn rounded-btn`}>
 									Map Boss Sv3
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('24'))}
 									className={`${
-										userGame === '24' ? 'btn-success' : 'btn-outline'
+										userGame === '24' ? 'btn-primary' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 24/24
 								</button>
@@ -280,7 +280,7 @@ export default function Home() {
 							chơi
 						</p>
 						<p>
-							- <span className="text-red-500">Dự đoán chẵn-lẻ</span>: kết quả
+							- <span className="text-red-500">Dự đoán chẵn-lẻ</span>: kết quả{' '}
 							<span className="font-semibold">số chẵn</span> hoặc{' '}
 							<span className="font-semibold">số lẻ</span>
 						</p>
@@ -379,7 +379,7 @@ export default function Home() {
 								width={50}
 								height={50}
 							/>
-							Nạp Thỏi Vàng khuyễn mãi lên đến x{bank} qua ví/ATM
+							Nạp Thỏi Vàng tích điểm nhận thành viên VIP
 						</Link>
 					</div>
 					<div className="modal-action">

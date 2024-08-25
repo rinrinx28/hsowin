@@ -190,7 +190,7 @@ function TableReviewClaimVip() {
 	return (
 		<div className="py-4 flex flex-col gap-2">
 			<h1 className="text-xl">
-				Mua vàng tích tiền lên{' '}
+				Nạp thỏi vàng tích điểm lên{' '}
 				<span className="text-error">thành viên VIP</span>
 			</h1>
 			<div className="overflow-x-auto">
