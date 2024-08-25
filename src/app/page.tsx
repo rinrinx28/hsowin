@@ -185,7 +185,7 @@ export default function Home() {
 								</button>
 							</div>
 							<div className="flex flex-wrap lg:flex-row gap-4 justify-center">
-								<button
+								{/* <button
 									onClick={() => dispatch(updateUserGame('1-mini'))}
 									className={`${
 										userGame === '1-mini' ? 'btn-success' : 'btn-outline'
@@ -205,7 +205,7 @@ export default function Home() {
 										userGame === '3-mini' ? 'btn-success' : 'btn-outline'
 									} btn rounded-btn`}>
 									Server 3
-								</button>
+								</button> */}
 								<button
 									onClick={() => dispatch(updateUserGame('1'))}
 									className={`${
