@@ -10,19 +10,7 @@ import Gold from './icons/gold';
 
 const NavBar = () => {
 	const user = useAppSelector((state) => state.user);
-	const logo_hsowin = ImageLoader('/image/hsowin_logo.gif');
-	// const [isTheme, setIsTheme] = useState<string | null>(null);
-
-	// useEffect(() => {
-	// 	const theme = localStorage.getItem('theme');
-	// 	setIsTheme(theme);
-	// }, []);
-
-	const changeTheme = (value: boolean) => {
-		if (typeof window !== 'undefined') {
-			localStorage.setItem('theme', `${value}`);
-		}
-	};
+	// const logo_hsowin = ImageLoader('/image/Dueling_Spatulas_profileicon.webp');
 	return (
 		<div className="w-full flex justify-center items-center sticky top-0 z-[1000] backdrop-blur-md">
 			<div className="navbar max-w-7xl rounded-md shadow-lg">
@@ -72,7 +60,11 @@ const NavBar = () => {
 									<Link href={'/rutvang'}>Rút Vàng</Link>
 								</li>
 								<li>
-									<Link href={'/vip'}>Điểm Danh VIP</Link>
+									<Link
+										className="text-primary"
+										href={'/vip'}>
+										Điểm Danh VIP
+									</Link>
 								</li>
 								{user?.isLogin && (
 									<>
@@ -116,10 +108,10 @@ const NavBar = () => {
 						className="btn btn-ghost text-xl">
 						<Image
 							alt="hsowin_logo"
-							src={logo_hsowin}
-							// className="size-52"
-							width={150}
-							height={150}
+							src={'/image/avatar/Dueling_Spatulas_profileicon.webp'}
+							className="rounded-full"
+							width={50}
+							height={50}
 						/>
 					</Link>
 
@@ -139,7 +131,7 @@ const NavBar = () => {
 							</li>
 							<li>
 								<Link
-									className="fire"
+									className="text-primary"
 									href={'/vip'}>
 									Điểm Danh VIP
 								</Link>

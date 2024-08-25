@@ -1,7 +1,7 @@
 'use client';
 
 import apiClient from '@/lib/apiClient';
-import user, { updateUser } from '@/lib/redux/features/auth/user';
+import { updateUser } from '@/lib/redux/features/auth/user';
 import { updateUserVip } from '@/lib/redux/features/auth/userVip';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import moment from 'moment';
@@ -92,7 +92,7 @@ export default function VipClaimPage() {
 							<span className="text-primary">mất quyền lợi VIP</span>
 						</span>
 					</p>
-					<p>- Để nhận mỗi ngày thì phải đánh:</p>
+					<p>- Để nhận quà VIP mỗi ngày thì phải đánh:</p>
 					<div className="grid grid-cols-2">
 						{rule?.map((s, i: number) => {
 							return (
@@ -199,7 +199,7 @@ function TableReviewClaimVip() {
 					<thead className="bg-error text-white">
 						<tr className="text-center">
 							<th>VIP</th>
-							<th>Số Tiền</th>
+							<th>Số Thỏi Vàng</th>
 							<th>Số Thỏi Vàng Nhận</th>
 						</tr>
 					</thead>
@@ -208,12 +208,7 @@ function TableReviewClaimVip() {
 							return (
 								<tr key={`${i}-vip`}>
 									<td>VIP {i + 1}</td>
-									<td>
-										{new Intl.NumberFormat('vi', {
-											currency: 'VND',
-											style: 'currency',
-										}).format(v)}
-									</td>
+									<td>{new Intl.NumberFormat('vi').format(v)}</td>
 									<td>{prize[i]} Thỏi/ngày</td>
 								</tr>
 							);

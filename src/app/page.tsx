@@ -125,9 +125,9 @@ export default function Home() {
 									<ul
 										tabIndex={0}
 										className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-										<li>
+										{/* <li>
 											<Link href={'/user?type=NAPBANKING'}>Mua Vàng</Link>
-										</li>
+										</li> */}
 										<li>
 											<Link href={'/napvang'}>Nạp Vàng</Link>
 										</li>
@@ -153,7 +153,7 @@ export default function Home() {
 
 										<li>
 											<Link
-												className="fire"
+												className=""
 												href={'/vip'}>
 												Điểm Danh VIP
 											</Link>
@@ -247,7 +247,7 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="flex justify-center">
-				<div className="max-w-7xl grid grid-rows-2 gap-10">
+				<div className="max-w-7xl w-full grid grid-rows-2 gap-10">
 					<TableResult />
 					{/* <TableClans /> */}
 					<TableUser />

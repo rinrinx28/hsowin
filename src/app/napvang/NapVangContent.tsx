@@ -26,6 +26,8 @@ export default function PageNapVang() {
 	const [session, setSession] = useState<any[]>([]);
 	const eventConfig = useAppSelector((state) => state.eventConfig);
 	const [config, setConfig] = useState({ min: 0 });
+	const [vip, setVip] = useState([]);
+	const [prize, setPrize] = useState([]);
 	const [msg, setMsg] = useState('');
 	const router = useRouter();
 
@@ -175,8 +177,23 @@ export default function PageNapVang() {
 				...e,
 				min: min_deposit_gold?.value ?? 0,
 			}));
+			const e_value_vip = eventConfig.find((e) => e.name === 'e-value-vip');
+			const e_value_vip_claim = eventConfig.find(
+				(e) => e.name === 'e-value-vip-claim',
+			);
+			setVip(JSON.parse(e_value_vip?.option ?? '[]'));
+			setPrize(JSON.parse(e_value_vip_claim?.option ?? '[]'));
 		}
 	}, [eventConfig]);
+
+	useEffect(() => {
+		const modal = document.getElementById(
+			'noti-vip',
+		) as HTMLDialogElement | null;
+		if (modal) {
+			return modal.showModal();
+		}
+	}, []);
 
 	return (
 		<div>
@@ -411,6 +428,58 @@ export default function PageNapVang() {
 								onClick={() => router.push('/login')}>
 								Đăng Nhập
 							</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+
+			<dialog
+				id="noti-vip"
+				className="modal">
+				<div className="modal-box max-w-sm lg:max-w-xl w-full">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<div className="py-4 flex flex-col gap-2">
+						<p>
+							Nạp thỏi vàng tích điểm lên{' '}
+							<span className="text-error">thành viên VIP</span>
+						</p>
+						<div className="overflow-x-auto">
+							<table className="table">
+								{/* head */}
+								<thead className="bg-error text-white">
+									<tr className="text-center">
+										<th>VIP</th>
+										<th>Số Thỏi Vàng Nạp</th>
+										<th>Số Thỏi Vàng Nhận</th>
+									</tr>
+								</thead>
+								<tbody className="text-center">
+									{vip?.map((v: any, i: number) => {
+										return (
+											<tr key={`${i}-vip`}>
+												<td>VIP {i + 1}</td>
+												<td>{new Intl.NumberFormat('vi').format(v)}</td>
+												<td>{prize[i]} Thỏi/ngày</td>
+											</tr>
+										);
+									})}
+								</tbody>
+							</table>
+						</div>
+						<p className="text-error">Lưu ý:</p>
+						<p>
+							- VIP tương ứng với tổng số thỏi vàng bạn nạp trong 30 ngày gần
+							nhất!
+						</p>
+						<p>
+							- Khi lên VIP bạn sẽ trông ngầu hơn khi chém gió và đặc biệt rất
+							dễ tán gái nhé
+						</p>
+					</div>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
 						</form>
 					</div>
 				</div>

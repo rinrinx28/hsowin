@@ -126,11 +126,11 @@ export default function TableResult() {
 	}
 
 	return (
-		<div className="lg:flex lg:flex-col grid">
+		<div className="lg:flex lg:flex-col grid w-full">
 			<div className="border-current border rounded-box grid h-20 place-items-center">
 				Lịch Sử Kết Quả
 			</div>
-			<div className="overflow-auto border border-current max-h-[600px]">
+			<div className="overflow-auto border border-current max-h-[600px] w-full">
 				<table className="table table-lg table-pin-rows table-pin-cols">
 					{/* head */}
 					<thead className="text-sm  text-center">

@@ -9,7 +9,7 @@ import { SocketProvider } from '@/lib/socket';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-	title: 'HSGAME',
+	title: 'HSGAME ME | Mini Game Kiếm Vàng Ngọc Rồng',
 	description: 'Mini game',
 	icons: '/image/icon.png',
 	openGraph: {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 		description:
 			'HỆ THỐNG MINI GAME, Kiếm Vàng Ngọc Rồng Giao Dịch Tự Động Uy Tín',
 		images: 'https://hsgame.me/image/icon.png',
-		title: 'HSGAME',
+		title: 'HSGAME ME | Mini Game Kiếm Vàng Ngọc Rồng',
 		url: 'https://hsgame.me/',
 	},
 	keywords: [
@@ -40,7 +40,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			data-theme="luxury">
+			data-theme="coffee">
 			<head>
 				<script
 					async
