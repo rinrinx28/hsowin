@@ -105,13 +105,13 @@ const NavBar = () => {
 					</div>
 					<Link
 						href={'/'}
-						className="btn btn-ghost text-xl">
+						className="btn btn-link text-xl">
 						<Image
 							alt="hsowin_logo"
-							src={'/image/avatar/Arcade_Miss_Fortune_profileicon.webp'}
+							src={'/image/logo_hsgame.gif'}
 							className="rounded-full"
-							width={50}
-							height={50}
+							width={150}
+							height={150}
 						/>
 					</Link>
 
