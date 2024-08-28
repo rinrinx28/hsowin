@@ -16,9 +16,7 @@ interface InfoResgiter {
 }
 
 function Resigter() {
-	// const logo_hsowin = ImageLoader(
-	// 	'/image/avatar/Arcade_Miss_Fortune_profileicon.webp',
-	// );
+	const logo_hsowin = ImageLoader('/image/logo_2.gif');
 	const [info, setInfo] = useState<InfoResgiter>({ server: '1' });
 	const [msg, setMsg] = useState('');
 	const router = useRouter();
@@ -68,7 +66,7 @@ function Resigter() {
 	return (
 		<div className="min-h-screen flex justify-center items-center">
 			<div className="card bg-base-100 lg:w-1/3 w-full shadow-xl border border-current">
-				{/* <figure>
+				<figure>
 					<Image
 						alt="hsowin_logo"
 						src={logo_hsowin}
@@ -76,7 +74,7 @@ function Resigter() {
 						width={400}
 						height={400}
 					/>
-				</figure> */}
+				</figure>
 				<div className="card-body gap-6">
 					<h2 className="card-title justify-center">Đăng Ký Tài Khoản</h2>
 					<div className="flex flex-col gap-2 w-full justify-start">
