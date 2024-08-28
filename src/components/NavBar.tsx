@@ -108,7 +108,7 @@ const NavBar = () => {
 						className="btn btn-link text-xl">
 						<Image
 							alt="hsowin_logo"
-							src={'/image/logo_hsgame.gif'}
+							src={'/image/logo_2.gif'}
 							className="rounded-full"
 							width={150}
 							height={150}
