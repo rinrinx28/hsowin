@@ -10,7 +10,7 @@ function PosUp() {
 
 	useEffect(() => {
 		if (eventConfig) {
-			const e_zalo = eventConfig.find((e) => e.name === 'e_zalo');
+			const e_zalo = eventConfig.find((e) => e.name === 'e-zalo');
 			setNumber(e_zalo?.option ?? '');
 		}
 	}, [eventConfig]);
