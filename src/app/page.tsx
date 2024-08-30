@@ -13,6 +13,7 @@ import ImageLoader from '@/lib/ImageLoader';
 import Image from 'next/image';
 import moment from 'moment';
 import { useSocket } from '@/lib/socket';
+import { IoIosStarHalf } from 'react-icons/io';
 
 const slogans = [
 	'Mini Game Đỏ Đen Hồi Sinh Ngọc Rồng',
@@ -33,6 +34,7 @@ export default function Home() {
 	const [delay, setDelay] = useState(0);
 	const [mem, setMem] = useState(0);
 	const [prize, setPrize] = useState(0);
+	const [text, setText] = useState<any>(null);
 	const socket = useSocket();
 
 	const showTutorial = () => {
@@ -92,6 +94,9 @@ export default function Home() {
 				(e) => e.name === 'e-prize-diem-danh',
 			);
 			setPrize(e_prize_diem_danh?.value ?? 0);
+
+			const e_banner_text = evenConfig?.find((e) => e.name === 'e-banner-text');
+			setText(e_banner_text);
 		}
 	}, [evenConfig]);
 
@@ -239,6 +244,16 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
+
+			{text && text?.status && (
+				<div className="w-full p-2 bg-primary overflow-hidden text-white">
+					<div className="running flex items-center gap-3 ">
+						<IoIosStarHalf className="spin" />
+						<p>{text?.option}</p>
+						<IoIosStarHalf className="spin" />
+					</div>
+				</div>
+			)}
 			<div className="flex justify-center">
 				<div className="max-w-7xl grid lg:grid-cols-2 lg:grid-rows-5 grid-flow-row gap-4">
 					<Minigame />

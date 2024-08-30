@@ -302,3 +302,68 @@
 -ms-overflow-style: none;  /* IE and Edge */
 scrollbar-width: none;  /* Firefox */
 }
+
+/* Running  */
+
+.running{
+  -moz-animation: slide-right 10s linear infinite;
+  -webkit-animation: slide-right 10s linear infinite;
+  animation: slide-right 10s linear infinite;
+}
+.spin{
+  -moz-animation: spin-logo 10s linear infinite;
+  -webkit-animation: spin-logo 10s linear infinite;
+  animation: spin-logo 10s linear infinite;
+}
+
+/* for Firefox */
+@-moz-keyframes  slide-right {
+  from { -moz-transform: translateX(-100%); }
+  to { -moz-transform: translateX(100%); }
+}
+
+/* for Chrome */
+@-webkit-keyframes  slide-right {
+  from { -webkit-transform: translateX(-100%); }
+  to { -webkit-transform: translateX(100%); }
+}
+
+@keyframes  slide-right {
+  from {
+    -moz-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+  to {
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+}
+
+
+
+/* for Firefox */
+@-moz-keyframes  spin-logo {
+  from { -moz-transform: rotate(0deg); }
+  to { -moz-transform: rotate(360deg); }
+}
+
+/* for Chrome */
+@-webkit-keyframes  spin-logo {
+  from { -webkit-transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes  spin-logo {
+  from {
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

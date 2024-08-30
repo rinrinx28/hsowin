@@ -5,6 +5,7 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import Providers from '@/lib/redux/Provider';
 import { SocketProvider } from '@/lib/socket';
+import PosUp from '@/components/PosUp';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -63,6 +64,7 @@ export default function RootLayout({
 						<NavBar />
 						{children}
 						<Footer />
+						<PosUp />
 					</SocketProvider>
 				</Providers>
 			</body>

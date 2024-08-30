@@ -139,7 +139,6 @@ const NavBar = () => {
 						</ul>
 					</div>
 				</div>
-
 				<div className="navbar-end gap-4">
 					<label className="swap swap-rotate">
 						<input

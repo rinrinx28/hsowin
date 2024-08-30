@@ -38,6 +38,11 @@ function Resigter() {
 					return modal.showModal();
 				}
 			}
+			const isValid = containsSpecialOrAccentedCharacters(info.username ?? '');
+			if (!isValid)
+				throw new Error(
+					'Xin lỗi, Username không thể dùng các ký hiệu đặc biệt!',
+				);
 			const res = await apiClient.post('/auth/resgiter', info);
 			if (res.data) {
 				router.push('/login');
@@ -201,3 +206,17 @@ function Resigter() {
 }
 
 export default Resigter;
+
+function containsSpecialOrAccentedCharacters(input: string): boolean {
+	// This regex checks for specific special characters: !@#$%^&*()+=._-
+	const specificSpecialCharRegex = /[!@#\$%\^\&*\)\(+=._-]/;
+
+	// This regex checks for any non-alphanumeric character, excluding whitespace (covers accented characters too)
+	const accentedOrOtherSpecialCharRegex = /[^a-zA-Z0-9\s]/;
+
+	// Return true if either regex matches
+	return (
+		specificSpecialCharRegex.test(input) ||
+		accentedOrOtherSpecialCharRegex.test(input)
+	);
+}
