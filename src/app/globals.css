@@ -306,11 +306,10 @@ scrollbar-width: none;  /* Firefox */
 /* Running  */
 
 .running{
-  
   transform: translateX(100%); /* Animation start out of the screen */
-  -moz-animation: slide-right 30s linear infinite;
-  -webkit-animation: slide-right 30s linear infinite;
-  animation: slide-right 30s linear infinite;
+  -moz-animation: slide-right 15s linear infinite;
+  -webkit-animation: slide-right 15s linear infinite;
+  animation: slide-right 15s linear infinite;
 }
 .spin{
   -moz-animation: spin-logo 10s linear infinite;

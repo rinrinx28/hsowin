@@ -25,7 +25,7 @@ function PosUp() {
 				<SiZalo size={24} />
 			</Link>
 			<Link
-				href={'https://www.facebook.com/profile.php?id=61565053230557'}
+				href={'http://m.me/61565053230557'}
 				target="_blank"
 				className="btn btn-link z-50 bg-base-200 rounded-full">
 				<FaFacebookMessenger size={24} />
