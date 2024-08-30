@@ -39,10 +39,15 @@ function Resigter() {
 				}
 			}
 			const isValid = isValidUsername(info.username ?? '');
-			if (!isValid)
-				throw new Error(
-					'Xin lỗi, Username không thể dùng các ký hiệu đặc biệt!',
-				);
+			if (!isValid) {
+				const modal = document.getElementById(
+					'lock',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					setMsg('Xin lỗi, Username không thể dùng các ký hiệu đặc biệt!');
+					return modal.showModal();
+				}
+			}
 			const res = await apiClient.post('/auth/resgiter', info);
 			if (res.data) {
 				router.push('/login');
@@ -51,7 +56,6 @@ function Resigter() {
 			const modal = document.getElementById('lock') as HTMLDialogElement | null;
 			if (modal) {
 				let message = err?.response?.data?.message?.split(' ');
-				console.log(message);
 				let msg = message.includes('username_1')
 					? 'Tên tài khoản đã có người sử dụng'
 					: message.includes('name_1')
