@@ -106,7 +106,7 @@ export default function Home() {
 				<div className="max-w-6xl">
 					<div className="flex flex-col justify-center items-center text-center">
 						<h1 className="text-3xl font-bold text-primary">HSGAME.ME</h1>
-						<div className="py-3 mb-4 text-xl text-current border-b border-current">
+						<div className="py-3 mb-4 lg:text-xl text-sm text-current border-b border-current">
 							<Typewriter
 								options={{
 									strings: slogans,
@@ -246,7 +246,7 @@ export default function Home() {
 			</div>
 
 			{text && text?.status && (
-				<div className="w-full p-2 bg-primary overflow-hidden text-white">
+				<div className="w-full p-2 bg-primary overflow-hidden text-white text-nowrap">
 					<div className="running flex items-center gap-3 ">
 						<IoIosStarHalf className="spin" />
 						<p>{text?.option}</p>
