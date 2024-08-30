@@ -38,7 +38,7 @@ function Resigter() {
 					return modal.showModal();
 				}
 			}
-			const isValid = containsSpecialOrAccentedCharacters(info.username ?? '');
+			const isValid = isValidUsername(info.username ?? '');
 			if (!isValid)
 				throw new Error(
 					'Xin lỗi, Username không thể dùng các ký hiệu đặc biệt!',
@@ -207,16 +207,8 @@ function Resigter() {
 
 export default Resigter;
 
-function containsSpecialOrAccentedCharacters(input: string): boolean {
-	// This regex checks for specific special characters: !@#$%^&*()+=._-
-	const specificSpecialCharRegex = /[!@#\$%\^\&*\)\(+=._-]/;
-
-	// This regex checks for any non-alphanumeric character, excluding whitespace (covers accented characters too)
-	const accentedOrOtherSpecialCharRegex = /[^a-zA-Z0-9\s]/;
-
-	// Return true if either regex matches
-	return (
-		specificSpecialCharRegex.test(input) ||
-		accentedOrOtherSpecialCharRegex.test(input)
-	);
+function isValidUsername(username: string): boolean {
+	// Chỉ cho phép các ký tự a-z, A-Z, 0-9 và _
+	const validUsernameRegex = /^[a-zA-Z0-9_]+$/;
+	return validUsernameRegex.test(username);
 }
