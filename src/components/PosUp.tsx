@@ -1,3 +1,4 @@
+'use client';
 import { useAppSelector } from '@/lib/redux/hook';
 import Image from 'next/image';
 import Link from 'next/link';
