@@ -244,13 +244,20 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
-
 			{text && text?.status && (
-				<div className="w-full p-2 bg-primary overflow-hidden text-white text-nowrap">
-					<div className="running flex items-center gap-3 ">
-						<IoIosStarHalf className="spin" />
-						<p>{text?.option}</p>
-						<IoIosStarHalf className="spin" />
+				<div className="w-full flex items-center justify-center">
+					<div className="w-full max-w-6xl p-2 overflow-hidden text-current text-nowrap">
+						<div className="running flex items-center gap-5 ">
+							{JSON.parse(text?.option)?.map((t: string) => {
+								return (
+									<>
+										<IoIosStarHalf className="spin" />
+										<p>{t}</p>
+										<IoIosStarHalf className="spin" />
+									</>
+								);
+							})}
+						</div>
 					</div>
 				</div>
 			)}

@@ -1,8 +1,9 @@
 'use client';
 import { useAppSelector } from '@/lib/redux/hook';
-import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { FaFacebookMessenger } from 'react-icons/fa';
+import { SiZalo } from 'react-icons/si';
 
 function PosUp() {
 	const eventConfig = useAppSelector((state) => state.eventConfig);
@@ -16,17 +17,18 @@ function PosUp() {
 	}, [eventConfig]);
 
 	return (
-		<div className="fixed bottom-0 right-0 size-28 flex items-center justify-center bg-transparent">
+		<div className="fixed bottom-5 right-0 size-28 flex flex-col items-center justify-center bg-transparent gap-4">
 			<Link
 				href={`http://zalo.me/${number}`}
 				target="_blank"
-				className="btn btn-link z-50">
-				<Image
-					src={'/image/social/Icon_of_Zalo.svg.png'}
-					alt="logo zalo"
-					height={50}
-					width={50}
-				/>
+				className="btn btn-link z-50 bg-base-200 rounded-full">
+				<SiZalo size={24} />
+			</Link>
+			<Link
+				href={'https://www.facebook.com/profile.php?id=61565053230557'}
+				target="_blank"
+				className="btn btn-link z-50 bg-base-200 rounded-full">
+				<FaFacebookMessenger size={24} />
 			</Link>
 		</div>
 	);
