@@ -177,6 +177,8 @@ function ProfileUser() {
 		try {
 			if (pwd.new_pwd !== pwd.conf_pwd)
 				throw new Error('Xin vui lòng kiểm tra lại nhập mật khẩu mới!');
+			if (pwd.new_pwd.length === 0 || pwd.conf_pwd.length === 0)
+				throw new Error('Xin vui lòng nhập mật khẩu mới!');
 			const res = await apiClient.post(
 				'/user/change-password',
 				{

@@ -250,11 +250,13 @@ export default function Home() {
 						<div className="running flex items-center gap-5 ">
 							{JSON.parse(text?.option)?.map((t: string) => {
 								return (
-									<>
+									<div
+										className="flex flex-row text-nowrap items-center gap-4"
+										key={t}>
 										<IoIosStarHalf className="spin" />
 										<p>{t}</p>
 										<IoIosStarHalf className="spin" />
-									</>
+									</div>
 								);
 							})}
 						</div>

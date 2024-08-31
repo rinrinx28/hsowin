@@ -22,13 +22,13 @@ function PosUp() {
 				href={`http://zalo.me/${number}`}
 				target="_blank"
 				className="btn btn-link z-50 bg-base-200 rounded-full">
-				<SiZalo size={24} />
+				<SiZalo size={32} />
 			</Link>
 			<Link
 				href={'http://m.me/61565053230557'}
 				target="_blank"
 				className="btn btn-link z-50 bg-base-200 rounded-full">
-				<FaFacebookMessenger size={24} />
+				<FaFacebookMessenger size={32} />
 			</Link>
 		</div>
 	);
