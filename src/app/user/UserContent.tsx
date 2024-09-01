@@ -396,414 +396,414 @@ function ProfileUser() {
 	);
 }
 
-function NapThe() {
-	const user = useAppSelector((state) => state.user);
-	const handleNapThe = () => {
-		const modal = document.getElementById('lock') as HTMLDialogElement | null;
-		if (modal) {
-			modal.showModal();
-		}
-	};
-	return (
-		<div className="flex flex-col gap-5 items-start p-4 w-full">
-			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
-				NẠP TỪ THẺ CÀO
-			</h1>
-			<div className="flex flex-col gap-2 w-full p-4 rounded-md bg-base-300">
-				<p className="text-error">Tỉ lệ nạp thẻ cào 16000%</p>
-				<p className="text-error">Nạp 100k nhận 1600tr vàng</p>
-				<p>
-					<span className="text-success">Tặng ngẫu nhiên</span> từ{' '}
-					<span className="text-success">2tr tới 250tr</span> cho mỗi lượt nạp
-					thẻ cào
-				</p>
-				<p>
-					Mỗi <span className="font-semibold">lượt nạp</span> được{' '}
-					<span className="text-error">tặng Lục Bảo</span>
-				</p>
-				<p>
-					Lục Bảo <span className="text-error">đổi</span> vàng{' '}
-					<Link
-						href={'/user?type=EXCHANGEGOLD'}
-						className="link link-warning link-hover">
-						tại đây
-					</Link>
-				</p>
-				<p>
-					Sai serial hoặc mệnh giá sẽ không được hỗ trợ giải quyết khiếu nại!
-				</p>
-			</div>
-			<div className="flex flex-col gap-4 items-center justify-center w-full">
-				<label className="label w-2/3">
-					<p>ID Tài Khoản:</p>
-					<input
-						type="text"
-						placeholder="Type here"
-						className="input input-bordered w-full max-w-md"
-						disabled
-						value={user?._id}
-					/>
-				</label>
+// function NapThe() {
+// 	const user = useAppSelector((state) => state.user);
+// 	const handleNapThe = () => {
+// 		const modal = document.getElementById('lock') as HTMLDialogElement | null;
+// 		if (modal) {
+// 			modal.showModal();
+// 		}
+// 	};
+// 	return (
+// 		<div className="flex flex-col gap-5 items-start p-4 w-full">
+// 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
+// 				NẠP TỪ THẺ CÀO
+// 			</h1>
+// 			<div className="flex flex-col gap-2 w-full p-4 rounded-md bg-base-300">
+// 				<p className="text-error">Tỉ lệ nạp thẻ cào 16000%</p>
+// 				<p className="text-error">Nạp 100k nhận 1600tr vàng</p>
+// 				<p>
+// 					<span className="text-success">Tặng ngẫu nhiên</span> từ{' '}
+// 					<span className="text-success">2tr tới 250tr</span> cho mỗi lượt nạp
+// 					thẻ cào
+// 				</p>
+// 				<p>
+// 					Mỗi <span className="font-semibold">lượt nạp</span> được{' '}
+// 					<span className="text-error">tặng Lục Bảo</span>
+// 				</p>
+// 				<p>
+// 					Lục Bảo <span className="text-error">đổi</span> vàng{' '}
+// 					<Link
+// 						href={'/user?type=EXCHANGEGOLD'}
+// 						className="link link-warning link-hover">
+// 						tại đây
+// 					</Link>
+// 				</p>
+// 				<p>
+// 					Sai serial hoặc mệnh giá sẽ không được hỗ trợ giải quyết khiếu nại!
+// 				</p>
+// 			</div>
+// 			<div className="flex flex-col gap-4 items-center justify-center w-full">
+// 				<label className="label w-2/3">
+// 					<p>ID Tài Khoản:</p>
+// 					<input
+// 						type="text"
+// 						placeholder="Type here"
+// 						className="input input-bordered w-full max-w-md"
+// 						disabled
+// 						value={user?._id}
+// 					/>
+// 				</label>
 
-				<label className="label w-2/3">
-					<p>Tên Tài Khoản:</p>
-					<input
-						type="text"
-						placeholder="Type here"
-						className="input input-bordered w-full max-w-md"
-						disabled
-						value={user?.username}
-					/>
-				</label>
+// 				<label className="label w-2/3">
+// 					<p>Tên Tài Khoản:</p>
+// 					<input
+// 						type="text"
+// 						placeholder="Type here"
+// 						className="input input-bordered w-full max-w-md"
+// 						disabled
+// 						value={user?.username}
+// 					/>
+// 				</label>
 
-				<label className="label w-2/3">
-					<p>Loại thẻ::</p>
-					<select className="select select-bordered w-full max-w-md select-md">
-						<option
-							disabled
-							selected>
-							VIETEL
-						</option>
-						{['VINAPHONE', 'MOBIFONE'].map((value) => (
-							<option
-								key={value}
-								value={value}>
-								{value}
-							</option>
-						))}
-					</select>
-				</label>
+// 				<label className="label w-2/3">
+// 					<p>Loại thẻ::</p>
+// 					<select className="select select-bordered w-full max-w-md select-md">
+// 						<option
+// 							disabled
+// 							selected>
+// 							VIETEL
+// 						</option>
+// 						{['VINAPHONE', 'MOBIFONE'].map((value) => (
+// 							<option
+// 								key={value}
+// 								value={value}>
+// 								{value}
+// 							</option>
+// 						))}
+// 					</select>
+// 				</label>
 
-				<label className="label w-2/3">
-					<p>Mệnh giá:</p>
-					<select className="select select-bordered w-full max-w-md select-md">
-						<option
-							disabled
-							selected>
-							CHỌN ĐÚNG MỆNH GIÁ, NẾU SAI SẼ MẤT THẺ
-						</option>
-						{[
-							1e3 * 10,
-							1e3 * 20,
-							1e3 * 30,
-							1e3 * 50,
-							1e3 * 100,
-							1e3 * 200,
-							1e3 * 300,
-							1e3 * 500,
-							1e3 * 1000,
-						].map((value) => (
-							<option
-								key={value}
-								value={value}>
-								{new Intl.NumberFormat('vi', {
-									currency: 'VND',
-									style: 'currency',
-								}).format(value)}
-							</option>
-						))}
-					</select>
-				</label>
+// 				<label className="label w-2/3">
+// 					<p>Mệnh giá:</p>
+// 					<select className="select select-bordered w-full max-w-md select-md">
+// 						<option
+// 							disabled
+// 							selected>
+// 							CHỌN ĐÚNG MỆNH GIÁ, NẾU SAI SẼ MẤT THẺ
+// 						</option>
+// 						{[
+// 							1e3 * 10,
+// 							1e3 * 20,
+// 							1e3 * 30,
+// 							1e3 * 50,
+// 							1e3 * 100,
+// 							1e3 * 200,
+// 							1e3 * 300,
+// 							1e3 * 500,
+// 							1e3 * 1000,
+// 						].map((value) => (
+// 							<option
+// 								key={value}
+// 								value={value}>
+// 								{new Intl.NumberFormat('vi', {
+// 									currency: 'VND',
+// 									style: 'currency',
+// 								}).format(value)}
+// 							</option>
+// 						))}
+// 					</select>
+// 				</label>
 
-				<label className="label w-2/3">
-					<p>Mã thẻ:</p>
-					<input
-						type="text"
-						className="input input-bordered w-full max-w-md"
-					/>
-				</label>
+// 				<label className="label w-2/3">
+// 					<p>Mã thẻ:</p>
+// 					<input
+// 						type="text"
+// 						className="input input-bordered w-full max-w-md"
+// 					/>
+// 				</label>
 
-				<label className="label w-2/3">
-					<p>Số Serial:</p>
-					<input
-						type="text"
-						className="input input-bordered w-full max-w-md"
-					/>
-				</label>
+// 				<label className="label w-2/3">
+// 					<p>Số Serial:</p>
+// 					<input
+// 						type="text"
+// 						className="input input-bordered w-full max-w-md"
+// 					/>
+// 				</label>
 
-				<div className="flex flex-col gap-2">
-					<p className="text-xs">
-						Sai serial hoặc mệnh giá sẽ không được hỗ trợ giải quyết khiếu nại!
-					</p>
-					<button
-						className="btn btn-lg"
-						onClick={handleNapThe}>
-						NẠP NGAY
-					</button>
-				</div>
-			</div>
-			<dialog
-				id="lock"
-				className="modal">
-				<div className="modal-box">
-					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
-					<p className="py-4">
-						Chức Năng Nạp Thẻ Hiện Đóng, xin vui lòng thử lại sau!
-					</p>
-					<div className="modal-action">
-						<form method="dialog">
-							{/* if there is a button in form, it will close the modal */}
-							<button className="btn">Đóng</button>
-						</form>
-					</div>
-				</div>
-			</dialog>
-		</div>
-	);
-}
+// 				<div className="flex flex-col gap-2">
+// 					<p className="text-xs">
+// 						Sai serial hoặc mệnh giá sẽ không được hỗ trợ giải quyết khiếu nại!
+// 					</p>
+// 					<button
+// 						className="btn btn-lg"
+// 						onClick={handleNapThe}>
+// 						NẠP NGAY
+// 					</button>
+// 				</div>
+// 			</div>
+// 			<dialog
+// 				id="lock"
+// 				className="modal">
+// 				<div className="modal-box">
+// 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+// 					<p className="py-4">
+// 						Chức Năng Nạp Thẻ Hiện Đóng, xin vui lòng thử lại sau!
+// 					</p>
+// 					<div className="modal-action">
+// 						<form method="dialog">
+// 							{/* if there is a button in form, it will close the modal */}
+// 							<button className="btn">Đóng</button>
+// 						</form>
+// 					</div>
+// 				</div>
+// 			</dialog>
+// 		</div>
+// 	);
+// }
 
-function NapBanking() {
-	const evenConfig = useAppSelector((state) => state.eventConfig);
-	const user = useAppSelector((state) => state.user);
-	const [msg, setMsg] = useState('');
-	const [amount, setAmount] = useState('0');
-	const [vip, setVip] = useState([]);
-	const [prize, setPrize] = useState([]);
-	const router = useRouter();
+// function NapBanking() {
+// 	const evenConfig = useAppSelector((state) => state.eventConfig);
+// 	const user = useAppSelector((state) => state.user);
+// 	const [msg, setMsg] = useState('');
+// 	const [amount, setAmount] = useState('0');
+// 	const [vip, setVip] = useState([]);
+// 	const [prize, setPrize] = useState([]);
+// 	const router = useRouter();
 
-	const handleNapBank = async () => {
-		try {
-			if (!containsLettersAndSpecialChars(amount)) {
-				const modal = document.getElementById(
-					'err-bank',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg('Xin vui lòng chỉ nhập chữ số ở trường Nhập Số Tiền');
-					return modal.showModal();
-				}
-			}
-			if (Number(amount) < 10000) {
-				const modal = document.getElementById(
-					'err-bank',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg('Xin vui lòng nạp trên 10.000 ₫');
-					return modal.showModal();
-				}
-			}
-			if (Number(amount) > 1000000) {
-				const modal = document.getElementById(
-					'err-bank',
-				) as HTMLDialogElement | null;
-				if (modal) {
-					setMsg('Không thể nạp trên 1.000.000 ₫');
-					return modal.showModal();
-				}
-			}
-			const res = await apiClient.post(
-				'/session/banking/create',
-				{
-					uid: user?._id,
-					amount: Number(amount),
-					username: user?.username,
-				},
-				{
-					headers: {
-						Authorization: 'Bearer ' + user?.token,
-					},
-				},
-			);
-			const data = res.data;
-			if (data.code === '00') {
-				const url = data?.data.checkoutUrl;
-				router.push(url);
-				return;
-			}
-		} catch (err: any) {
-			const modal = document.getElementById(
-				'err-bank',
-			) as HTMLDialogElement | null;
-			if (modal) {
-				setMsg(err?.response?.data?.message);
-				return modal.showModal();
-			}
-		}
-	};
+// 	const handleNapBank = async () => {
+// 		try {
+// 			if (!containsLettersAndSpecialChars(amount)) {
+// 				const modal = document.getElementById(
+// 					'err-bank',
+// 				) as HTMLDialogElement | null;
+// 				if (modal) {
+// 					setMsg('Xin vui lòng chỉ nhập chữ số ở trường Nhập Số Tiền');
+// 					return modal.showModal();
+// 				}
+// 			}
+// 			if (Number(amount) < 10000) {
+// 				const modal = document.getElementById(
+// 					'err-bank',
+// 				) as HTMLDialogElement | null;
+// 				if (modal) {
+// 					setMsg('Xin vui lòng nạp trên 10.000 ₫');
+// 					return modal.showModal();
+// 				}
+// 			}
+// 			if (Number(amount) > 1000000) {
+// 				const modal = document.getElementById(
+// 					'err-bank',
+// 				) as HTMLDialogElement | null;
+// 				if (modal) {
+// 					setMsg('Không thể nạp trên 1.000.000 ₫');
+// 					return modal.showModal();
+// 				}
+// 			}
+// 			const res = await apiClient.post(
+// 				'/session/banking/create',
+// 				{
+// 					uid: user?._id,
+// 					amount: Number(amount),
+// 					username: user?.username,
+// 				},
+// 				{
+// 					headers: {
+// 						Authorization: 'Bearer ' + user?.token,
+// 					},
+// 				},
+// 			);
+// 			const data = res.data;
+// 			if (data.code === '00') {
+// 				const url = data?.data.checkoutUrl;
+// 				router.push(url);
+// 				return;
+// 			}
+// 		} catch (err: any) {
+// 			const modal = document.getElementById(
+// 				'err-bank',
+// 			) as HTMLDialogElement | null;
+// 			if (modal) {
+// 				setMsg(err?.response?.data?.message);
+// 				return modal.showModal();
+// 			}
+// 		}
+// 	};
 
-	useEffect(() => {
-		const modal = document.getElementById(
-			'noti-vip',
-		) as HTMLDialogElement | null;
-		if (modal) {
-			return modal.showModal();
-		}
-	}, []);
+// 	useEffect(() => {
+// 		const modal = document.getElementById(
+// 			'noti-vip',
+// 		) as HTMLDialogElement | null;
+// 		if (modal) {
+// 			return modal.showModal();
+// 		}
+// 	}, []);
 
-	useEffect(() => {
-		if (evenConfig) {
-			const e_value_vip = evenConfig.find((e) => e.name === 'e-value-vip');
-			const e_value_vip_claim = evenConfig.find(
-				(e) => e.name === 'e-value-vip-claim',
-			);
-			setVip(JSON.parse(e_value_vip?.option ?? '[]'));
-			setPrize(JSON.parse(e_value_vip_claim?.option ?? '[]'));
-		}
-	}, [evenConfig]);
-	return (
-		<div className="flex flex-col gap-5 items-start lg:p-4 w-full">
-			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
-				NẠP TỪ BANKING
-			</h1>
-			<div className="flex flex-col gap-2 w-full p-4 rounded-md bg-base-300">
-				<p className="text-error">Tỉ lệ 0.5%</p>
-				<p className="text-error">Nạp 100k nhận 500 thỏi vàng</p>
-				<p>
-					<span className="text-success">Tặng ngẫu nhiên</span> từ{' '}
-					<span className="text-success">2 thỏi vàng tới 25 thỏi vàng</span> cho
-					mỗi lượt nạp từ <span className="text-success">BANKING</span>
-				</p>
-				<p>
-					Mỗi <span className="font-semibold">lượt nạp</span> được{' '}
-					<span className="text-error">tặng Lục Bảo</span>
-				</p>
-				<p>
-					Lục Bảo <span className="text-error">đổi</span> thỏi vàng{' '}
-					<Link
-						href={'/user?type=EXCHANGEGOLD'}
-						className="link link-warning link-hover">
-						tại đây
-					</Link>
-				</p>
-				<p>
-					Mỗi lần nạp khách hàng vui lòng tạo đơn nạp mới và thực hiện chuyển
-					khoản đúng theo yêu cầu
-				</p>
-				<p>
-					Lưu ý: <span className="text-error"> KHÔNG</span> chuyển lại đơn cũ sẽ
-					mất tiền.
-				</p>
-				<p>Mã nạp sắp hết hạn vui lòng hủy rồi tạo mã mới để tránh lỗi!</p>
-				<p>Nạp tối thiểu 10K và đúng nội dung để được xử lý tự động!</p>
-			</div>
-			<div className="flex flex-col gap-4 items-center justify-center w-full">
-				<label className="label w-full lg:w-3/4">
-					<p>ID Tài Khoản:</p>
-					<input
-						type="text"
-						placeholder="Type here"
-						className="input input-bordered w-full max-w-md"
-						disabled
-						value={user?._id}
-					/>
-				</label>
+// 	useEffect(() => {
+// 		if (evenConfig) {
+// 			const e_value_vip = evenConfig.find((e) => e.name === 'e-value-vip');
+// 			const e_value_vip_claim = evenConfig.find(
+// 				(e) => e.name === 'e-value-vip-claim',
+// 			);
+// 			setVip(JSON.parse(e_value_vip?.option ?? '[]'));
+// 			setPrize(JSON.parse(e_value_vip_claim?.option ?? '[]'));
+// 		}
+// 	}, [evenConfig]);
+// 	return (
+// 		<div className="flex flex-col gap-5 items-start lg:p-4 w-full">
+// 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
+// 				NẠP TỪ BANKING
+// 			</h1>
+// 			<div className="flex flex-col gap-2 w-full p-4 rounded-md bg-base-300">
+// 				<p className="text-error">Tỉ lệ 0.5%</p>
+// 				<p className="text-error">Nạp 100k nhận 500 thỏi vàng</p>
+// 				<p>
+// 					<span className="text-success">Tặng ngẫu nhiên</span> từ{' '}
+// 					<span className="text-success">2 thỏi vàng tới 25 thỏi vàng</span> cho
+// 					mỗi lượt nạp từ <span className="text-success">BANKING</span>
+// 				</p>
+// 				<p>
+// 					Mỗi <span className="font-semibold">lượt nạp</span> được{' '}
+// 					<span className="text-error">tặng Lục Bảo</span>
+// 				</p>
+// 				<p>
+// 					Lục Bảo <span className="text-error">đổi</span> thỏi vàng{' '}
+// 					<Link
+// 						href={'/user?type=EXCHANGEGOLD'}
+// 						className="link link-warning link-hover">
+// 						tại đây
+// 					</Link>
+// 				</p>
+// 				<p>
+// 					Mỗi lần nạp khách hàng vui lòng tạo đơn nạp mới và thực hiện chuyển
+// 					khoản đúng theo yêu cầu
+// 				</p>
+// 				<p>
+// 					Lưu ý: <span className="text-error"> KHÔNG</span> chuyển lại đơn cũ sẽ
+// 					mất tiền.
+// 				</p>
+// 				<p>Mã nạp sắp hết hạn vui lòng hủy rồi tạo mã mới để tránh lỗi!</p>
+// 				<p>Nạp tối thiểu 10K và đúng nội dung để được xử lý tự động!</p>
+// 			</div>
+// 			<div className="flex flex-col gap-4 items-center justify-center w-full">
+// 				<label className="label w-full lg:w-3/4">
+// 					<p>ID Tài Khoản:</p>
+// 					<input
+// 						type="text"
+// 						placeholder="Type here"
+// 						className="input input-bordered w-full max-w-md"
+// 						disabled
+// 						value={user?._id}
+// 					/>
+// 				</label>
 
-				<label className="label w-full lg:w-3/4">
-					<p>Tên Tài Khoản:</p>
-					<input
-						type="text"
-						placeholder="Type here"
-						className="input input-bordered w-full max-w-md"
-						disabled
-						value={user?.username}
-					/>
-				</label>
+// 				<label className="label w-full lg:w-3/4">
+// 					<p>Tên Tài Khoản:</p>
+// 					<input
+// 						type="text"
+// 						placeholder="Type here"
+// 						className="input input-bordered w-full max-w-md"
+// 						disabled
+// 						value={user?.username}
+// 					/>
+// 				</label>
 
-				<label className="label w-full lg:w-3/4">
-					<p>Nhập Số Tiền:</p>
-					<input
-						type="text"
-						className="input input-bordered w-full max-w-md"
-						onChange={(e) => setAmount(e.target.value)}
-					/>
-				</label>
+// 				<label className="label w-full lg:w-3/4">
+// 					<p>Nhập Số Tiền:</p>
+// 					<input
+// 						type="text"
+// 						className="input input-bordered w-full max-w-md"
+// 						onChange={(e) => setAmount(e.target.value)}
+// 					/>
+// 				</label>
 
-				<div className="flex flex-col gap-2 w-full lg:w-3/4">
-					<button
-						className="btn btn-lg"
-						onClick={handleNapBank}>
-						NẠP NGAY
-					</button>
-				</div>
-			</div>
-			<dialog
-				id="lock"
-				className="modal">
-				<div className="modal-box">
-					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
-					<p className="py-4">
-						Chức Năng Nạp Thẻ Hiện Đóng, xin vui lòng thử lại sau!
-					</p>
-					<div className="modal-action">
-						<form method="dialog">
-							{/* if there is a button in form, it will close the modal */}
-							<button className="btn">Đóng</button>
-						</form>
-					</div>
-				</div>
-			</dialog>
-			<dialog
-				id="noti-vip"
-				className="modal">
-				<div className="modal-box max-w-sm lg:max-w-xl w-full">
-					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
-					<div className="py-4 flex flex-col gap-2">
-						<p>
-							Mua vàng tích tiền lên{' '}
-							<span className="text-error">thành viên VIP</span>
-						</p>
-						<div className="overflow-x-auto">
-							<table className="table">
-								{/* head */}
-								<thead className="bg-error text-white">
-									<tr className="text-center">
-										<th>VIP</th>
-										<th>Số Tiền</th>
-										<th>Số Thỏi Vàng Nhận</th>
-									</tr>
-								</thead>
-								<tbody className="text-center">
-									{vip?.map((v: any, i: number) => {
-										return (
-											<tr key={`${i}-vip`}>
-												<td>VIP {i + 1}</td>
-												<td>
-													{new Intl.NumberFormat('vi', {
-														currency: 'VND',
-														style: 'currency',
-													}).format(v)}
-												</td>
-												<td>{prize[i]} Thỏi/ngày</td>
-											</tr>
-										);
-									})}
-								</tbody>
-							</table>
-						</div>
-						<p className="text-error">Lưu ý:</p>
-						<p>
-							- VIP tương ứng với tổng số tiền bạn nạp trong 30 ngày gần nhất!
-						</p>
-						<p>- Áp dụng cho nạp thẻ cào và ví</p>
-						<p>
-							- Khi lên VIP bạn sẽ trông ngầu hơn khi chém gió và đặc biệt rất
-							dễ tán gái nhé
-						</p>
-					</div>
-					<div className="modal-action">
-						<form method="dialog">
-							{/* if there is a button in form, it will close the modal */}
-							<button className="btn">Đóng</button>
-						</form>
-					</div>
-				</div>
-			</dialog>
-			<dialog
-				id="err-bank"
-				className="modal">
-				<div className="modal-box">
-					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
-					<p className="py-4">{msg}</p>
-					<div className="modal-action">
-						<form method="dialog">
-							{/* if there is a button in form, it will close the modal */}
-							<button className="btn">Đóng</button>
-						</form>
-					</div>
-				</div>
-			</dialog>
-		</div>
-	);
-}
+// 				<div className="flex flex-col gap-2 w-full lg:w-3/4">
+// 					<button
+// 						className="btn btn-lg"
+// 						onClick={handleNapBank}>
+// 						NẠP NGAY
+// 					</button>
+// 				</div>
+// 			</div>
+// 			<dialog
+// 				id="lock"
+// 				className="modal">
+// 				<div className="modal-box">
+// 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+// 					<p className="py-4">
+// 						Chức Năng Nạp Thẻ Hiện Đóng, xin vui lòng thử lại sau!
+// 					</p>
+// 					<div className="modal-action">
+// 						<form method="dialog">
+// 							{/* if there is a button in form, it will close the modal */}
+// 							<button className="btn">Đóng</button>
+// 						</form>
+// 					</div>
+// 				</div>
+// 			</dialog>
+// 			<dialog
+// 				id="noti-vip"
+// 				className="modal">
+// 				<div className="modal-box max-w-sm lg:max-w-xl w-full">
+// 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+// 					<div className="py-4 flex flex-col gap-2">
+// 						<p>
+// 							Mua vàng tích tiền lên{' '}
+// 							<span className="text-error">thành viên VIP</span>
+// 						</p>
+// 						<div className="overflow-x-auto">
+// 							<table className="table">
+// 								{/* head */}
+// 								<thead className="bg-error text-white">
+// 									<tr className="text-center">
+// 										<th>VIP</th>
+// 										<th>Số Tiền</th>
+// 										<th>Số Thỏi Vàng Nhận</th>
+// 									</tr>
+// 								</thead>
+// 								<tbody className="text-center">
+// 									{vip?.map((v: any, i: number) => {
+// 										return (
+// 											<tr key={`${i}-vip`}>
+// 												<td>VIP {i + 1}</td>
+// 												<td>
+// 													{new Intl.NumberFormat('vi', {
+// 														currency: 'VND',
+// 														style: 'currency',
+// 													}).format(v)}
+// 												</td>
+// 												<td>{prize[i]} Thỏi/ngày</td>
+// 											</tr>
+// 										);
+// 									})}
+// 								</tbody>
+// 							</table>
+// 						</div>
+// 						<p className="text-error">Lưu ý:</p>
+// 						<p>
+// 							- VIP tương ứng với tổng số tiền bạn nạp trong 30 ngày gần nhất!
+// 						</p>
+// 						<p>- Áp dụng cho nạp thẻ cào và ví</p>
+// 						<p>
+// 							- Khi lên VIP bạn sẽ trông ngầu hơn khi chém gió và đặc biệt rất
+// 							dễ tán gái nhé
+// 						</p>
+// 					</div>
+// 					<div className="modal-action">
+// 						<form method="dialog">
+// 							{/* if there is a button in form, it will close the modal */}
+// 							<button className="btn">Đóng</button>
+// 						</form>
+// 					</div>
+// 				</div>
+// 			</dialog>
+// 			<dialog
+// 				id="err-bank"
+// 				className="modal">
+// 				<div className="modal-box">
+// 					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+// 					<p className="py-4">{msg}</p>
+// 					<div className="modal-action">
+// 						<form method="dialog">
+// 							{/* if there is a button in form, it will close the modal */}
+// 							<button className="btn">Đóng</button>
+// 						</form>
+// 					</div>
+// 				</div>
+// 			</dialog>
+// 		</div>
+// 	);
+// }
 
 interface TypeRutBank {
 	type?: string;
@@ -1127,7 +1127,7 @@ function HistoryUserBet() {
 				Lịch Sử Cược
 			</div>
 			<select
-				defaultValue={watch}
+				defaultValue={'24'}
 				onChange={(e) => setWatch(e.target.value)}
 				className="select select-bordered w-fit">
 				{['1-mini', '2-mini', '3-mini', '1', '2', '3', '24'].map((i) => (
@@ -1279,8 +1279,16 @@ function HistoryUserBank() {
 				defaultValue={fil}
 				onChange={(e) => setFill(Number(e.target.value))}
 				className="max-w-fit select">
-				<option value={0}>Nạp</option>
-				<option value={1}>Rút</option>
+				<option
+					value={0}
+					selected={0 === fil}>
+					Nạp
+				</option>
+				<option
+					value={1}
+					selected={1 === fil}>
+					Rút
+				</option>
 			</select>
 			<div className="overflow-auto border border-current max-h-[600px]">
 				{fil === 0 && <HistoryNapBank data={logBank} />}

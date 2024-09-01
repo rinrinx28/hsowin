@@ -16,7 +16,7 @@ interface InfoResgiter {
 }
 
 function Resigter() {
-	const logo_hsowin = ImageLoader('/image/logo_2.gif');
+	const logo_hsowin = ImageLoader('image/logo_2.gif');
 	const [info, setInfo] = useState<InfoResgiter>({ server: '1' });
 	const [msg, setMsg] = useState('');
 	const router = useRouter();
@@ -82,6 +82,7 @@ function Resigter() {
 						// className="size-52"
 						width={400}
 						height={400}
+						priority={true}
 					/>
 				</figure>
 				<div className="card-body gap-6">
@@ -162,7 +163,7 @@ function Resigter() {
 						</label>
 						<label className="label w-full justify-center">
 							<select
-								defaultValue={'1'}
+								defaultValue={'3'}
 								className="select select-bordered w-full max-w-md select-md"
 								onChange={(e) =>
 									setInfo((i) => ({ ...i, server: e.target.value }))

@@ -66,6 +66,7 @@ export default function TableUser() {
 											width={100}
 											height={100}
 											className="flicker-4"
+											priority={true}
 										/>
 									</td>
 									<td>{name}</td>

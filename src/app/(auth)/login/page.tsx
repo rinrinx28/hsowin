@@ -18,7 +18,7 @@ function LoginPage() {
 	const [loginInfo, setLogin] = useState<Info>({ username: '', password: '' });
 	const [isStay, setStay] = useState(true);
 	const [msg, setMsg] = useState('');
-	const logo_hsowin = ImageLoader('/image/logo_2.gif');
+	const logo_hsowin = ImageLoader('image/logo_2.gif');
 	const user = useAppSelector((state) => state.user);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -78,9 +78,9 @@ function LoginPage() {
 					<Image
 						alt="hsowin_logo"
 						src={logo_hsowin}
-						// className="size-52"
 						width={400}
 						height={400}
+						priority={true}
 					/>
 				</figure>
 				<div className="card-body gap-6">

@@ -380,6 +380,7 @@ export default function Home() {
 								alt="new_logo_1"
 								width={50}
 								height={50}
+								priority={true}
 							/>
 							Nhận ngay 10 thỏi vàng khi tạo tài khoản trên web
 						</Link>
@@ -391,6 +392,7 @@ export default function Home() {
 								alt="new_logo_2"
 								width={50}
 								height={50}
+								priority={true}
 							/>
 							Tặng thỏi vàng miễn phí mỗi ngày
 						</Link>
@@ -402,6 +404,7 @@ export default function Home() {
 								alt="new_logo_3"
 								width={50}
 								height={50}
+								priority={true}
 							/>
 							Nạp Thỏi Vàng tích điểm nhận thành viên VIP
 						</Link>

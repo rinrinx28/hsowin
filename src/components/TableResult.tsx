@@ -264,7 +264,7 @@ export default function TableResult() {
 				<div className="flex flex-row items-center gap-2">
 					<p className="text-nowrap">Hiển Thị:</p>
 					<select
-						value={showType}
+						defaultValue={showType}
 						onChange={(e) => setShow(e.target.value)}
 						className="select select-bordered w-full">
 						{[
@@ -274,6 +274,7 @@ export default function TableResult() {
 							return (
 								<option
 									value={type.value}
+									selected={type.value === showType}
 									key={`${i}-showtype`}>
 									{type.name}
 								</option>
@@ -287,7 +288,11 @@ export default function TableResult() {
 						defaultValue={'10'}
 						className="select select-bordered w-full"
 						onChange={(e) => changeRowTable(e.target.value)}>
-						<option value={'10'}>10</option>
+						<option
+							value={'10'}
+							selected>
+							10
+						</option>
 						<option value={'25'}>25</option>
 						<option value={'50'}>50</option>
 					</select>

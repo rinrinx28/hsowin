@@ -17,18 +17,18 @@ function PosUp() {
 	}, [eventConfig]);
 
 	return (
-		<div className="fixed bottom-5 right-0 size-28 flex flex-col items-center justify-center bg-transparent gap-4">
+		<div className="fixed bottom-1 right-1 flex flex-col items-center justify-center bg-transparent gap-4 z-[1000]">
 			<Link
 				href={`http://zalo.me/${number}`}
 				target="_blank"
-				className="btn btn-link z-50 bg-base-200 rounded-full">
-				<SiZalo size={32} />
+				className="btn btn-link bg-base-200 rounded-full">
+				<SiZalo size={34} />
 			</Link>
 			<Link
 				href={'http://m.me/61565053230557'}
 				target="_blank"
-				className="btn btn-link z-50 bg-base-200 rounded-full">
-				<FaFacebookMessenger size={32} />
+				className="btn btn-link bg-base-200 rounded-full">
+				<FaFacebookMessenger size={34} />
 			</Link>
 		</div>
 	);

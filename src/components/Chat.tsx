@@ -129,6 +129,7 @@ export default function ChatBox() {
 																width={44}
 																height={44}
 																alt={`${index + 1}_user_rank_image`}
+																priority={true}
 															/>
 														</div>
 													);
