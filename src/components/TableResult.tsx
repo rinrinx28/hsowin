@@ -150,7 +150,9 @@ export default function TableResult() {
 						{/* row 1 */}
 						{userBetLog
 							?.filter((userBet) =>
-								showType === 'all' ? userBet : userBet.uid === user?._id,
+								showType === 'all'
+									? userBet
+									: userBet.uid === user?._id && userBet.server === userGame,
 							)
 							?.map((userBet) => {
 								let {

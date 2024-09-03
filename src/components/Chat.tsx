@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Send from './icons/send';
 import Chat from './icons/chat';
 import Link from 'next/link';
-import { useAppSelector } from '@/lib/redux/hook';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { useSocket } from '@/lib/socket';
 import Image from 'next/image';
 
@@ -18,9 +18,11 @@ export default function ChatBox() {
 	const messageLog = useAppSelector((state) => state.messageLog);
 	const userGame = useAppSelector((state) => state.userGame);
 	const userRanks = useAppSelector((state) => state.userRanks);
+	const [channel, setChannel] = useState<Array<any>>();
 	const [chat, setChat] = useState<ChatBox | any>(null);
 	const socket = useSocket();
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
+	const dispatch = useAppDispatch();
 
 	const handlerChatUser = () => {
 		if (!user?.isLogin) {
@@ -59,6 +61,24 @@ export default function ChatBox() {
 		}
 	}, [userGame, user]);
 
+	useEffect(() => {
+		if (messageLog) {
+			const main_server = messageLog.filter(
+				(m) => m.server === userGame || m.server === 'all',
+			);
+
+			let new_main_server = main_server;
+			let new_channel = [];
+			for (const msg of new_main_server) {
+				if (new_channel.length >= 10) {
+					new_channel.shift(); // Removes the oldest message if the array exceeds 10 messages
+				}
+				new_channel.push(msg);
+			}
+			setChannel(new_channel);
+		}
+	}, [messageLog, userGame, dispatch]);
+
 	return (
 		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col justify-between gap-2 border border-current shadow-xl p-4 rounded-2xl">
 			<div className="flex flex-col gap-2 w-full border-b border-current">
@@ -70,10 +90,11 @@ export default function ChatBox() {
 			<div
 				className="overflow-auto h-[950px] bg-base-100 rounded-lg p-4"
 				ref={chatEndRef}>
-				{messageLog
-					?.filter((i: any) => i.server === userGame || i.server === 'all')
-					?.map((msg, i) => {
+				{channel &&
+					channel?.map((msg, i) => {
 						const { uid, content, username } = msg;
+						const avatarUrl = msg?.meta ? JSON.parse(msg.meta)?.avatar : null;
+						const vip = msg?.meta ? JSON.parse(msg?.meta)?.vip : 0;
 						return (
 							<div
 								className={`chat ${
@@ -96,11 +117,9 @@ export default function ChatBox() {
 											<div
 												className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
 												style={{
-													backgroundImage: `url("/image/avatar/${
-														msg?.meta
-															? `${JSON.parse(msg?.meta)?.avatar}.webp`
-															: ''
-													}")`,
+													backgroundImage: avatarUrl
+														? `url("/image/avatar/${avatarUrl}.webp")`
+														: 'none',
 												}}></div>
 										</div>
 									</div>
@@ -111,9 +130,9 @@ export default function ChatBox() {
 											uid === user?._id ? 'flex-row-reverse' : 'flex-row'
 										} gap-2 items-center`}>
 										{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
-										{msg?.meta && (JSON.parse(msg?.meta)?.vip ?? 0) > 0 && (
+										{vip > 0 && (
 											<p className="fire font-extrabold text-red-500">
-												VIP {JSON.parse(msg?.meta)?.vip}
+												VIP {vip}
 											</p>
 										)}
 										{userRanks &&

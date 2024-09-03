@@ -296,6 +296,11 @@ export const BetMinigame = () => {
 			showModelBet('Xin vui lòng kiểm tra dự đoán và đặt tiền cược!');
 			return;
 		}
+		if (!mainBet) {
+			showModelBet('Hiện tại phiên chưa bắt đầu, xin vui lòng chờ phiên mới!');
+			dispatch(resetBet());
+			return;
+		}
 		setPause(true);
 		if (userGame === mainBet?.server) {
 			if (type === 'BOSS') {
@@ -319,6 +324,7 @@ export const BetMinigame = () => {
 			}
 		} else {
 			showModelBet('Đã xảy ra lỗi, xin vui lòng tải lại trang!');
+			setPause(false);
 			return;
 		}
 	};

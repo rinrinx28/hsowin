@@ -39,12 +39,15 @@ function Resigter() {
 				}
 			}
 			const isValid = isValidUsername(info.username ?? '');
-			if (!isValid) {
+			const isValid_name = isValidUsername(info.name ?? '');
+			if (!isValid || !isValid_name) {
 				const modal = document.getElementById(
 					'lock',
 				) as HTMLDialogElement | null;
 				if (modal) {
-					setMsg('Xin lỗi, Username không thể dùng các ký hiệu đặc biệt!');
+					setMsg(
+						'Xin lỗi, Username/Tên hiển thị không thể dùng các ký hiệu đặc biệt!',
+					);
 					return modal.showModal();
 				}
 			}

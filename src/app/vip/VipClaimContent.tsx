@@ -44,12 +44,13 @@ export default function VipClaimPage() {
 		<div className="min-h-screen flex w-full justify-center items-center">
 			<div className="max-w-7xl w-full flex flex-col gap-5 items-center select-none">
 				<h1 className="lg:text-4xl text-xl">Điểm Danh VIP Hàng Ngày</h1>
-				{user?.isLogin && (
+				{user?.isLogin && user?.vip !== 0 && (
 					<TableClaimVip
 						setMsg={setMsg}
 						showModel={showModel}
 					/>
 				)}
+				{user?.isLogin && user?.vip === 0 && <TableReviewClaimVip />}
 				{!user?.isLogin && <TableReviewClaimVip />}
 			</div>
 
