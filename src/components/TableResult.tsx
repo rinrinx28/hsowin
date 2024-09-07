@@ -16,14 +16,11 @@ export default function TableResult() {
 	const [showType, setShow] = useState<string>('all');
 	const dispatch = useAppDispatch();
 	const [msg, setMsg] = useState('');
+	const [row, setRow] = useState(10);
 
-	const changeRowTable = async (value: any) => {
+	const changeRowTable = async (value: number) => {
 		try {
-			const res = await apiClient.get(
-				`/user/log-bet/all?limit=${value}&server=${userGame}`,
-			);
-			const data = res.data;
-			dispatch(updateAll(data?.data));
+			setRow(value);
 		} catch (err) {}
 	};
 
@@ -101,19 +98,21 @@ export default function TableResult() {
 	}, [dispatch, socket, user, userBetLog, userGame]);
 
 	useEffect(() => {
-		const changeTable = async (server: any) => {
+		const changeTable = async (server: any, row: number, showtype: any) => {
 			try {
 				const res = await apiClient.get(
-					`/user/log-bet/all?limit=10&server=${server}`,
+					`/user/log-bet/all?limit=${row}&server=${server}${
+						showtype === 'only' ? '&userId=' + user._id : ''
+					}`,
 				);
 				const data = res.data;
 				dispatch(updateAll(data?.data));
 			} catch (err) {}
 		};
 		if (userGame) {
-			changeTable(userGame);
+			changeTable(userGame, row, showType);
 		}
-	}, [userGame, dispatch]);
+	}, [userGame, dispatch, row, showType, user]);
 
 	function showMessageTable(message: any) {
 		const modal = document.getElementById(
@@ -285,9 +284,9 @@ export default function TableResult() {
 				<div className="flex flex-row items-center gap-2">
 					<p className="text-nowrap">Dòng:</p>
 					<select
-						defaultValue={'10'}
+						defaultValue={row}
 						className="select select-bordered w-full"
-						onChange={(e) => changeRowTable(e.target.value)}>
+						onChange={(e) => changeRowTable(parseInt(e.target.value, 10))}>
 						<option
 							value={'10'}
 							selected>

@@ -17,7 +17,7 @@ interface InfoResgiter {
 
 function Resigter() {
 	const logo_hsowin = ImageLoader('image/logo_2.gif');
-	const [info, setInfo] = useState<InfoResgiter>({ server: '1' });
+	const [info, setInfo] = useState<InfoResgiter>({ server: '3' });
 	const [msg, setMsg] = useState('');
 	const router = useRouter();
 	const user = useAppSelector((state) => state.user);
