@@ -63,8 +63,8 @@ export default function TableUser() {
 										<Image
 											alt={`${i + 1}_user`}
 											src={`/image/rank/${i + 1}.png`}
-											width={100}
-											height={100}
+											width={40}
+											height={40}
 											className="flicker-4"
 											priority={true}
 										/>
