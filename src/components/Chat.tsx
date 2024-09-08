@@ -144,7 +144,7 @@ export default function ChatBox() {
 															className="tooltip"
 															data-tip={`Khứa này top ${index + 1}`}>
 															<Image
-																src={`/image/rank/${index + 1}_user.webp`}
+																src={`/image/rank/${index + 1}.png`}
 																width={44}
 																height={44}
 																alt={`${index + 1}_user_rank_image`}

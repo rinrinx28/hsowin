@@ -62,7 +62,7 @@ export default function TableUser() {
 									<td className="flex items-center justify-center">
 										<Image
 											alt={`${i + 1}_user`}
-											src={`/image/rank/${i + 1}_user.webp`}
+											src={`/image/rank/${i + 1}.png`}
 											width={100}
 											height={100}
 											className="flicker-4"
