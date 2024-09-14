@@ -125,7 +125,7 @@ export default function TableResult() {
 	}
 
 	return (
-		<div className="lg:flex lg:flex-col grid w-full">
+		<div className="lg:flex lg:flex-col grid gap-2 w-full">
 			<div className="border-current border rounded-box grid h-20 place-items-center">
 				Lịch Sử Kết Quả
 			</div>

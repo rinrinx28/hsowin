@@ -17,6 +17,20 @@ const config: Config = {
 				wh: 'height,width',
 				spacing: 'margin, padding',
 			},
+			animation: {
+				'flip-vertical-right':
+					'flip-vertical-right 0.4s cubic-bezier(0.455, 0.030, 0.515, 0.955) both',
+			},
+			keyframes: {
+				'flip-vertical-right': {
+					'0%': {
+						transform: 'rotateY(0)',
+					},
+					'100%': {
+						transform: 'rotateY(180deg)',
+					},
+				},
+			},
 		},
 	},
 	plugins: [require('daisyui')],

@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import Providers from '@/lib/redux/Provider';
 import { SocketProvider } from '@/lib/socket';
 import PosUp from '@/components/PosUp';
+import Clans from '@/components/Clans';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -65,6 +66,7 @@ export default function RootLayout({
 						{children}
 						<Footer />
 						<PosUp />
+						<Clans />
 					</SocketProvider>
 				</Providers>
 			</body>

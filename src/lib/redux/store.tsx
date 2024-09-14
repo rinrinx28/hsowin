@@ -14,6 +14,7 @@ import userVip from './features/auth/userVip';
 import historyServer from './features/logs/historyServer';
 import missionDaily from './features/auth/missionDaily';
 import diemDanhStore from './features/logs/diemdanh';
+import clanRanks from './features/rank/clanRanks';
 
 export const makeStore = () => {
 	return configureStore({
@@ -27,6 +28,7 @@ export const makeStore = () => {
 			betInfo: betInfo,
 			userBetLog: userBetLog,
 			userRanks: userRanks,
+			clanRanks: clanRanks,
 			messageLog: messageLog,
 			eventConfig: eventConfig,
 			userVip: userVip,

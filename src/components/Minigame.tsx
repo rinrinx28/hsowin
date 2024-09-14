@@ -448,7 +448,7 @@ export const BetMinigame = () => {
 					</div>
 				</div>
 				<div className="btn btn-outline flex items-center gap-2">
-					<Gold className="" />
+					<Gold />
 					<p className="font-medium border-l-2">
 						{new Intl.NumberFormat('vi').format(user?.gold ?? 0)} Thỏi Vàng
 					</p>

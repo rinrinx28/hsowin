@@ -18,6 +18,7 @@ import { updateEventConfig } from './features/logs/eventConfig';
 import { updateUserVip } from './features/auth/userVip';
 import { updateHistoryServer } from './features/logs/historyServer';
 import { updateMission } from './features/auth/missionDaily';
+import { updateclansRanks } from './features/rank/clanRanks';
 
 export default function StoreProvider({
 	children,
@@ -99,6 +100,13 @@ export default function StoreProvider({
 				storeRef.current?.dispatch(updateUserRanks(data?.data));
 			} catch (err) {}
 		};
+		const getClansRank = async () => {
+			try {
+				const res = await apiClient.get('/user/rank/clans');
+				const data = res.data;
+				storeRef.current?.dispatch(updateclansRanks(data));
+			} catch (err) {}
+		};
 		const getMessageLog = async () => {
 			try {
 				const res = await apiClient.get('/message/all?page=1&limit=10');
@@ -131,6 +139,7 @@ export default function StoreProvider({
 		getMessageLog();
 		getEventConfig();
 		getHistoryServer();
+		getClansRank();
 		return () => {};
 	}, [router]);
 

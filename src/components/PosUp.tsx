@@ -17,7 +17,7 @@ function PosUp() {
 	}, [eventConfig]);
 
 	return (
-		<div className="fixed bottom-1 right-1 flex flex-col items-center justify-center bg-transparent gap-4 z-[1000]">
+		<div className="fixed bottom-5 right-5 flex flex-col items-center justify-center bg-transparent gap-4 z-[1000]">
 			<Link
 				href={`http://zalo.me/${number}`}
 				target="_blank"

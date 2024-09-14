@@ -30,7 +30,7 @@ function LoginPage() {
 			const res = await apiClient.post('/auth/login', loginInfo);
 			const data = res.data;
 			const { clan, ...new_data } = data.user;
-			const new_clan = JSON.parse(clan);
+			const new_clan = clan;
 			dispatch(
 				login({
 					...new_data,

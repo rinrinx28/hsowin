@@ -14,6 +14,7 @@ import Image from 'next/image';
 import moment from 'moment';
 import { useSocket } from '@/lib/socket';
 import { IoIosStarHalf } from 'react-icons/io';
+import TableClans from '@/components/TableClans';
 
 const slogans = [
 	'Mini Game Đỏ Đen Hồi Sinh Ngọc Rồng',
@@ -272,9 +273,9 @@ export default function Home() {
 			</div>
 			<div className="flex justify-center">
 				<div className="max-w-7xl w-full grid grid-rows-2 gap-10">
-					<TableResult />
-					{/* <TableClans /> */}
 					<TableUser />
+					<TableResult />
+					<TableClans />
 				</div>
 			</div>
 			<dialog

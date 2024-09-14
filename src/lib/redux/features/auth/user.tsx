@@ -19,7 +19,7 @@ export interface userState {
 
 	diamon?: number;
 
-	clan?: userClan;
+	clan?: string;
 
 	totalBet?: number;
 

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface userClan {
+export interface userClan {
 	clanId: string;
 	timejoin: Date;
 }
