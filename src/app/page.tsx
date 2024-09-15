@@ -273,9 +273,9 @@ export default function Home() {
 			</div>
 			<div className="flex justify-center">
 				<div className="max-w-7xl w-full grid grid-rows-2 gap-10">
-					<TableUser />
 					<TableResult />
 					<TableClans />
+					<TableUser />
 				</div>
 			</div>
 			<dialog
