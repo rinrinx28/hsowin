@@ -272,7 +272,7 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="flex justify-center">
-				<div className="max-w-7xl w-full grid grid-rows-2 gap-10">
+				<div className="max-w-7xl w-full flex flex-col gap-10">
 					<TableResult />
 					<TableClans />
 					<TableUser />

@@ -461,7 +461,7 @@ function Clans() {
 					</form>
 					<h3 className="font-bold text-lg">Bang Hội Cái Bang</h3>
 					<div className="py-4 flex flex-col w-full justify-center items-center gap-4">
-						<div className="flex flex-row gap-2 items-center justify-center">
+						<div className="flex lg:flex-row flex-col gap-2 items-center justify-center">
 							{clanInfo && (
 								<button
 									onClick={() => {
@@ -683,7 +683,7 @@ function Clans() {
 					<div className="py-4 flex flex-col w-full justify-center items-center gap-4">
 						{clanInfo?.ownerId === user._id && (
 							<div className="flex flex-row gap-2 item-start w-full">
-								<div className="flex flex-row gap-2 items-center justify-center">
+								<div className="flex lg:flex-row flex-wrap gap-2 items-center justify-center">
 									<button
 										onClick={() => {
 											setView('members');
@@ -964,7 +964,7 @@ function MemberClan({
 			{/* Info */}
 			<div className="flex flex-col w-full">
 				{/* Name */}
-				<div className="flex flex-row justify-between items-center text-lg">
+				<div className="flex lg:flex-row flex-wrap justify-between items-center text-lg">
 					<div className="flex flex-row items-center gap-2">
 						<p className="text-primary">{user.name}</p>
 						{!isPening && (
@@ -980,7 +980,7 @@ function MemberClan({
 				</div>
 				{/* Info clans */}
 				{!isPening && (
-					<div className="flex flex-row justify-between items-center text-sm">
+					<div className="flex lg:flex-row flex-wrap justify-between items-center text-sm">
 						<p>Cống Hiến: {socore}</p>
 						<p>Tham Gia: {joinedAt}</p>
 					</div>

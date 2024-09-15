@@ -217,28 +217,32 @@ function ProfileUser() {
 	};
 
 	return (
-		<div className="flex flex-col gap-5 items-center lg:w-1/2 lg:p-4">
+		<div className="flex flex-col gap-5 items-center lg:w-1/2 lg:p-4 p-2 border border-current rounded-box">
 			<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
 				Thông tin tài khoản
 			</h1>
 			<ul className="flex flex-col gap-4 items-start justify-start w-full">
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
 					<p>ID Tài Khoản:</p>
 					<p className="font-semibold">{user?._id}</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
+					<p>Server:</p>
+					<p className="font-semibold">{user?.server}</p>
+				</li>
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
 					<p>Tên Tài Khoản:</p>
 					<p className="font-semibold">{user?.username}</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
 					<p>Email Tài Khoản:</p>
 					<p className="font-semibold">{user?.email}</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
 					<p>Tên hiển thị:</p>
 					<p className="font-semibold">{user?.name}</p>
 				</li>
-				<li className="w-full gap-2 rounded-md bg-base-300 flex flex-col justify-start p-1 lg:p-4 items-start">
+				<li className="w-full gap-2 rounded-md bg-base-200 flex flex-col justify-start p-1 lg:p-4 lg:text-base text-sm items-start">
 					<p className="">
 						Thông Tin VIP:{' '}
 						<span className="fire font-extrabold text-red-500">
@@ -256,7 +260,7 @@ function ProfileUser() {
 						/>{' '}
 					</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
 					<p>Số Thỏi Vàng:</p>
 					<p className="text-green-500 font-semibold flex flex-row gap-3 items-center">
 						{new Intl.NumberFormat('vi').format(user?.gold ?? 0)}{' '}
@@ -266,7 +270,7 @@ function ProfileUser() {
 						/>
 					</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
 					<p>Lục Bảo hiện có:</p>
 					<p className="text-green-500 font-semibold">
 						{new Intl.NumberFormat('vi').format(user?.diamon ?? 0)}
@@ -276,7 +280,7 @@ function ProfileUser() {
 						className="text-green-500"
 					/>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
 					<p>Tháng này đã hiến:</p>
 					<p className="text-green-500 font-extrabold flex flex-row gap-3 items-center">
 						{new Intl.NumberFormat('vi').format(Number(user?.totalBank) ?? 0)}{' '}
@@ -286,7 +290,7 @@ function ProfileUser() {
 						/>
 					</p>
 				</li>
-				<li className="w-full h-10 gap-5 rounded-md bg-base-300 flex flex-row justify-start p-1 lg:p-4 items-center">
+				<li className="w-full h-10 gap-5 rounded-md bg-base-200 flex flex-row justify-start p-1 lg:p-4 lg:text-base text-sm items-center">
 					<p>Mật Khẩu: ********</p>
 					<button
 						onClick={() => {
