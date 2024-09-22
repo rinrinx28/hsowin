@@ -134,15 +134,15 @@ export default function TableResult() {
 					{/* head */}
 					<thead className="text-sm  text-center">
 						<tr>
-							<th>Server</th>
-							<th>Nhân Vật</th>
-							<th>Gold Cược</th>
-							<th>Dự Đoán</th>
-							<th>Kết Quả</th>
-							<th>Gold Nhận</th>
-							<th>Tình Trạng</th>
-							<th>Thời gian</th>
-							<th>Thao Tác</th>
+							<th className="border border-current">Server</th>
+							<th className="border border-current">Nhân Vật</th>
+							<th className="border border-current">Gold Cược</th>
+							<th className="border border-current">Dự Đoán</th>
+							<th className="border border-current">Kết Quả</th>
+							<th className="border border-current">Gold Nhận</th>
+							<th className="border border-current">Tình Trạng</th>
+							<th className="border border-current">Thời gian</th>
+							<th className="border border-current">Thao Tác</th>
 						</tr>
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
@@ -177,15 +177,21 @@ export default function TableResult() {
 									<tr
 										className="hover"
 										key={userBet?._id}>
-										<td>{server?.replace('-mini', ' Sao')}</td>
-										<td>
+										<td className="border border-current">
+											{server?.replace('-mini', ' Sao')}
+										</td>
+										<td className="border border-current">
 											{uid === user?._id
 												? user?.name ?? user?.username
 												: name ?? shortUID}
 										</td>
-										<td>{new Intl.NumberFormat('vi').format(amount ?? 0)}</td>
-										<td>{new_result ?? result ?? ''}</td>
-										<td>
+										<td className="border border-current">
+											{new Intl.NumberFormat('vi').format(amount ?? 0)}
+										</td>
+										<td className="border border-current">
+											{new_result ?? result ?? ''}
+										</td>
+										<td className="border border-current">
 											{new_resultBet &&
 											!['1', '2', '3'].includes(userBet?.server)
 												? `${new_resultBet}-${resultBet[1]}`
@@ -195,8 +201,10 @@ export default function TableResult() {
 												? 'Khỉ Đen'
 												: ''}
 										</td>
-										<td>{new Intl.NumberFormat('vi').format(receive ?? 0)}</td>
-										<td>
+										<td className="border border-current">
+											{new Intl.NumberFormat('vi').format(receive ?? 0)}
+										</td>
+										<td className="border border-current">
 											{isEnd && receive > 0 ? (
 												'Đã Thanh Toán'
 											) : !isEnd ? (
@@ -205,8 +213,10 @@ export default function TableResult() {
 												'Đã Thua'
 											)}
 										</td>
-										<td>{moment(createdAt).format('DD/MM/YYYY')}</td>
-										<td>
+										<td className="border border-current">
+											{moment(createdAt).format('DD/MM/YYYY')}
+										</td>
+										<td className="border border-current">
 											{uid !== user?._id ? (
 												''
 											) : !isEnd ? (

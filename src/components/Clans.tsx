@@ -500,7 +500,7 @@ function Clans() {
 								<CiSearch />
 							</label>
 						</div>
-						<div className="flex flex-col w-full items-center justify-end max-h-[600px] overflow-auto">
+						<div className="flex flex-col w-full items-center max-h-[600px] overflow-auto">
 							{clans &&
 								clans
 									?.filter((c) => c.clanName?.includes(filter ?? ''))

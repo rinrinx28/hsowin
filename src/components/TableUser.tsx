@@ -42,14 +42,14 @@ export default function TableUser() {
 				Bảng Xếp Hạng Ngày
 			</div>
 			<div className="overflow-auto border border-current max-h-[600px]">
-				<table className="table table-lg table-pin-rows table-pin-cols">
+				<table className="table table-lg table-pin-rows table-pin-cols border-collapse border border-current">
 					{/* head */}
 					<thead className="text-sm  text-center">
 						<tr>
-							<th>TOP</th>
-							<th>Nhân Vật</th>
-							<th>Gold</th>
-							<th>Phần Thưởng</th>
+							<th className="border border-current">TOP</th>
+							<th className="border border-current">Nhân Vật</th>
+							<th className="border border-current">Gold</th>
+							<th className="border border-current">Phần Thưởng</th>
 						</tr>
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
@@ -59,7 +59,7 @@ export default function TableUser() {
 								<tr
 									className="hover"
 									key={user._id}>
-									<td className="flex items-center justify-center">
+									<td className="flex items-center justify-center border border-current">
 										<Image
 											alt={`${i + 1}_user`}
 											src={`/image/rank/${i + 1}.png`}
@@ -69,9 +69,13 @@ export default function TableUser() {
 											priority={true}
 										/>
 									</td>
-									<td>{name}</td>
-									<td>{new Intl.NumberFormat('vi').format(totalBet)}</td>
-									<td>{prizes[i] ? `${prizes[i]} thỏi vàng` : 'Cái Nịt'}</td>
+									<td className="border border-current">{name}</td>
+									<td className="border border-current">
+										{new Intl.NumberFormat('vi').format(totalBet)}
+									</td>
+									<td className="border border-current">
+										{prizes[i] ? `${prizes[i]} thỏi vàng` : 'Cái Nịt'}
+									</td>
 								</tr>
 							);
 						})}

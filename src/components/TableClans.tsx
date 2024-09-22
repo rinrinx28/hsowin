@@ -24,16 +24,16 @@ export default function TableClans() {
 			<div className="border-current border rounded-box grid h-20 place-items-center">
 				Bang Hội Cái Bang
 			</div>
-			<div className="overflow-auto border border-current max-h-[600px] w-full">
-				<table className="table table-lg table-pin-rows table-pin-cols">
+			<div className="overflow-auto max-h-[600px] w-full">
+				<table className="table border border-current table-lg table-pin-rows table-pin-cols">
 					{/* head */}
 					<thead className="text-sm text-center">
 						<tr>
-							<th>TOP</th>
-							<th>Bang Hội</th>
-							<th>Gold</th>
-							<th>Thành Viên</th>
-							<th>Phần Thưởng/Người</th>
+							<th className="border border-current">TOP</th>
+							<th className="border border-current">Bang Hội</th>
+							<th className="border border-current">Gold</th>
+							<th className="border border-current">Thành Viên</th>
+							<th className="border border-current">Phần Thưởng/Người</th>
 						</tr>
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
@@ -44,11 +44,11 @@ export default function TableClans() {
 									<tr
 										key={c._id}
 										className="hover">
-										<td>{i + 1}</td>
-										<td>{clanName}</td>
-										<td>{totalBet}</td>
-										<td>{member}/25</td>
-										<td>Có cái nịt</td>
+										<td className="border border-current">{i + 1}</td>
+										<td className="border border-current">{clanName}</td>
+										<td className="border border-current">{totalBet}</td>
+										<td className="border border-current">{member}/5</td>
+										<td className="border border-current">Đang Cập Nhật</td>
 									</tr>
 								);
 							})}
