@@ -42,7 +42,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			data-theme="luxury">
+			data-theme="valentine">
 			<head>
 				<script
 					async

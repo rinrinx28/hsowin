@@ -145,7 +145,7 @@ const NavBar = () => {
 						<input
 							type="checkbox"
 							className="theme-controller"
-							value="valentine"
+							value="luxury"
 							// defaultChecked={true}
 							// defaultChecked={isTheme === 'true'}
 							// onChange={(e) => changeTheme(e.target.checked)}
