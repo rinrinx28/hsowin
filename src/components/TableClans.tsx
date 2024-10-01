@@ -3,10 +3,12 @@
 import apiClient from '@/lib/apiClient';
 import { updateclansRanks } from '@/lib/redux/features/rank/clanRanks';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function TableClans() {
 	const clansRank = useAppSelector((state) => state.clanRanks);
+	const eventConfig = useAppSelector((state) => state.eventConfig);
+	const [limited, setLimited] = useState(5);
 	const dispatch = useAppDispatch();
 	useEffect(() => {
 		let loop_up_rank = setInterval(async () => {
@@ -19,6 +21,16 @@ export default function TableClans() {
 			clearInterval(loop_up_rank);
 		};
 	}, [dispatch]);
+
+	useEffect(() => {
+		if (eventConfig) {
+			let limited_clans_members = eventConfig.find(
+				(e) => e.name === 'e-clans-limit-members',
+			);
+			setLimited(limited_clans_members?.value ?? 5);
+		}
+	}, [eventConfig]);
+
 	return (
 		<div className="lg:flex lg:flex-col grid gap-2 w-full">
 			<div className="border-current border rounded-box grid h-20 place-items-center">
@@ -47,7 +59,9 @@ export default function TableClans() {
 										<td className="border border-current">{i + 1}</td>
 										<td className="border border-current">{clanName}</td>
 										<td className="border border-current">{totalBet}</td>
-										<td className="border border-current">{member}/5</td>
+										<td className="border border-current">
+											{member}/{limited}
+										</td>
 										<td className="border border-current">Đang Cập Nhật</td>
 									</tr>
 								);

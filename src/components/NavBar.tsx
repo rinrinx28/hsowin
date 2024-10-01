@@ -146,9 +146,6 @@ const NavBar = () => {
 							type="checkbox"
 							className="theme-controller"
 							value="luxury"
-							// defaultChecked={true}
-							// defaultChecked={isTheme === 'true'}
-							// onChange={(e) => changeTheme(e.target.checked)}
 						/>
 						<Sun />
 						<Moon />

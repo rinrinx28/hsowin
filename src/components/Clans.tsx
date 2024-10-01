@@ -37,6 +37,7 @@ function Clans() {
 	const [penning, setPenning] = useState<userState[]>();
 	const [dataPen, setDataPen] = useState<any[]>();
 	const [targetView, setTargetView] = useState<userState>();
+	const [myClan, setMyClan] = useState<string | null>(null);
 	const dispatch = useAppDispatch();
 
 	const [noti, setNote] = useState<string>('');
@@ -391,6 +392,18 @@ function Clans() {
 		}
 	};
 
+	//TODO ———————————————[Handler Get Info Target Clan]———————————————
+	const handlerGetInfoClanTarget = async (id: string, data: any) => {
+		try {
+			const res = await apiClient.get(`/user/clans/info/${id}`);
+			setClanInfo({ ...data, members: res.data });
+			closeClansInfo();
+			showUserClan();
+		} catch (err: any) {
+			console.log(err);
+		}
+	};
+
 	useEffect(() => {
 		if (eventConfig) {
 			const e_clans_type = eventConfig.find((e) => e.name === 'e-clans-type');
@@ -412,30 +425,15 @@ function Clans() {
 	}, [eventConfig]);
 
 	useEffect(() => {
-		const getClanInfo = async (id: string) => {
-			try {
-				const res = await apiClient.get(`/user/clans/info/${id}`);
-				return res.data;
-			} catch (err: any) {}
-		};
-		if (user.isLogin && user) {
-			if (user) {
-				const uClan: userClan = JSON.parse(user.clan ?? '{}');
-				if ('clanId' in uClan) {
-					const target_clan = clans?.find((c) => c._id === uClan.clanId);
-					if (target_clan) {
-						getClanInfo(target_clan?._id ?? '')
-							.then((res) => {
-								setClanInfo({ ...target_clan, members: res });
-							})
-							.catch((err: any) => {});
-					}
-				} else {
-					setClanInfo(undefined);
-				}
+		if (user.isLogin) {
+			let clan = JSON.parse(user.clan ?? '');
+			if ('clanId' in clan) {
+				setMyClan(clan['clanId']);
+			} else {
+				setMyClan(null);
 			}
 		}
-	}, [user, clans]);
+	}, [user]);
 
 	return (
 		<div className="fixed bottom-5 left-5 flex flex-col items-center justify-center bg-transparent gap-4 z-[1000]">
@@ -462,18 +460,18 @@ function Clans() {
 					<h3 className="font-bold text-lg">Bang Hội Cái Bang</h3>
 					<div className="py-4 flex flex-col w-full justify-center items-center gap-4">
 						<div className="flex lg:flex-row flex-col gap-2 items-center justify-center">
-							{clanInfo && (
+							{myClan && (
 								<button
 									onClick={() => {
-										closeClansInfo();
-										showUserClan();
+										let clan = clans?.find((c) => c._id === myClan);
+										handlerGetInfoClanTarget(myClan, clan);
 									}}
 									className="btn btn-success btn-outline">
 									<GiFamilyHouse />
 									Bang Hội
 								</button>
 							)}
-							{!clanInfo && (
+							{!myClan && (
 								<button
 									onClick={() => {
 										if (!user.isLogin) {
@@ -508,6 +506,9 @@ function Clans() {
 										return (
 											<div
 												key={c._id}
+												onClick={() => {
+													handlerGetInfoClanTarget(c._id ?? '', c);
+												}}
 												className="flex flex-row w-full gap-2 border border-current p-2 cursor-pointer hover:bg-base-200 hover:duration-300 rounded-md">
 												<div className="avatar border-r-2 border-current">
 													<div className="w-24 rounded-xl">
@@ -529,7 +530,7 @@ function Clans() {
 													<p className="text-info text-sm text-start w-full">
 														{c?.descriptions ?? 'Hí Anh Em ơi!'}
 													</p>
-													{!clanInfo && (
+													{!myClan && (
 														<div className="flex flex-row">
 															<button
 																onClick={() => {
@@ -712,18 +713,19 @@ function Clans() {
 								</div>
 							</div>
 						)}
-						{clanInfo?.ownerId !== user._id && (
-							<div className="flex item-start w-full">
-								<button
-									onClick={() => {
-										showLeaveClan();
-									}}
-									className="btn btn-error btn-outline">
-									<HiOutlineLogout />
-									Rời Bang Hội
-								</button>
-							</div>
-						)}
+						{clanInfo?.ownerId !== user._id &&
+							clanInfo?.members?.find((m) => m._id === user._id) && (
+								<div className="flex item-start w-full">
+									<button
+										onClick={() => {
+											showLeaveClan();
+										}}
+										className="btn btn-error btn-outline">
+										<HiOutlineLogout />
+										Rời Bang Hội
+									</button>
+								</div>
+							)}
 						{view === 'members' && (
 							<div className="flex flex-col w-full">
 								<p className="w-full text-end">
@@ -928,7 +930,7 @@ function MemberClan({
 	const balance_number = new Intl.NumberFormat('vi').format(user.gold ?? 0);
 	const balance = `${balance_number}`
 		.split('')
-		.map((s: string, i: number) => (i < 2 ? '*' : s))
+		.map((s: string, i: number) => (i < 3 ? '*' : s))
 		.join('');
 
 	const handlerfunc = (arg: Pening) => {
@@ -976,7 +978,7 @@ function MemberClan({
 							</div>
 						)}
 					</div>
-					<p>Số dư: {balance}</p>
+					<p>Số dư: {balance.length <= 3 ? '***' : balance}</p>
 				</div>
 				{/* Info clans */}
 				{!isPening && (
