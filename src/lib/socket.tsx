@@ -23,6 +23,7 @@ import {
 	DiemDanhResult,
 } from './dto/dto.socket';
 import { updateDiemDanh } from './redux/features/logs/diemdanh';
+import { updateMsgOneClan } from './redux/features/logs/messageClan';
 moment().format();
 
 const urlConfig = {
@@ -96,6 +97,23 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 		socket.on('message-user-re', (data) => {
 			if (data?.status) {
 				dispatch(updateMsgOne(data?.msg));
+			} else {
+				if (data?.token === user?.token) {
+					const modal = document.getElementById(
+						'error_chat',
+					) as HTMLDialogElement | null;
+					let msg = document.getElementById('msg') as HTMLElement | null;
+					if (modal && msg) {
+						msg.innerText = data?.msg ?? '';
+						modal.showModal();
+					}
+				}
+			}
+		});
+
+		socket.on('message-clan-re', (data) => {
+			if (data?.status) {
+				dispatch(updateMsgOneClan(data?.msg));
 			} else {
 				if (data?.token === user?.token) {
 					const modal = document.getElementById(
@@ -266,6 +284,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
 		return () => {
 			socket.off('message-user-re');
+			socket.off('message-clan-re');
 			//TODO ———————————————[Handle mini game event]———————————————
 			socket.off('status-boss');
 			socket.off('status-sv');

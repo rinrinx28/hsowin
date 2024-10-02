@@ -726,6 +726,21 @@ function Clans() {
 									</button>
 								</div>
 							)}
+						{!JSON.parse(user?.clan ?? '{}').clanId && (
+							<div className="flex flex-row">
+								<button
+									onClick={() => {
+										if (!user.isLogin) {
+											showClanError('Xin vui lòng đăng nhập!');
+											return;
+										}
+										handlerJoinClan(clanInfo?._id);
+									}}
+									className="btn btn-success btn-sm">
+									Xin gia nhập
+								</button>
+							</div>
+						)}
 						{view === 'members' && (
 							<div className="flex flex-col w-full">
 								<p className="w-full text-end">

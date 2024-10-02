@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { useSocket } from '@/lib/socket';
 import Image from 'next/image';
+import apiClient from '@/lib/apiClient';
 
 interface ChatBox {
 	server: string;
@@ -18,13 +19,15 @@ export default function ChatBox() {
 	const messageLog = useAppSelector((state) => state.messageLog);
 	const userGame = useAppSelector((state) => state.userGame);
 	const userRanks = useAppSelector((state) => state.userRanks);
+	const messageClan = useAppSelector((state) => state.messageClan);
 	const [channel, setChannel] = useState<Array<any>>();
+	const [channelClan, setChannelClan] = useState<Array<any>>();
 	const [chat, setChat] = useState<ChatBox | any>(null);
 	const socket = useSocket();
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
 
-	const handlerChatUser = () => {
+	const handlerChatUser = (type: string) => {
 		if (!user?.isLogin) {
 			const modal = document.getElementById(
 				'auth_chat',
@@ -43,10 +46,29 @@ export default function ChatBox() {
 			}
 			return;
 		}
-		socket.emit('message-user', chat);
+		if (!JSON.parse(user.clan ?? '{}').clanId) {
+			const modal = document.getElementById(
+				'error_chat_clan',
+			) as HTMLDialogElement | null;
+			if (modal) {
+				modal.showModal();
+			}
+			return;
+		}
+		if (type === 'user') {
+			socket.emit('message-user', chat);
+			let inputE = document.getElementById(
+				'chat-input-id-user',
+			) as HTMLInputElement;
+			inputE.value = '';
+		} else {
+			socket.emit('message-clan', chat);
+			let inputE = document.getElementById(
+				'chat-input-id-clan',
+			) as HTMLInputElement;
+			inputE.value = '';
+		}
 		setChat((e: any) => ({ ...e, content: '' }));
-		let inputE = document.getElementById('chat-input-id') as HTMLInputElement;
-		inputE.value = '';
 	};
 
 	useEffect(() => {
@@ -56,7 +78,7 @@ export default function ChatBox() {
 	}, [messageLog]);
 
 	useEffect(() => {
-		if (user) {
+		if (userGame && user.isLogin) {
 			setChat({ server: userGame, content: '', token: user?.token ?? '' });
 		}
 	}, [userGame, user]);
@@ -79,6 +101,24 @@ export default function ChatBox() {
 		}
 	}, [messageLog, userGame, dispatch]);
 
+	useEffect(() => {
+		if (messageClan && user.isLogin && JSON.parse(user.clan ?? '{}').clanId) {
+			const main_server = messageClan.filter(
+				(m) => m.server === JSON.parse(user.clan ?? '{}').clanId,
+			);
+
+			let new_main_server = main_server;
+			let new_channel = [];
+			for (const msg of new_main_server) {
+				if (new_channel.length >= 10) {
+					new_channel.shift(); // Removes the oldest message if the array exceeds 10 messages
+				}
+				new_channel.push(msg);
+			}
+			setChannelClan(new_channel);
+		}
+	}, [messageClan, user, dispatch]);
+
 	return (
 		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col justify-between gap-2 border border-current shadow-xl p-4 rounded-2xl">
 			<div className="flex flex-col gap-2 w-full border-b border-current">
@@ -88,103 +128,241 @@ export default function ChatBox() {
 				</div>
 			</div>
 			<div
-				className="overflow-auto h-[950px] bg-base-100 rounded-lg p-4"
-				ref={chatEndRef}>
-				{channel &&
-					channel?.map((msg, i) => {
-						const { uid, content, username } = msg;
-						const avatarUrl = msg?.meta ? JSON.parse(msg.meta)?.avatar : null;
-						const vip = msg?.meta ? JSON.parse(msg?.meta)?.vip : 0;
-						return (
-							<div
-								className={`chat ${
-									uid === user?._id ? 'chat-end' : 'chat-start'
-								}`}
-								key={`${i}-msg-log`}>
-								{uid === '' ? (
-									<div className="chat-image avatar">
-										<div className="avatar online  placeholder">
-											<div
-												className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
-												style={{
-													backgroundImage: `url("/image/avatar/Arcade_Miss_Fortune_profileicon.webp")`,
-												}}></div>
-										</div>
-									</div>
-								) : (
-									<div className="chat-image avatar">
-										<div className="avatar online placeholder">
-											<div
-												className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
-												style={{
-													backgroundImage: avatarUrl
-														? `url("/image/avatar/${avatarUrl}.webp")`
-														: 'none',
-												}}></div>
-										</div>
-									</div>
-								)}
-								<div className="chat-header">
-									<div
-										className={`flex ${
-											uid === user?._id ? 'flex-row-reverse' : 'flex-row'
-										} gap-2 items-center`}>
-										{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
-										{vip > 0 && (
-											<p className="fire font-extrabold text-red-500">
-												VIP {vip}
-											</p>
-										)}
-										{userRanks &&
-											userRanks.map((u, index) => {
-												if (uid === u._id) {
-													return (
-														<div
-															key={`${u._id}-chat-header-rank`}
-															className="tooltip"
-															data-tip={`Khứa này top ${index + 1}`}>
-															<Image
-																src={`/image/rank/${index + 1}.png`}
-																width={32}
-																height={32}
-																alt={`${index + 1}_user_rank_image`}
-																priority={true}
-															/>
-														</div>
-													);
-												}
-											})}
-									</div>
-								</div>
-								<div className="chat-bubble text-sm chat-bubble-primary">
-									{content}
-								</div>
-							</div>
-						);
-					})}
-			</div>
-			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					handlerChatUser();
-				}}
-				className="flex flex-row w-full py-2 gap-2">
+				role="tablist"
+				className="tabs tabs-bordered w-full text-nowrap">
 				<input
-					id="chat-input-id"
-					type="text"
-					className="grow w-full input input-bordered"
-					placeholder="Nhập nội dung trò chuyện"
-					defaultValue={chat?.content}
-					onChange={(e) =>
-						setChat((c: ChatBox | any) => ({ ...c, content: e.target.value }))
-					}
+					type="radio"
+					name="my_tabs_1"
+					role="tab"
+					className="tab w-full"
+					aria-label={`Server ${userGame}`}
+					defaultChecked
 				/>
-				<button
-					type="submit"
-					className="btn  btn-outline">
-					<Send />
-				</button>
-			</form>
+				<div
+					role="tabpanel"
+					className="tab-content w-full p-4 text-wrap">
+					<div
+						className="overflow-auto h-[950px] bg-base-100 rounded-lg"
+						ref={chatEndRef}>
+						{channel &&
+							channel?.map((msg, i) => {
+								const { uid, content, username } = msg;
+								const avatarUrl = msg?.meta
+									? JSON.parse(msg.meta)?.avatar
+									: null;
+								const vip = msg?.meta ? JSON.parse(msg?.meta)?.vip : 0;
+								return (
+									<div
+										className={`chat ${
+											uid === user?._id ? 'chat-end' : 'chat-start'
+										}`}
+										key={`${i}-msg-log`}>
+										{uid === '' ? (
+											<div className="chat-image avatar">
+												<div className="avatar online  placeholder">
+													<div
+														className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
+														style={{
+															backgroundImage: `url("/image/avatar/Arcade_Miss_Fortune_profileicon.webp")`,
+														}}></div>
+												</div>
+											</div>
+										) : (
+											<div className="chat-image avatar">
+												<div className="avatar online placeholder">
+													<div
+														className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
+														style={{
+															backgroundImage: avatarUrl
+																? `url("/image/avatar/${avatarUrl}.webp")`
+																: 'none',
+														}}></div>
+												</div>
+											</div>
+										)}
+										<div className="chat-header">
+											<div
+												className={`flex ${
+													uid === user?._id ? 'flex-row-reverse' : 'flex-row'
+												} gap-2 items-center`}>
+												{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
+												{vip > 0 && (
+													<p className="fire font-extrabold text-red-500">
+														VIP {vip}
+													</p>
+												)}
+												{userRanks &&
+													userRanks.map((u, index) => {
+														if (uid === u._id) {
+															return (
+																<div
+																	key={`${u._id}-chat-header-rank`}
+																	className="tooltip"
+																	data-tip={`Khứa này top ${index + 1}`}>
+																	<Image
+																		src={`/image/rank/${index + 1}.png`}
+																		width={32}
+																		height={32}
+																		alt={`${index + 1}_user_rank_image`}
+																		priority={true}
+																	/>
+																</div>
+															);
+														}
+													})}
+											</div>
+										</div>
+										<div className="chat-bubble text-sm chat-bubble-primary">
+											{content}
+										</div>
+									</div>
+								);
+							})}
+					</div>
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							handlerChatUser('user');
+						}}
+						className="flex flex-row w-full py-2 gap-2 items-center">
+						<input
+							id="chat-input-id-user"
+							type="text"
+							className="grow w-full input input-bordered"
+							placeholder="Nhập nội dung trò chuyện"
+							defaultValue={chat?.content}
+							onChange={(e) =>
+								setChat((c: ChatBox | any) => ({
+									...c,
+									content: e.target.value,
+									server: userGame,
+								}))
+							}
+						/>
+						<button
+							type="submit"
+							className="btn  btn-outline">
+							<Send />
+						</button>
+					</form>
+				</div>
+				<input
+					type="radio"
+					name="my_tabs_1"
+					role="tab"
+					className="tab w-full"
+					aria-label="Bang Hội"
+				/>
+				<div
+					role="tabpanel"
+					className="tab-content w-full p-4 text-wrap">
+					<div
+						className="overflow-auto h-[950px] bg-base-100 rounded-lg"
+						ref={chatEndRef}>
+						{channelClan &&
+							channelClan?.map((msg, i) => {
+								const { uid, content, username } = msg;
+								const avatarUrl = msg?.meta
+									? JSON.parse(msg.meta)?.avatar
+									: null;
+								const vip = msg?.meta ? JSON.parse(msg?.meta)?.vip : 0;
+								return (
+									<div
+										className={`chat ${
+											uid === user?._id ? 'chat-end' : 'chat-start'
+										}`}
+										key={`${i}-msg-log`}>
+										{uid === '' ? (
+											<div className="chat-image avatar">
+												<div className="avatar online  placeholder">
+													<div
+														className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
+														style={{
+															backgroundImage: `url("/image/avatar/Arcade_Miss_Fortune_profileicon.webp")`,
+														}}></div>
+												</div>
+											</div>
+										) : (
+											<div className="chat-image avatar">
+												<div className="avatar online placeholder">
+													<div
+														className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
+														style={{
+															backgroundImage: avatarUrl
+																? `url("/image/avatar/${avatarUrl}.webp")`
+																: 'none',
+														}}></div>
+												</div>
+											</div>
+										)}
+										<div className="chat-header">
+											<div
+												className={`flex ${
+													uid === user?._id ? 'flex-row-reverse' : 'flex-row'
+												} gap-2 items-center`}>
+												{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
+												{vip > 0 && (
+													<p className="fire font-extrabold text-red-500">
+														VIP {vip}
+													</p>
+												)}
+												{userRanks &&
+													userRanks.map((u, index) => {
+														if (uid === u._id) {
+															return (
+																<div
+																	key={`${u._id}-chat-header-rank`}
+																	className="tooltip"
+																	data-tip={`Khứa này top ${index + 1}`}>
+																	<Image
+																		src={`/image/rank/${index + 1}.png`}
+																		width={32}
+																		height={32}
+																		alt={`${index + 1}_user_rank_image`}
+																		priority={true}
+																	/>
+																</div>
+															);
+														}
+													})}
+											</div>
+										</div>
+										<div className="chat-bubble text-sm chat-bubble-primary">
+											{content}
+										</div>
+									</div>
+								);
+							})}
+					</div>
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							handlerChatUser('clan');
+						}}
+						className="flex flex-row w-full py-2 gap-2 items-center">
+						<input
+							id="chat-input-id-clan"
+							type="text"
+							className="grow w-full input input-bordered text-wrap"
+							placeholder="Nhập nội dung trò chuyện"
+							defaultValue={chat?.content}
+							onChange={(e) =>
+								setChat((c: ChatBox | any) => ({
+									...c,
+									content: e.target.value,
+									server: JSON.parse(user?.clan ?? '{}').clanId ?? null,
+								}))
+							}
+						/>
+						<button
+							type="submit"
+							className="btn  btn-outline">
+							<Send />
+						</button>
+					</form>
+				</div>
+			</div>
+
 			<dialog
 				id="auth_chat"
 				className="modal">
@@ -216,6 +394,24 @@ export default function ChatBox() {
 						className="py-4"
 						id="msg">
 						Xin vui lòng nhập tin nhắn
+					</p>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="error_chat_clan"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<p
+						className="py-4"
+						id="msg">
+						Bạn chưa tham gia Bang Hội!
 					</p>
 					<div className="modal-action">
 						<form method="dialog">

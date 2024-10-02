@@ -19,6 +19,7 @@ import { updateUserVip } from './features/auth/userVip';
 import { updateHistoryServer } from './features/logs/historyServer';
 import { updateMission } from './features/auth/missionDaily';
 import { updateclansRanks } from './features/rank/clanRanks';
+import { updateMsgAllClan } from './features/logs/messageClan';
 
 export default function StoreProvider({
 	children,
@@ -128,11 +129,26 @@ export default function StoreProvider({
 				storeRef.current?.dispatch(updateEventConfig(data));
 			} catch (err) {}
 		};
+		const clanMessage = async (token: string) => {
+			try {
+				const res = await apiClient.get('/message/clan', {
+					headers: {
+						Authorization: 'Bearer ' + token,
+					},
+				});
+				const { status, message } = res.data;
+				if (status && status === 400) throw new Error(message);
+				storeRef.current?.dispatch(updateMsgAllClan(res.data));
+			} catch (err: any) {
+				console.log(err);
+			}
+		};
 		const isStay = localStorage.getItem('access_token');
 		if (isStay) {
 			relogin(isStay);
 			getUserVip(isStay);
 			getUserMission(isStay);
+			clanMessage(isStay);
 		}
 		getUserBetLog();
 		getUserRank();
