@@ -462,15 +462,21 @@ function Clans() {
 	}, [eventConfig]);
 
 	useEffect(() => {
-		if (user.isLogin) {
+		const getTargetMyClan = async (id: string, data: any) => {
+			const res = await apiClient.get(`/user/clans/info/${id}`);
+			setClanInfo({ ...data, members: res.data });
+		};
+		if (user.isLogin && clans) {
 			let clan = JSON.parse(user.clan ?? '');
 			if ('clanId' in clan) {
 				setMyClan(clan['clanId']);
+				let clantarget = clans?.find((c) => c._id === clan['clanId']);
+				getTargetMyClan(clantarget?._id ?? '', clantarget);
 			} else {
 				setMyClan(null);
 			}
 		}
-	}, [user]);
+	}, [user, clans]);
 
 	useEffect(() => {
 		if (messageClan && user.isLogin && JSON.parse(user.clan ?? '{}').clanId) {
@@ -515,8 +521,23 @@ function Clans() {
 					}
 				}}
 				className="bg-base-200 rounded-full p-4 hover:scale-110 hover:duration-300 drop-shadow-xl flex flex-row items-center justify-center gap-2">
-				<GiMedievalPavilion size={34} />
-				Bang Hội
+				{myClan && (
+					<>
+						<Image
+							alt={`myclan-b${clanInfo?.typeClan}-logo`}
+							src={`image/banghoi/b${clanInfo?.typeClan}.gif`}
+							width={24}
+							height={24}
+						/>
+						{clanInfo?.clanName}
+					</>
+				)}
+				{!myClan && (
+					<>
+						<GiMedievalPavilion size={34} />
+						Bang Hội
+					</>
+				)}
 			</button>
 			{/* List Clans */}
 			{!myClan && (
@@ -755,11 +776,29 @@ function Clans() {
 							✕
 						</button>
 					</form>
-					<h3 className="font-bold text-lg">Bang Hội - {clanInfo?.clanName}</h3>
+					<div className="w-full flex flex-row justify-between items-center px-4">
+						<h3 className="font-bold text-lg flex flex-col">
+							Bang Hội - {clanInfo?.clanName}
+							<span className="text-sm text-secondary-content">
+								{clanInfo?.descriptions}
+							</span>
+						</h3>
+						<h3 className="font-bold text-sm flex flex-col">
+							Rank{' '}
+							{clans &&
+								clans
+									?.sort((a: any, b: any) => b.totalBet - a.totalBet)
+									.findIndex((c) => c?._id === myClan) + 1}
+							/{clans?.length}
+							<span className="text-xs text-secondary-content">
+								Thành tích: {clanInfo?.totalBet}
+							</span>
+						</h3>
+					</div>
 					<div className="py-4 flex flex-col w-full justify-center items-center gap-4">
 						{clanInfo?.ownerId === user._id && (
 							<div className="flex flex-row gap-2 item-start w-full">
-								<div className="flex lg:flex-row flex-wrap gap-2 items-center justify-center">
+								<div className="flex lg:flex-row flex-wrap gap-2 items-center justify-start">
 									<button
 										onClick={() => {
 											setView('members');
@@ -798,7 +837,7 @@ function Clans() {
 						)}
 						{clanInfo?.ownerId !== user._id &&
 							clanInfo?.members?.find((m) => m._id === user._id) && (
-								<div className="flex item-start w-full">
+								<div className="flex lg:flex-row flex-wrap gap-2 items-center justify-start w-full">
 									<button
 										onClick={() => {
 											setView('members');
@@ -811,7 +850,7 @@ function Clans() {
 										onClick={() => {
 											setView('chat-clan');
 										}}
-										className="btn btn-success btn-sm">
+										className="btn btn-success btn-outline btn-sm">
 										Trò Chuyện
 									</button>
 									<button
