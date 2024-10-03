@@ -1135,7 +1135,13 @@ function Clans() {
 								className="btn btn-error btn-outline">
 								Xóa Bang Hội
 							</button>
-							<button className="btn btn-neutral btn-outline">Hủy</button>
+							<button
+								onClick={() => {
+									closeDeleteClan();
+								}}
+								className="btn btn-neutral btn-outline">
+								Hủy
+							</button>
 						</div>
 					</div>
 				</div>
@@ -1166,7 +1172,13 @@ function Clans() {
 								className="btn btn-error btn-outline">
 								Rời Bang Hội
 							</button>
-							<button className="btn btn-neutral btn-outline">Hủy</button>
+							<button
+								onClick={() => {
+									closeLeaveClan();
+								}}
+								className="btn btn-neutral btn-outline">
+								Hủy
+							</button>
 						</div>
 					</div>
 				</div>
