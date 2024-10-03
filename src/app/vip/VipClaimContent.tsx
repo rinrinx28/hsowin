@@ -149,20 +149,22 @@ function TableClaimVip({ setMsg, showModel }: { setMsg: any; showModel: any }) {
 					return (
 						<button
 							key={d?.date}
-							className={`size-40 flex flex-col text-primary items-center hover:scale-125 hover:z-50 duration-300 justify-end bg-cover border border-current p-2 rounded-lg`}
+							className={`size-40 flex flex-col items-center hover:scale-125 hover:z-50 duration-300 justify-end bg-cover border border-current p-2 rounded-lg`}
 							style={{
 								backgroundImage: `url("/image/vip/claim/${
 									d?.isClaim ? 'open.png' : 'claim.png'
 								}")`,
 							}}
 							onClick={() => handleClaim(d?.date)}>
-							{moment(d?.date).format('DD/MM/YYYY') ===
-							moment().format('DD/MM/YYYY')
-								? 'Hôm Nay'
-								: `Ngày ${i + 1}`}
-							<span className="text-xs">
-								({moment(d?.date).format('DD/MM/YYYY')})
-							</span>
+							<p className="flex flex-col justify-center text-secondary-content backdrop-blur-sm">
+								{moment(d?.date).format('DD/MM/YYYY') ===
+								moment().format('DD/MM/YYYY')
+									? 'Hôm Nay'
+									: `Ngày ${i + 1}`}
+								<span className="text-xs">
+									({moment(d?.date).format('DD/MM/YYYY')})
+								</span>
+							</p>
 						</button>
 					);
 				})}
