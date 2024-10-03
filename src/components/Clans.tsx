@@ -2,15 +2,14 @@
 import apiClient from '@/lib/apiClient';
 import { clanState } from '@/lib/redux/features/rank/clanRanks';
 import Image from 'next/image';
-import { ChangeEventHandler, use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { GiFamilyHouse, GiMedievalPavilion } from 'react-icons/gi';
 import Gold from './icons/gold';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
-import { userClan } from '@/lib/redux/features/rank/userRanks';
 import { updateUser, userState } from '@/lib/redux/features/auth/user';
 import moment from 'moment';
-import { FaUser, FaUsers } from 'react-icons/fa';
+import { FaUsers } from 'react-icons/fa';
 import { HiOutlineLogout } from 'react-icons/hi';
 import Chat from './icons/chat';
 import { ChatBox } from './Chat';
@@ -305,7 +304,7 @@ function Clans() {
 			closeDeleteClan();
 			closeUserClan();
 			dispatch(updateUser({ ...user, ...data }));
-			setClanInfo(undefined);
+			setClanInfo(null);
 		} catch (err: any) {
 			showClanError(err.message);
 			return;
@@ -356,7 +355,7 @@ function Clans() {
 			if (!status || status === 400) throw new Error(message);
 			let new_clans = clans?.filter((c) => c._id !== clanInfo?._id) ?? [];
 
-			setClanInfo(undefined);
+			setClanInfo(null);
 			setClans([...new_clans, data[0]]);
 			dispatch(updateUser({ ...user, ...data[1] }));
 
