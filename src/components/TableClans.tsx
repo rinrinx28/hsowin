@@ -9,6 +9,7 @@ export default function TableClans() {
 	const clansRank = useAppSelector((state) => state.clanRanks);
 	const eventConfig = useAppSelector((state) => state.eventConfig);
 	const [limited, setLimited] = useState(5);
+	const [prizes, setPrizes] = useState<any | null>(null);
 	const dispatch = useAppDispatch();
 	useEffect(() => {
 		let loop_up_rank = setInterval(async () => {
@@ -27,7 +28,9 @@ export default function TableClans() {
 			let limited_clans_members = eventConfig.find(
 				(e) => e.name === 'e-clans-limit-members',
 			);
+			let prize_clans = eventConfig.find((e) => e.name === 'e-clans-prizes');
 			setLimited(limited_clans_members?.value ?? 5);
+			setPrizes(JSON.parse(prize_clans?.option ?? '[]'));
 		}
 	}, [eventConfig]);
 
@@ -62,7 +65,9 @@ export default function TableClans() {
 										<td className="border border-current">
 											{member}/{limited}
 										</td>
-										<td className="border border-current">Đang Cập Nhật</td>
+										<td className="border border-current">
+											{`${prizes[i]} thỏi vàng` ?? 'Có cái nịch'}
+										</td>
 									</tr>
 								);
 							})}
