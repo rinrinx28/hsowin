@@ -23,6 +23,7 @@ export default function ChatBox() {
 	const [channel, setChannel] = useState<Array<any>>();
 	const [channelClan, setChannelClan] = useState<Array<any>>();
 	const [chat, setChat] = useState<ChatBox | any>(null);
+	const [chatClan, setChatClan] = useState<ChatBox | any>(null);
 	const socket = useSocket();
 	const chatEndRef = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
@@ -46,7 +47,7 @@ export default function ChatBox() {
 			}
 			return;
 		}
-		if (!JSON.parse(user.clan ?? '{}').clanId) {
+		if (!JSON.parse(user.clan ?? '{}').clanId && type === 'clan') {
 			const modal = document.getElementById(
 				'error_chat_clan',
 			) as HTMLDialogElement | null;
@@ -62,7 +63,7 @@ export default function ChatBox() {
 			) as HTMLInputElement;
 			inputE.value = '';
 		} else {
-			socket.emit('message-clan', chat);
+			socket.emit('message-clan', chatClan);
 			let inputE = document.getElementById(
 				'chat-input-id-clan',
 			) as HTMLInputElement;
@@ -347,7 +348,7 @@ export default function ChatBox() {
 							placeholder="Nhập nội dung trò chuyện"
 							defaultValue={chat?.content}
 							onChange={(e) =>
-								setChat((c: ChatBox | any) => ({
+								setChatClan((c: ChatBox | any) => ({
 									...c,
 									content: e.target.value,
 									server: JSON.parse(user?.clan ?? '{}').clanId ?? null,
