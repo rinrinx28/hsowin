@@ -799,7 +799,13 @@ function Clans() {
 						{clanInfo?.ownerId !== user._id &&
 							clanInfo?.members?.find((m) => m._id === user._id) && (
 								<div className="flex item-start w-full">
-									<button className="btn btn-success btn-sm">Trò Chuyện</button>
+									<button
+										onClick={() => {
+											setView('chat-clan');
+										}}
+										className="btn btn-success btn-sm">
+										Trò Chuyện
+									</button>
 									<button
 										onClick={() => {
 											showLeaveClan();
