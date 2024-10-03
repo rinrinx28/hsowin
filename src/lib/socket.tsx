@@ -32,7 +32,7 @@ const urlConfig = {
 	https: 'https://api.hsgame.me',
 };
 
-const socket: Socket = io(urlConfig.dev, {
+const socket: Socket = io(urlConfig.https, {
 	path: '/socket.io/',
 	transports: ['websocket'],
 	secure: true,
