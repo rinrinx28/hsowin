@@ -404,7 +404,7 @@ function Clans() {
 	};
 
 	//TODO ———————————————[Handler Chat Clan]———————————————
-	const handlerChatUser = (type: string) => {
+	const handlerChatUser = () => {
 		if (!user?.isLogin) {
 			const modal = document.getElementById(
 				'auth_chat',
@@ -432,19 +432,11 @@ function Clans() {
 			}
 			return;
 		}
-		if (type === 'user') {
-			socket.emit('message-user', chat);
-			let inputE = document.getElementById(
-				'chat-input-id-user',
-			) as HTMLInputElement;
-			inputE.value = '';
-		} else {
-			socket.emit('message-clan', chat);
-			let inputE = document.getElementById(
-				'chat-input-id-clan',
-			) as HTMLInputElement;
-			inputE.value = '';
-		}
+		socket.emit('message-clan', chat);
+		let inputE = document.getElementById(
+			'chat-input-id-clan',
+		) as HTMLInputElement;
+		inputE.value = '';
 		setChat((e: any) => ({ ...e, content: '' }));
 	};
 
@@ -954,7 +946,7 @@ function Clans() {
 									<form
 										onSubmit={(e) => {
 											e.preventDefault();
-											handlerChatUser('clan');
+											handlerChatUser();
 										}}
 										className="flex flex-row w-full py-2 gap-2 items-center">
 										<input
@@ -973,7 +965,7 @@ function Clans() {
 										/>
 										<button
 											type="submit"
-											className="btn  btn-outline">
+											className="btn btn-outline">
 											<Send />
 										</button>
 									</form>
