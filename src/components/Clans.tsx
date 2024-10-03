@@ -31,15 +31,15 @@ function Clans() {
 	const eventConfig = useAppSelector((state) => state.eventConfig);
 	const messageClan = useAppSelector((state) => state.messageClan);
 	const userRanks = useAppSelector((state) => state.userRanks);
-	const [channelClan, setChannelClan] = useState<Array<any>>();
 	const user = useAppSelector((state) => state.user);
+	const [channelClan, setChannelClan] = useState<Array<any>>();
 	const [type, setType] = useState<number[]>();
 	const [price, setPrice] = useState<number[]>();
 	const [clans, setClans] = useState<clanState[]>();
 	const [filter, setFilter] = useState<string>();
 	const [info, setInfo] = useState<Info>();
 	const [limit, setLimit] = useState<number>();
-	const [clanInfo, setClanInfo] = useState<clanState>();
+	const [clanInfo, setClanInfo] = useState<clanState | null>(null);
 	const [view, setView] = useState<View>('members');
 	const [penning, setPenning] = useState<userState[]>();
 	const [dataPen, setDataPen] = useState<any[]>();
@@ -392,10 +392,10 @@ function Clans() {
 	};
 
 	//TODO ———————————————[Handler Get Info Target Clan]———————————————
-	const handlerGetInfoClanTarget = async (id: string, data: any) => {
+	const handlerGetInfoClanTarget = async (id: string) => {
 		try {
 			const res = await apiClient.get(`/user/clans/info/${id}`);
-			setClanInfo({ ...data, members: res.data });
+			setClanInfo(res.data);
 			closeClansInfo();
 			showUserClan();
 		} catch (err: any) {
@@ -462,21 +462,20 @@ function Clans() {
 	}, [eventConfig]);
 
 	useEffect(() => {
-		const getTargetMyClan = async (id: string, data: any) => {
+		const getTargetMyClan = async (id: string) => {
 			const res = await apiClient.get(`/user/clans/info/${id}`);
-			setClanInfo({ ...data, members: res.data });
+			setClanInfo(res.data);
 		};
-		if (user.isLogin && clans) {
+		if (user.isLogin) {
 			let clan = JSON.parse(user.clan ?? '');
 			if ('clanId' in clan) {
 				setMyClan(clan['clanId']);
-				let clantarget = clans?.find((c) => c._id === clan['clanId']);
-				getTargetMyClan(clantarget?._id ?? '', clantarget);
+				getTargetMyClan(clan['clanId'] ?? '');
 			} else {
 				setMyClan(null);
 			}
 		}
-	}, [user, clans]);
+	}, [user]);
 
 	useEffect(() => {
 		if (messageClan && user.isLogin && JSON.parse(user.clan ?? '{}').clanId) {
@@ -493,6 +492,8 @@ function Clans() {
 				new_channel.push(msg);
 			}
 			setChannelClan(new_channel);
+		} else {
+			setChannelClan(undefined);
 		}
 	}, [messageClan, user, dispatch]);
 
@@ -509,13 +510,62 @@ function Clans() {
 		getInfoClans();
 	}, []);
 
+	useEffect(() => {
+		// Update Clan All
+		socket.on('clan-update', (data: clanState) => {
+			setClans((e) => [...(e?.filter((c) => c._id !== data._id) ?? []), data]);
+			if (myClan) {
+				setClanInfo(data);
+			}
+		});
+
+		// Update Clan if acpect penning
+		socket.on(
+			'clan-notice',
+			(data: { uid: string; clanId: string; user: any }) => {
+				if (user.isLogin) {
+					if (data.uid === user._id) {
+						dispatch(updateUser({ ...user, ...data.user }));
+					}
+				}
+			},
+		);
+
+		// Update Clan Kick User
+		socket.on(
+			'clan-kick',
+			(data: { uid: string; clanId: string; user: any }) => {
+				if (user.isLogin) {
+					if (data.uid === user._id) {
+						dispatch(updateUser({ ...user, ...data.user }));
+					}
+				}
+			},
+		);
+
+		// Delete Clan
+		socket.on('clan-delete', (data: string) => {
+			setClans((e) => [...(e?.filter((c) => c._id !== data) ?? [])]);
+			if (myClan) {
+				setClanInfo(null);
+				setMyClan(null);
+				dispatch(updateUser({ ...user, clan: '{}' }));
+			}
+		});
+		return () => {
+			socket.off('clan-update');
+			socket.off('clan-notice');
+			socket.off('clan-kick');
+			socket.off('clan-delete');
+		};
+	}, [socket, user, myClan, dispatch]);
+
 	return (
 		<div className="fixed bottom-5 left-5 flex flex-col items-center justify-center bg-transparent gap-4 z-[1000]">
 			<button
 				onClick={() => {
 					if (myClan) {
-						let clan = clans?.find((c) => c._id === myClan);
-						handlerGetInfoClanTarget(clan?._id ?? '', clan);
+						handlerGetInfoClanTarget(myClan);
 					} else {
 						showClansInfo();
 					}
@@ -557,8 +607,7 @@ function Clans() {
 								{myClan && (
 									<button
 										onClick={() => {
-											let clan = clans?.find((c) => c._id === myClan);
-											handlerGetInfoClanTarget(myClan, clan);
+											handlerGetInfoClanTarget(myClan);
 										}}
 										className="btn btn-success btn-outline">
 										<GiFamilyHouse />
@@ -604,7 +653,7 @@ function Clans() {
 													<div
 														className="avatar border-r-2 border-current cursor-pointer"
 														onClick={() => {
-															handlerGetInfoClanTarget(c._id ?? '', c);
+															handlerGetInfoClanTarget(c._id ?? '');
 														}}>
 														<div className="w-24 rounded-xl">
 															<Image
@@ -881,7 +930,7 @@ function Clans() {
 						{view === 'members' && (
 							<div className="flex flex-col w-full">
 								<p className="w-full text-end">
-									Thành viên {clanInfo?.member}/{limit ?? 10}
+									Thành viên {clanInfo?.members?.length ?? 0}/{limit ?? 10}
 								</p>
 								<hr className="w-full h-[0.2rem] bg-base-300 rounded-lg" />
 							</div>
@@ -1204,7 +1253,7 @@ function MemberClan({
 	const joinedAt = timejoin
 		? moment(`${timejoin}`).format('DD/MM/YYYY - HH:mm:ss')
 		: moment().format('DD/MM/YYYY - HH:mm:ss');
-	const socore = new Intl.NumberFormat('vi').format(user.totalBet ?? 0);
+	const socore = new Intl.NumberFormat('vi').format(user.totalClan ?? 0);
 	const balance_number = new Intl.NumberFormat('vi').format(user.gold ?? 0);
 	const balance = `${balance_number}`
 		.split('')

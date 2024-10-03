@@ -130,6 +130,8 @@ export default function ChatBox() {
 				new_channel.push(msg);
 			}
 			setChannelClan(new_channel);
+		} else {
+			setChannelClan(undefined);
 		}
 	}, [messageClan, user, dispatch]);
 
@@ -143,13 +145,13 @@ export default function ChatBox() {
 			</div>
 			<div
 				role="tablist"
-				className="tabs tabs-bordered w-full text-nowrap">
+				className="tabs tabs-bordered w-full text-nowrap tabs-lg">
 				<input
 					type="radio"
 					name="my_tabs_1"
 					role="tab"
 					className="tab w-full"
-					aria-label={`Server ${userGame}`}
+					aria-label={`🎮 Server ${userGame} 🎮`}
 					defaultChecked
 				/>
 				<div
@@ -266,7 +268,7 @@ export default function ChatBox() {
 					name="my_tabs_1"
 					role="tab"
 					className="tab w-full"
-					aria-label="Bang Hội"
+					aria-label="⚔️ Bang Hội ⚔️"
 				/>
 				<div
 					role="tabpanel"

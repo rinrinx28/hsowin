@@ -35,6 +35,8 @@ export interface userState {
 
 	totalBank?: number;
 
+	totalClan?: number;
+
 	type?: string;
 
 	createdAt?: Date;
