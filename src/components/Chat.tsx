@@ -8,7 +8,7 @@ import { useSocket } from '@/lib/socket';
 import Image from 'next/image';
 import apiClient from '@/lib/apiClient';
 
-interface ChatBox {
+export interface ChatBox {
 	server: string;
 	token: string;
 	content: string;
@@ -142,7 +142,7 @@ export default function ChatBox() {
 					role="tabpanel"
 					className="tab-content w-full p-4 text-wrap">
 					<div
-						className="overflow-auto h-[950px] bg-base-100 rounded-lg"
+						className="overflow-auto h-[950px] bg-base-100 custom-an-border rounded-lg px-2"
 						ref={chatEndRef}>
 						{channel &&
 							channel?.map((msg, i) => {
@@ -257,7 +257,7 @@ export default function ChatBox() {
 					role="tabpanel"
 					className="tab-content w-full p-4 text-wrap">
 					<div
-						className="overflow-auto h-[950px] bg-base-100 rounded-lg"
+						className="overflow-auto h-[950px] bg-base-100 custom-an-border rounded-lg px-2"
 						ref={chatEndRef}>
 						{channelClan &&
 							channelClan?.map((msg, i) => {

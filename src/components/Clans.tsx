@@ -12,6 +12,10 @@ import { updateUser, userState } from '@/lib/redux/features/auth/user';
 import moment from 'moment';
 import { FaUser, FaUsers } from 'react-icons/fa';
 import { HiOutlineLogout } from 'react-icons/hi';
+import Chat from './icons/chat';
+import { ChatBox } from './Chat';
+import Send from './icons/send';
+import { useSocket } from '@/lib/socket';
 
 interface Info {
 	name?: string;
@@ -19,12 +23,15 @@ interface Info {
 	description?: string;
 }
 
-type View = 'members' | 'penning';
+type View = 'members' | 'penning' | 'chat-clan';
 
 type Pening = 'acpect' | 'decline';
 
 function Clans() {
 	const eventConfig = useAppSelector((state) => state.eventConfig);
+	const messageClan = useAppSelector((state) => state.messageClan);
+	const userRanks = useAppSelector((state) => state.userRanks);
+	const [channelClan, setChannelClan] = useState<Array<any>>();
 	const user = useAppSelector((state) => state.user);
 	const [type, setType] = useState<number[]>();
 	const [price, setPrice] = useState<number[]>();
@@ -38,7 +45,9 @@ function Clans() {
 	const [dataPen, setDataPen] = useState<any[]>();
 	const [targetView, setTargetView] = useState<userState>();
 	const [myClan, setMyClan] = useState<string | null>(null);
+	const [chat, setChat] = useState<ChatBox | any>(null);
 	const dispatch = useAppDispatch();
+	const socket = useSocket();
 
 	const [noti, setNote] = useState<string>('');
 
@@ -202,16 +211,6 @@ function Clans() {
 			dispatch(updateUser({ ...user, ...data[1] }));
 			closeCreateClansInfo();
 		} catch (err: any) {}
-	};
-
-	const getInfoClans = async () => {
-		try {
-			const res = await apiClient.get('/user/clans');
-			const data = res.data;
-			setClans(data);
-		} catch (err: any) {
-			console.log(err.message);
-		}
 	};
 
 	//TODO ———————————————[Handler Penning Clans]———————————————
@@ -404,6 +403,51 @@ function Clans() {
 		}
 	};
 
+	//TODO ———————————————[Handler Chat Clan]———————————————
+	const handlerChatUser = (type: string) => {
+		if (!user?.isLogin) {
+			const modal = document.getElementById(
+				'auth_chat',
+			) as HTMLDialogElement | null;
+			if (modal) {
+				modal.showModal();
+			}
+			return;
+		}
+		if (!chat?.content || chat?.content.length < 1) {
+			const modal = document.getElementById(
+				'error_chat',
+			) as HTMLDialogElement | null;
+			if (modal) {
+				modal.showModal();
+			}
+			return;
+		}
+		if (!JSON.parse(user.clan ?? '{}').clanId) {
+			const modal = document.getElementById(
+				'error_chat_clan',
+			) as HTMLDialogElement | null;
+			if (modal) {
+				modal.showModal();
+			}
+			return;
+		}
+		if (type === 'user') {
+			socket.emit('message-user', chat);
+			let inputE = document.getElementById(
+				'chat-input-id-user',
+			) as HTMLInputElement;
+			inputE.value = '';
+		} else {
+			socket.emit('message-clan', chat);
+			let inputE = document.getElementById(
+				'chat-input-id-clan',
+			) as HTMLInputElement;
+			inputE.value = '';
+		}
+		setChat((e: any) => ({ ...e, content: '' }));
+	};
+
 	useEffect(() => {
 		if (eventConfig) {
 			const e_clans_type = eventConfig.find((e) => e.name === 'e-clans-type');
@@ -435,124 +479,162 @@ function Clans() {
 		}
 	}, [user]);
 
+	useEffect(() => {
+		if (messageClan && user.isLogin && JSON.parse(user.clan ?? '{}').clanId) {
+			const main_server = messageClan.filter(
+				(m) => m.server === JSON.parse(user.clan ?? '{}').clanId,
+			);
+
+			let new_main_server = main_server;
+			let new_channel = [];
+			for (const msg of new_main_server) {
+				if (new_channel.length >= 10) {
+					new_channel.shift(); // Removes the oldest message if the array exceeds 10 messages
+				}
+				new_channel.push(msg);
+			}
+			setChannelClan(new_channel);
+		}
+	}, [messageClan, user, dispatch]);
+
+	useEffect(() => {
+		const getInfoClans = async () => {
+			try {
+				const res = await apiClient.get('/user/clans');
+				const data = res.data;
+				setClans(data);
+			} catch (err: any) {
+				console.log(err.message);
+			}
+		};
+		getInfoClans();
+	}, []);
+
 	return (
 		<div className="fixed bottom-5 left-5 flex flex-col items-center justify-center bg-transparent gap-4 z-[1000]">
 			<button
 				onClick={() => {
-					getInfoClans();
-					showClansInfo();
+					if (myClan) {
+						let clan = clans?.find((c) => c._id === myClan);
+						handlerGetInfoClanTarget(clan?._id ?? '', clan);
+					} else {
+						showClansInfo();
+					}
 				}}
 				className="bg-base-200 rounded-full p-4 hover:scale-110 hover:duration-300 drop-shadow-xl flex flex-row items-center justify-center gap-2">
 				<GiMedievalPavilion size={34} />
 				Bang Hội
 			</button>
 			{/* List Clans */}
-			<dialog
-				id="clan-info"
-				className="modal">
-				<div className="modal-box">
-					<form method="dialog">
-						{/* if there is a button in form, it will close the modal */}
-						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-							✕
-						</button>
-					</form>
-					<h3 className="font-bold text-lg">Bang Hội Cái Bang</h3>
-					<div className="py-4 flex flex-col w-full justify-center items-center gap-4">
-						<div className="flex lg:flex-row flex-col gap-2 items-center justify-center">
-							{myClan && (
-								<button
-									onClick={() => {
-										let clan = clans?.find((c) => c._id === myClan);
-										handlerGetInfoClanTarget(myClan, clan);
-									}}
-									className="btn btn-success btn-outline">
-									<GiFamilyHouse />
-									Bang Hội
-								</button>
-							)}
-							{!myClan && (
-								<button
-									onClick={() => {
-										if (!user.isLogin) {
-											showClanError('Xin vui lòng đăng nhập!');
-											return;
-										}
-										showCreatelansInfo();
-									}}
-									className="btn btn-success btn-outline">
-									<GiFamilyHouse />
-									Tạo Hội
-								</button>
-							)}
-							<label className="input input-bordered input-info flex items-center gap-2">
-								<input
-									type="text"
-									className="grow"
-									placeholder="Tìm Hội"
-									defaultValue={filter ?? ''}
-									onChange={(e: any) => {
-										setFilter(e.target.value);
-									}}
-								/>
-								<CiSearch />
-							</label>
-						</div>
-						<div className="flex flex-col w-full items-center max-h-[600px] overflow-auto">
-							{clans &&
-								clans
-									?.filter((c) => c.clanName?.includes(filter ?? ''))
-									.map((c, i) => {
-										return (
-											<div
-												key={c._id}
-												onClick={() => {
-													handlerGetInfoClanTarget(c._id ?? '', c);
-												}}
-												className="flex flex-row w-full gap-2 border border-current p-2 cursor-pointer hover:bg-base-200 hover:duration-300 rounded-md">
-												<div className="avatar border-r-2 border-current">
-													<div className="w-24 rounded-xl">
-														<Image
-															alt={`${i}-b${c.typeClan}-logo`}
-															src={`image/banghoi/b${c.typeClan}.gif`}
-															width={52}
-															height={24}
-														/>
-													</div>
-												</div>
-												<div className="w-full flex flex-col items-center justify-start p-2">
-													<div className="flex flex-row w-full justify-between items-center">
-														<p className="font-semibold">{c.clanName}</p>
-														<p>
-															({c.member}/{limit ?? 10})
-														</p>
-													</div>
-													<p className="text-info text-sm text-start w-full">
-														{c?.descriptions ?? 'Hí Anh Em ơi!'}
-													</p>
-													{!myClan && (
-														<div className="flex flex-row">
-															<button
-																onClick={() => {
-																	if (!user.isLogin) {
-																		showClanError('Xin vui lòng đăng nhập!');
-																		return;
-																	}
-																	handlerJoinClan(c._id);
-																}}
-																className="btn btn-success btn-sm">
-																Xin gia nhập
-															</button>
+			{!myClan && (
+				<dialog
+					id="clan-info"
+					className="modal">
+					<div className="modal-box">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+								✕
+							</button>
+						</form>
+						<h3 className="font-bold text-lg">Bang Hội Cái Bang</h3>
+						<div className="py-4 flex flex-col w-full justify-center items-center gap-4">
+							<div className="flex lg:flex-row flex-col gap-2 items-center justify-center">
+								{myClan && (
+									<button
+										onClick={() => {
+											let clan = clans?.find((c) => c._id === myClan);
+											handlerGetInfoClanTarget(myClan, clan);
+										}}
+										className="btn btn-success btn-outline">
+										<GiFamilyHouse />
+										Bang Hội
+									</button>
+								)}
+								{!myClan && (
+									<button
+										onClick={() => {
+											if (!user.isLogin) {
+												showClanError('Xin vui lòng đăng nhập!');
+												return;
+											}
+											showCreatelansInfo();
+										}}
+										className="btn btn-success btn-outline">
+										<GiFamilyHouse />
+										Tạo Hội
+									</button>
+								)}
+								<label className="input input-bordered input-info flex items-center gap-2">
+									<input
+										type="text"
+										className="grow"
+										placeholder="Tìm Hội"
+										defaultValue={filter ?? ''}
+										onChange={(e: any) => {
+											setFilter(e.target.value);
+										}}
+									/>
+									<CiSearch />
+								</label>
+							</div>
+							<div className="flex flex-col w-full items-center max-h-[600px] overflow-auto">
+								{clans &&
+									clans
+										?.filter((c) => c.clanName?.includes(filter ?? ''))
+										.map((c, i) => {
+											return (
+												<div
+													key={c._id}
+													className="flex flex-row w-full gap-2 border border-current p-2 rounded-md">
+													<div
+														className="avatar border-r-2 border-current cursor-pointer"
+														onClick={() => {
+															handlerGetInfoClanTarget(c._id ?? '', c);
+														}}>
+														<div className="w-24 rounded-xl">
+															<Image
+																alt={`${i}-b${c.typeClan}-logo`}
+																src={`image/banghoi/b${c.typeClan}.gif`}
+																width={52}
+																height={24}
+															/>
 														</div>
-													)}
+													</div>
+													<div className="w-full flex flex-col items-center justify-start p-2">
+														<div className="flex flex-row w-full justify-between items-center">
+															<p className="font-semibold">{c.clanName}</p>
+															<p>
+																({c.member}/{limit ?? 10})
+															</p>
+														</div>
+														<p className="text-info text-sm text-start w-full">
+															{c?.descriptions ?? 'Hí Anh Em ơi!'}
+														</p>
+														{!myClan && (
+															<div className="flex flex-row">
+																<button
+																	onClick={() => {
+																		if (!user.isLogin) {
+																			showClanError('Xin vui lòng đăng nhập!');
+																			return;
+																		}
+																		handlerJoinClan(c._id);
+																	}}
+																	className="btn btn-success btn-sm">
+																	Xin gia nhập
+																</button>
+															</div>
+														)}
+													</div>
 												</div>
-											</div>
-										);
-									})}
+											);
+										})}
+							</div>
 						</div>
 					</div>
-				</div>
-			</dialog>
+				</dialog>
+			)}
 			{/* Create Clans */}
 			<dialog
 				id="clan-create"
@@ -673,7 +755,7 @@ function Clans() {
 			<dialog
 				id="clan-info-user"
 				className="modal">
-				<div className="modal-box">
+				<div className="modal-box sm:w-11/12 sm:max-w-3xl">
 					<form method="dialog">
 						{/* if there is a button in form, it will close the modal */}
 						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -689,16 +771,24 @@ function Clans() {
 										onClick={() => {
 											setView('members');
 										}}
-										className="btn btn-success btn-outline">
+										className="btn btn-success btn-outline btn-sm">
 										<FaUsers />
 										Thành viên
+									</button>
+									<button
+										onClick={() => {
+											setView('chat-clan');
+										}}
+										className="btn btn-success btn-outline btn-sm">
+										<Chat />
+										Trò Chuyện
 									</button>
 									<button
 										onClick={() => {
 											setView('penning');
 											handlerGetPeningClans(clanInfo?._id ?? '');
 										}}
-										className="btn btn-success btn-outline">
+										className="btn btn-success btn-outline btn-sm">
 										<GiFamilyHouse />
 										Đơn Gia Nhập
 									</button>
@@ -706,7 +796,7 @@ function Clans() {
 										onClick={() => {
 											showDeleteClan();
 										}}
-										className="btn btn-error btn-outline">
+										className="btn btn-error btn-outline btn-sm">
 										<HiOutlineLogout />
 										Xoá Bang Hội
 									</button>
@@ -716,11 +806,12 @@ function Clans() {
 						{clanInfo?.ownerId !== user._id &&
 							clanInfo?.members?.find((m) => m._id === user._id) && (
 								<div className="flex item-start w-full">
+									<button className="btn btn-success btn-sm">Trò Chuyện</button>
 									<button
 										onClick={() => {
 											showLeaveClan();
 										}}
-										className="btn btn-error btn-outline">
+										className="btn btn-error btn-outline btn-sm">
 										<HiOutlineLogout />
 										Rời Bang Hội
 									</button>
@@ -749,6 +840,7 @@ function Clans() {
 								<hr className="w-full h-[0.2rem] bg-base-300 rounded-lg" />
 							</div>
 						)}
+
 						<div className="flex flex-col w-full items-center justify-start max-h-[600px] overflow-auto gap-2">
 							{view === 'members' &&
 								clanInfo &&
@@ -775,6 +867,118 @@ function Clans() {
 										/>
 									);
 								})}
+							{view === 'chat-clan' && (
+								<>
+									<div className="overflow-auto h-[350px] bg-base-100 rounded-lg custom-an-border w-full">
+										{channelClan &&
+											channelClan?.map((msg, i) => {
+												const { uid, content, username } = msg;
+												const avatarUrl = msg?.meta
+													? JSON.parse(msg.meta)?.avatar
+													: null;
+												const vip = msg?.meta ? JSON.parse(msg?.meta)?.vip : 0;
+												return (
+													<div
+														className={`chat ${
+															uid === user?._id ? 'chat-end' : 'chat-start'
+														}`}
+														key={`${i}-msg-log`}>
+														{uid === '' ? (
+															<div className="chat-image avatar">
+																<div className="avatar online  placeholder">
+																	<div
+																		className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
+																		style={{
+																			backgroundImage: `url("/image/avatar/Arcade_Miss_Fortune_profileicon.webp")`,
+																		}}></div>
+																</div>
+															</div>
+														) : (
+															<div className="chat-image avatar">
+																<div className="avatar online placeholder">
+																	<div
+																		className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
+																		style={{
+																			backgroundImage: avatarUrl
+																				? `url("/image/avatar/${avatarUrl}.webp")`
+																				: 'none',
+																		}}></div>
+																</div>
+															</div>
+														)}
+														<div className="chat-header">
+															<div
+																className={`flex ${
+																	uid === user?._id
+																		? 'flex-row-reverse'
+																		: 'flex-row'
+																} gap-2 items-center`}>
+																{uid === user?._id
+																	? 'Bạn'
+																	: username ?? 'Hệ Thống'}
+																{vip > 0 && (
+																	<p className="fire font-extrabold text-red-500">
+																		VIP {vip}
+																	</p>
+																)}
+																{userRanks &&
+																	userRanks.map((u, index) => {
+																		if (uid === u._id) {
+																			return (
+																				<div
+																					key={`${u._id}-chat-header-rank`}
+																					className="tooltip"
+																					data-tip={`Khứa này top ${
+																						index + 1
+																					}`}>
+																					<Image
+																						src={`/image/rank/${index + 1}.png`}
+																						width={32}
+																						height={32}
+																						alt={`${index + 1}_user_rank_image`}
+																						priority={true}
+																					/>
+																				</div>
+																			);
+																		}
+																	})}
+															</div>
+														</div>
+														<div className="chat-bubble text-sm chat-bubble-primary">
+															{content}
+														</div>
+													</div>
+												);
+											})}
+									</div>
+									<form
+										onSubmit={(e) => {
+											e.preventDefault();
+											handlerChatUser('clan');
+										}}
+										className="flex flex-row w-full py-2 gap-2 items-center">
+										<input
+											id="chat-input-id-clan"
+											type="text"
+											className="grow w-full input input-bordered text-wrap"
+											placeholder="Nhập nội dung trò chuyện"
+											defaultValue={chat?.content}
+											onChange={(e) =>
+												setChat((c: ChatBox | any) => ({
+													...c,
+													content: e.target.value,
+													server: JSON.parse(user?.clan ?? '{}').clanId ?? null,
+												}))
+											}
+										/>
+										<button
+											type="submit"
+											className="btn  btn-outline">
+											<Send />
+										</button>
+									</form>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
@@ -954,17 +1158,17 @@ function MemberClan({
 		}
 	};
 	return (
-		<div
-			className="flex flex-row w-full gap-2 items-center p-2 rounded-xl"
-			onClick={() => {
-				if (isOwverView) {
-					if (func) {
-						func(user._id);
-					}
-				}
-			}}>
+		<div className="flex flex-row w-full gap-2 items-center p-2 rounded-xl">
 			{/* Avatar */}
-			<div className="avatar">
+			<div
+				className="avatar cursor-pointer"
+				onClick={() => {
+					if (isOwverView) {
+						if (func) {
+							func(user._id);
+						}
+					}
+				}}>
 				<div className="w-14 rounded-xl bg-current">
 					{user.avatar && user.avatar?.length > 2 && (
 						<Image
@@ -993,7 +1197,14 @@ function MemberClan({
 							</div>
 						)}
 					</div>
-					<p>Số dư: {balance.length <= 3 ? '***' : balance}</p>
+					<p>
+						Số dư:{' '}
+						{balance.length <= 3
+							? '***'
+							: balance.length > 6
+							? '***' + balance.slice(-3)
+							: balance}
+					</p>
 				</div>
 				{/* Info clans */}
 				{!isPening && (

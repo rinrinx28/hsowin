@@ -36,8 +36,8 @@ export default function TableClans() {
 			<div className="border-current border rounded-box grid h-20 place-items-center">
 				Bang Hội Cái Bang
 			</div>
-			<div className="overflow-auto max-h-[600px] w-full">
-				<table className="table border border-current table-lg table-pin-rows table-pin-cols">
+			<div className="overflow-auto max-h-[600px] w-full custom-an-border">
+				<table className="table  table-lg table-pin-rows table-pin-cols">
 					{/* head */}
 					<thead className="text-sm text-center">
 						<tr>

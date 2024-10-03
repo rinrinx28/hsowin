@@ -138,7 +138,14 @@ export default function StoreProvider({
 				});
 				const { status, message } = res.data;
 				if (status && status === 400) throw new Error(message);
-				storeRef.current?.dispatch(updateMsgAllClan(res.data));
+				storeRef.current?.dispatch(
+					updateMsgAllClan(
+						res.data.sort(
+							(a: any, b: any) =>
+								moment(a.createdAt).unix() - moment(b.createdAt).unix(),
+						),
+					),
+				);
 			} catch (err: any) {
 				console.log(err);
 			}
