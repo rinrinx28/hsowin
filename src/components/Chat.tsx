@@ -38,14 +38,26 @@ export default function ChatBox() {
 			}
 			return;
 		}
-		if (!chat?.content || chat?.content.length < 1) {
-			const modal = document.getElementById(
-				'error_chat',
-			) as HTMLDialogElement | null;
-			if (modal) {
-				modal.showModal();
+		if (type === 'user') {
+			if (!chat?.content || chat?.content.length < 1) {
+				const modal = document.getElementById(
+					'error_chat',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					modal.showModal();
+				}
+				return;
 			}
-			return;
+		} else {
+			if (!chatClan?.content || chatClan?.content.length < 1) {
+				const modal = document.getElementById(
+					'error_chat',
+				) as HTMLDialogElement | null;
+				if (modal) {
+					modal.showModal();
+				}
+				return;
+			}
 		}
 		if (!JSON.parse(user.clan ?? '{}').clanId && type === 'clan') {
 			const modal = document.getElementById(
