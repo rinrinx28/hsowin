@@ -82,6 +82,7 @@ export default function ChatBox() {
 			inputE.value = '';
 		}
 		setChat((e: any) => ({ ...e, content: '' }));
+		setChatClan((e: any) => ({ ...e, content: '' }));
 	};
 
 	useEffect(() => {
@@ -249,6 +250,7 @@ export default function ChatBox() {
 									...c,
 									content: e.target.value,
 									server: userGame,
+									token: user.token,
 								}))
 							}
 						/>
@@ -364,6 +366,7 @@ export default function ChatBox() {
 									...c,
 									content: e.target.value,
 									server: JSON.parse(user?.clan ?? '{}').clanId ?? null,
+									token: user.token,
 								}))
 							}
 						/>

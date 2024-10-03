@@ -434,10 +434,11 @@ function Clans() {
 		}
 		socket.emit('message-clan', chat);
 		let inputE = document.getElementById(
-			'chat-input-id-clan',
+			'chat-input-id-clan-pops',
 		) as HTMLInputElement;
 		inputE.value = '';
 		setChat((e: any) => ({ ...e, content: '' }));
+		return;
 	};
 
 	useEffect(() => {
@@ -950,7 +951,7 @@ function Clans() {
 										}}
 										className="flex flex-row w-full py-2 gap-2 items-center">
 										<input
-											id="chat-input-id-clan"
+											id="chat-input-id-clan-pops"
 											type="text"
 											className="grow w-full input input-bordered text-wrap"
 											placeholder="Nhập nội dung trò chuyện"
@@ -960,6 +961,7 @@ function Clans() {
 													...c,
 													content: e.target.value,
 													server: JSON.parse(user?.clan ?? '{}').clanId ?? null,
+													token: user.token,
 												}))
 											}
 										/>
