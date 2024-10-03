@@ -801,6 +801,14 @@ function Clans() {
 								<div className="flex item-start w-full">
 									<button
 										onClick={() => {
+											setView('members');
+										}}
+										className="btn btn-success btn-outline btn-sm">
+										<FaUsers />
+										Thành viên
+									</button>
+									<button
+										onClick={() => {
 											setView('chat-clan');
 										}}
 										className="btn btn-success btn-sm">
