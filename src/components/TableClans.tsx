@@ -55,6 +55,7 @@ export default function TableClans() {
 						{clansRank &&
 							clansRank.map((c, i) => {
 								const { clanName, member, totalBet } = c;
+								const prize = prizes ? prizes[i] : 0;
 								return (
 									<tr
 										key={c._id}
@@ -66,7 +67,7 @@ export default function TableClans() {
 											{member}/{limited}
 										</td>
 										<td className="border border-current">
-											{`${prizes[i]} thỏi vàng` ?? 'Có cái nịch'}
+											{`${prize} thỏi vàng`}
 										</td>
 									</tr>
 								);
