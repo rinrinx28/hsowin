@@ -55,7 +55,7 @@ export default function TableClans() {
 						{clansRank &&
 							clansRank.map((c, i) => {
 								const { clanName, member, totalBet } = c;
-								const prize = prizes ? prizes[i] : 0;
+								const prize = i > prizes.length - 1 ? 0 : prizes[i];
 								return (
 									<tr
 										key={c._id}
