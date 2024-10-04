@@ -20,6 +20,7 @@ export default function ChatBox() {
 	const userGame = useAppSelector((state) => state.userGame);
 	const userRanks = useAppSelector((state) => state.userRanks);
 	const messageClan = useAppSelector((state) => state.messageClan);
+	const clans = useAppSelector((state) => state.listClans);
 	const [channel, setChannel] = useState<Array<any>>();
 	const [channelClan, setChannelClan] = useState<Array<any>>();
 	const [chat, setChat] = useState<ChatBox | any>(null);
@@ -167,6 +168,7 @@ export default function ChatBox() {
 									? JSON.parse(msg.meta)?.avatar
 									: null;
 								const vip = msg?.meta ? JSON.parse(msg?.meta)?.vip : 0;
+								const myClan = msg?.meta ? JSON.parse(msg?.meta).clanId : null;
 								return (
 									<div
 										className={`chat ${
@@ -207,6 +209,26 @@ export default function ChatBox() {
 														VIP {vip}
 													</p>
 												)}
+												{myClan &&
+													clans &&
+													clans.map((c) => {
+														if (myClan === c._id) {
+															return (
+																<div
+																	className="tooltip"
+																	key={`${c._id}-chat-header-clans-${uid}-${i}`}
+																	data-tip={`${c.clanName}`}>
+																	<Image
+																		src={`/image/banghoi/b${c.typeClan}.gif`}
+																		width={32}
+																		height={32}
+																		alt={`${c._id}-chat-header-clans-${uid}-${i}`}
+																		priority={true}
+																	/>
+																</div>
+															);
+														}
+													})}
 												{userRanks &&
 													userRanks.map((u, index) => {
 														if (uid === u._id) {

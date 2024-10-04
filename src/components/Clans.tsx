@@ -15,6 +15,9 @@ import Chat from './icons/chat';
 import { ChatBox } from './Chat';
 import Send from './icons/send';
 import { useSocket } from '@/lib/socket';
+import { MdOutlineEdit } from 'react-icons/md';
+import { RxAvatar } from 'react-icons/rx';
+import { updatelistClans } from '@/lib/redux/features/logs/listClans';
 
 interface Info {
 	name?: string;
@@ -22,7 +25,12 @@ interface Info {
 	description?: string;
 }
 
-type View = 'members' | 'penning' | 'chat-clan';
+type View =
+	| 'members'
+	| 'penning'
+	| 'chat-clan'
+	| 'change-description'
+	| 'change-type';
 
 type Pening = 'acpect' | 'decline';
 
@@ -30,11 +38,11 @@ function Clans() {
 	const eventConfig = useAppSelector((state) => state.eventConfig);
 	const messageClan = useAppSelector((state) => state.messageClan);
 	const userRanks = useAppSelector((state) => state.userRanks);
+	const clans = useAppSelector((state) => state.listClans);
 	const user = useAppSelector((state) => state.user);
 	const [channelClan, setChannelClan] = useState<Array<any>>();
 	const [type, setType] = useState<number[]>();
 	const [price, setPrice] = useState<number[]>();
-	const [clans, setClans] = useState<clanState[]>();
 	const [filter, setFilter] = useState<string>();
 	const [info, setInfo] = useState<Info>();
 	const [limit, setLimit] = useState<number>();
@@ -45,6 +53,8 @@ function Clans() {
 	const [targetView, setTargetView] = useState<userState>();
 	const [myClan, setMyClan] = useState<string | null>(null);
 	const [chat, setChat] = useState<ChatBox | any>(null);
+	const [changeType, setChangeType] = useState<number | null>(null);
+	const [changeDes, setChangeDes] = useState<string | null>(null);
 	const dispatch = useAppDispatch();
 	const socket = useSocket();
 
@@ -206,7 +216,7 @@ function Clans() {
 			// Update new clans list;
 			let new_clans_list = clans?.filter((c) => c._id !== clan._id);
 
-			setClans([...(new_clans_list ?? []), clan]);
+			dispatch(updatelistClans([...(new_clans_list ?? []), clan]));
 			dispatch(updateUser({ ...user, ...data[1] }));
 			closeCreateClansInfo();
 		} catch (err: any) {}
@@ -266,7 +276,7 @@ function Clans() {
 
 				// func update state;
 				setClanInfo(new_clans_info);
-				setClans([...(new_clans_list ?? []), data[0]]);
+				dispatch(updatelistClans([...(new_clans_list ?? []), data[0]]));
 			}
 			setPenning(new_penning);
 			setDataPen(new_data_pen);
@@ -300,7 +310,7 @@ function Clans() {
 
 			if (!status || status === 400) throw new Error(message);
 			let new_clans = clans?.filter((c) => c._id !== clanInfo?._id);
-			setClans(new_clans);
+			dispatch(updatelistClans(new_clans));
 			closeDeleteClan();
 			closeUserClan();
 			dispatch(updateUser({ ...user, ...data }));
@@ -329,7 +339,7 @@ function Clans() {
 			if (!status || status === 400) throw new Error(message);
 			closeClanOwnerView();
 			let new_clans = clans?.filter((c) => c._id !== data._id) ?? [];
-			setClans([...new_clans, data]);
+			dispatch(updatelistClans([...new_clans, data]));
 		} catch (err: any) {
 			showClanError(err.message);
 			return;
@@ -356,7 +366,7 @@ function Clans() {
 			let new_clans = clans?.filter((c) => c._id !== clanInfo?._id) ?? [];
 
 			setClanInfo(null);
-			setClans([...new_clans, data[0]]);
+			dispatch(updatelistClans([...new_clans, data[0]]));
 			dispatch(updateUser({ ...user, ...data[1] }));
 
 			// Close Dialog
@@ -440,6 +450,39 @@ function Clans() {
 		return;
 	};
 
+	//TODO ———————————————[Handler Update Clan]———————————————
+	const handlerUpdateClan = async (type: 'des' | 'type') => {
+		try {
+			const res = await apiClient.post(
+				'/user/clans/update',
+				{
+					type,
+					clanId: myClan,
+					data: type === 'des' ? changeDes : changeType,
+				},
+				{
+					headers: {
+						Authorization: 'Bearer ' + user.token,
+					},
+				},
+			);
+			const { status, message }: { status?: number; message?: string } =
+				res.data;
+			if (status && status === 400) throw new Error(message);
+			if (res.data.clan && res.data.clan._id === myClan) {
+				setClanInfo((e) => ({ ...e, ...res.data.clan }));
+			}
+			if (res.data.user !== null && res.data.user._id === user._id) {
+				dispatch(updateUser({ ...user, ...res.data.user }));
+			}
+			setView('members');
+			setChangeDes(null);
+			setChangeType(null);
+		} catch (err: any) {
+			showClanError(err.message);
+		}
+	};
+
 	useEffect(() => {
 		if (eventConfig) {
 			const e_clans_type = eventConfig.find((e) => e.name === 'e-clans-type');
@@ -501,19 +544,24 @@ function Clans() {
 			try {
 				const res = await apiClient.get('/user/clans');
 				const data = res.data;
-				setClans(data);
+				dispatch(updatelistClans(data));
 			} catch (err: any) {
 				console.log(err.message);
 			}
 		};
 		getInfoClans();
-	}, []);
+	}, [dispatch]);
 
 	useEffect(() => {
 		// Update Clan All
 		socket.on('clan-update', (data: clanState) => {
-			setClans((e) => [...(e?.filter((c) => c._id !== data._id) ?? []), data]);
-			if (myClan) {
+			dispatch(
+				updatelistClans([
+					...(clans?.filter((c) => c._id !== data._id) ?? []),
+					data,
+				]),
+			);
+			if (myClan === data._id) {
 				setClanInfo(data);
 			}
 		});
@@ -544,20 +592,23 @@ function Clans() {
 
 		// Delete Clan
 		socket.on('clan-delete', (data: string) => {
-			setClans((e) => [...(e?.filter((c) => c._id !== data) ?? [])]);
-			if (myClan) {
+			dispatch(
+				updatelistClans([...(clans?.filter((c) => c._id !== data) ?? [])]),
+			);
+			if (myClan === data) {
 				setClanInfo(null);
 				setMyClan(null);
 				dispatch(updateUser({ ...user, clan: '{}' }));
 			}
 		});
+
 		return () => {
 			socket.off('clan-update');
 			socket.off('clan-notice');
 			socket.off('clan-kick');
 			socket.off('clan-delete');
 		};
-	}, [socket, user, myClan, dispatch]);
+	}, [socket, user, myClan, clans, dispatch]);
 
 	return (
 		<div className="fixed bottom-5 left-5 flex flex-col items-center justify-center bg-transparent gap-4 z-[1000]">
@@ -565,6 +616,7 @@ function Clans() {
 				onClick={() => {
 					if (myClan) {
 						handlerGetInfoClanTarget(myClan);
+						setView('members');
 					} else {
 						showClansInfo();
 					}
@@ -641,7 +693,7 @@ function Clans() {
 								</label>
 							</div>
 							<div className="flex flex-col w-full items-center max-h-[600px] overflow-auto">
-								{clans &&
+								{clans.length > 0 &&
 									clans
 										?.filter((c) => c.clanName?.includes(filter ?? ''))
 										.map((c, i) => {
@@ -833,11 +885,13 @@ function Clans() {
 						</h3>
 						<h3 className="font-bold text-sm flex flex-col">
 							Rank{' '}
-							{clans &&
+							{clans.length > 0 &&
 								clans
-									?.sort((a: any, b: any) => b.totalBet - a.totalBet)
+									?.slice() // Cloning the array
+									.sort(
+										(a: any, b: any) => (b?.totalBet ?? 1) - (a?.totalBet ?? 0),
+									)
 									.findIndex((c) => c?._id === myClan) + 1}
-							/{clans?.length}
 							<span className="text-xs text-secondary-content">
 								Thành tích: {clanInfo?.totalBet}
 							</span>
@@ -846,7 +900,7 @@ function Clans() {
 					<div className="py-4 flex flex-col w-full justify-center items-center gap-4">
 						{clanInfo?.ownerId === user._id && (
 							<div className="flex flex-row gap-2 item-start w-full">
-								<div className="flex lg:flex-row flex-wrap gap-2 items-center justify-start">
+								<div className="flex flex-wrap gap-2 items-center justify-start">
 									<button
 										onClick={() => {
 											setView('members');
@@ -854,6 +908,22 @@ function Clans() {
 										className="btn btn-success btn-outline btn-sm">
 										<FaUsers />
 										Thành viên
+									</button>
+									<button
+										onClick={() => {
+											setView('change-description');
+										}}
+										className="btn btn-success btn-outline btn-sm">
+										<MdOutlineEdit />
+										Đổi Giới Thiệu
+									</button>
+									<button
+										onClick={() => {
+											setView('change-type');
+										}}
+										className="btn btn-success btn-outline btn-sm">
+										<RxAvatar />
+										Đổi Biểu Tượng
 									</button>
 									<button
 										onClick={() => {
@@ -1073,6 +1143,105 @@ function Clans() {
 										</button>
 									</form>
 								</>
+							)}
+							{view === 'change-description' && (
+								<form
+									onSubmit={(e) => {
+										e.preventDefault();
+										handlerUpdateClan('des');
+									}}
+									className="flex flex-col w-full gap-2">
+									<label className="form-control">
+										<div className="label">
+											<span className="label-text">Giới Thiệu</span>
+										</div>
+										<textarea
+											className="textarea textarea-bordered h-24"
+											placeholder="Giới thiệu"
+											onChange={(e) => setChangeDes(e.target.value)}
+											defaultValue={clanInfo?.descriptions ?? ''}></textarea>
+									</label>
+									<button
+										type="submit"
+										className="btn btn-success btn-sm">
+										Lưu
+									</button>
+								</form>
+							)}
+							{view === 'change-type' && (
+								<form
+									onSubmit={(e) => {
+										e.preventDefault();
+										handlerUpdateClan('type');
+									}}
+									className="flex flex-col w-full gap-4">
+									<label className="form-control w-full">
+										<div className="label">
+											<span className="label-text">Loại Biểu Tượng</span>
+											<div className="label-text-alt">
+												<div className="avatar">
+													<div className="w-8 rounded-xl">
+														<Image
+															alt={`b${
+																changeType ?? clanInfo?.typeClan
+															}-select`}
+															src={`image/banghoi/b${
+																changeType ?? clanInfo?.typeClan
+															}.gif`}
+															width={52}
+															height={24}
+														/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<select
+											onChange={(e: any) => {
+												setChangeType(parseInt(e.target.value, 10));
+											}}
+											className="select select-bordered">
+											<option disabled>Pick one</option>
+											{type &&
+												type.map((t, i) => {
+													return (
+														<option
+															value={`${t}`}
+															selected={`${t}` === `${clanInfo?.typeClan}`}
+															disabled={`${t}` === `${clanInfo?.typeClan}`}
+															key={i}>
+															Loại {t}
+														</option>
+													);
+												})}
+										</select>
+									</label>
+									<label className="form-control w-full">
+										<div className="label">
+											<span className="label-text">Chi Phí tạo hội</span>
+										</div>
+										<div className="input input-bordered flex items-center gap-2">
+											<Gold />
+											<input
+												type="text"
+												className="grow"
+												disabled
+												value={
+													price &&
+													price[
+														(changeType ??
+															parseInt(clanInfo?.typeClan ?? '0')) - 1
+													]
+												}
+											/>
+										</div>
+									</label>
+									<button
+										type="submit"
+										disabled={!changeType}
+										className="btn btn-success btn-sm">
+										Lưu
+									</button>
+								</form>
 							)}
 						</div>
 					</div>

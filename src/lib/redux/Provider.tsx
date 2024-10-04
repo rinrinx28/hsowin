@@ -20,6 +20,7 @@ import { updateHistoryServer } from './features/logs/historyServer';
 import { updateMission } from './features/auth/missionDaily';
 import { updateclansRanks } from './features/rank/clanRanks';
 import { updateMsgAllClan } from './features/logs/messageClan';
+import { updatelistClans } from './features/logs/listClans';
 
 export default function StoreProvider({
 	children,
@@ -37,6 +38,7 @@ export default function StoreProvider({
 		storeRef.current.dispatch(count(0));
 		storeRef.current.dispatch(login({ isLogin: false }));
 		storeRef.current.dispatch(changeTypeGame('CL'));
+		storeRef.current.dispatch(updatelistClans([]));
 	}
 	const router = useRouter();
 

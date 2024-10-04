@@ -16,6 +16,7 @@ import missionDaily from './features/auth/missionDaily';
 import diemDanhStore from './features/logs/diemdanh';
 import clanRanks from './features/rank/clanRanks';
 import messageClan from './features/logs/messageClan';
+import listClans from './features/logs/listClans';
 
 export const makeStore = () => {
 	return configureStore({
@@ -37,6 +38,7 @@ export const makeStore = () => {
 			missionDaily: missionDaily,
 			diemDanhStore: diemDanhStore,
 			messageClan: messageClan,
+			listClans: listClans,
 		},
 	});
 };
