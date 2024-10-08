@@ -15,6 +15,10 @@ import moment from 'moment';
 import { useSocket } from '@/lib/socket';
 import { IoIosStarHalf } from 'react-icons/io';
 import TableClans from '@/components/TableClans';
+import { MdMenuBook } from 'react-icons/md';
+import { IoBookmarksOutline, IoGameController } from 'react-icons/io5';
+import { FaFacebook } from 'react-icons/fa';
+import { AiFillLike } from 'react-icons/ai';
 
 const slogans = [
 	'Mini Game Đỏ Đen Hồi Sinh Ngọc Rồng',
@@ -126,6 +130,7 @@ export default function Home() {
 										tabIndex={0}
 										role="button"
 										className="btn  btn-primary btn-outline rounded-btn">
+										<MdMenuBook />
 										Chức Năng
 									</div>
 									<ul
@@ -169,12 +174,13 @@ export default function Home() {
 								<button
 									onClick={showTutorial}
 									className="btn btn-primary btn-outline rounded-btn">
-									Hướng Dẫn
+									<IoBookmarksOutline /> Hướng Dẫn
 								</button>
 								<Link
 									href={'https://www.facebook.com/groups/hsowin.vip'}
 									target="_blank"
 									className="btn btn-primary btn-outline rounded-btn">
+									<FaFacebook />
 									Group Facebook
 								</Link>
 								<button
@@ -187,6 +193,7 @@ export default function Home() {
 										}
 									}}
 									className="btn btn-primary btn-outline rounded-btn">
+									<AiFillLike />
 									Điểm Danh
 								</button>
 							</div>
@@ -217,28 +224,28 @@ export default function Home() {
 									className={`${
 										userGame === '1' ? 'btn-primary' : 'btn-outline'
 									} btn rounded-btn`}>
-									Map Boss Sv1
+									<IoGameController /> Map Boss Sv1
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('2'))}
 									className={`${
 										userGame === '2' ? 'btn-primary' : 'btn-outline'
 									} btn rounded-btn`}>
-									Map Boss Sv2
+									<IoGameController /> Map Boss Sv2
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('3'))}
 									className={`${
 										userGame === '3' ? 'btn-primary' : 'btn-outline'
 									} btn rounded-btn`}>
-									Map Boss Sv3
+									<IoGameController /> Map Boss Sv3
 								</button>
 								<button
 									onClick={() => dispatch(updateUserGame('24'))}
 									className={`${
 										userGame === '24' ? 'btn-primary' : 'btn-outline'
 									} btn rounded-btn`}>
-									Server 24/24
+									<IoGameController /> Server 24/24
 								</button>
 							</div>
 						</div>

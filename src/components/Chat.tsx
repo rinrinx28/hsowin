@@ -205,7 +205,10 @@ export default function ChatBox() {
 												} gap-2 items-center`}>
 												{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
 												{vip > 0 && (
-													<p className="fire font-extrabold text-red-500">
+													<p
+														className={`fire font-extrabold text-red-500 ${
+															parseInt(vip, 10) > 4 && 'flicker-4'
+														}`}>
 														VIP {vip}
 													</p>
 												)}

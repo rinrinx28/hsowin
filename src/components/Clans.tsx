@@ -785,7 +785,7 @@ function Clans() {
 									{info?.type && (
 										<div className="label-text-alt">
 											<div className="avatar">
-												<div className="w-8 rounded-xl">
+												<div className="w-16 rounded-xl">
 													<Image
 														alt={`b${info.type}-select`}
 														src={`image/banghoi/b${info.type}.gif`}
@@ -905,7 +905,9 @@ function Clans() {
 										onClick={() => {
 											setView('members');
 										}}
-										className="btn btn-success btn-outline btn-sm">
+										className={`btn btn-success btn-outline btn-sm ${
+											view === 'members' && 'btn-active'
+										}`}>
 										<FaUsers />
 										Thành viên
 									</button>
@@ -913,7 +915,9 @@ function Clans() {
 										onClick={() => {
 											setView('change-description');
 										}}
-										className="btn btn-success btn-outline btn-sm">
+										className={`btn btn-success btn-outline btn-sm ${
+											view === 'change-description' && 'btn-active'
+										}`}>
 										<MdOutlineEdit />
 										Đổi Giới Thiệu
 									</button>
@@ -921,7 +925,9 @@ function Clans() {
 										onClick={() => {
 											setView('change-type');
 										}}
-										className="btn btn-success btn-outline btn-sm">
+										className={`btn btn-success btn-outline btn-sm ${
+											view === 'change-type' && 'btn-active'
+										}`}>
 										<RxAvatar />
 										Đổi Biểu Tượng
 									</button>
@@ -929,7 +935,9 @@ function Clans() {
 										onClick={() => {
 											setView('chat-clan');
 										}}
-										className="btn btn-success btn-outline btn-sm">
+										className={`btn btn-success btn-outline btn-sm ${
+											view === 'chat-clan' && 'btn-active'
+										}`}>
 										<Chat />
 										Trò Chuyện
 									</button>
@@ -938,7 +946,9 @@ function Clans() {
 											setView('penning');
 											handlerGetPeningClans(clanInfo?._id ?? '');
 										}}
-										className="btn btn-success btn-outline btn-sm">
+										className={`btn btn-success btn-outline btn-sm ${
+											view === 'penning' && 'btn-active'
+										}`}>
 										<GiFamilyHouse />
 										Đơn Gia Nhập
 									</button>
@@ -960,7 +970,9 @@ function Clans() {
 										onClick={() => {
 											setView('members');
 										}}
-										className="btn btn-success btn-outline btn-sm">
+										className={`btn btn-success btn-outline btn-sm ${
+											view === 'members' && 'btn-active'
+										}`}>
 										<FaUsers />
 										Thành viên
 									</button>
@@ -968,7 +980,9 @@ function Clans() {
 										onClick={() => {
 											setView('chat-clan');
 										}}
-										className="btn btn-success btn-outline btn-sm">
+										className={`btn btn-success btn-outline btn-sm ${
+											view === 'chat-clan' && 'btn-active'
+										}`}>
 										Trò Chuyện
 									</button>
 									<button

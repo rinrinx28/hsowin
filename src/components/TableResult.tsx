@@ -7,6 +7,12 @@ import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 import { TranslateKey } from '@/lib/unit/translateKey';
 import { useSocket } from '@/lib/socket';
 import { updateUser } from '@/lib/redux/features/auth/user';
+import { IoGameController } from 'react-icons/io5';
+import Gold from './icons/gold';
+import Ligh from './icons/ligh';
+import Clock from './icons/clock';
+import { HiOutlineCursorArrowRays } from 'react-icons/hi2';
+import { RiAwardFill } from 'react-icons/ri';
 
 export default function TableResult() {
 	const socket = useSocket();
@@ -126,23 +132,75 @@ export default function TableResult() {
 
 	return (
 		<div className="lg:flex lg:flex-col grid gap-2 w-full">
-			<div className="border-current border rounded-box grid h-20 place-items-center">
-				Lịch Sử Kết Quả
+			<div className="border-current border rounded-box grid h-20 place-items-center bg-primary font-semibold ">
+				<div className="flex flex-row items-center justify-center gap-2">
+					<RiAwardFill size={34} /> Lịch Sử Kết Quả <RiAwardFill size={34} />
+				</div>
 			</div>
 			<div className="overflow-auto border border-current max-h-[600px] w-full">
 				<table className="table table-lg table-pin-rows table-pin-cols">
 					{/* head */}
 					<thead className="text-sm  text-center">
 						<tr>
-							<th className="border border-current">Server</th>
-							<th className="border border-current">Nhân Vật</th>
-							<th className="border border-current">Gold Cược</th>
-							<th className="border border-current">Dự Đoán</th>
-							<th className="border border-current">Kết Quả</th>
-							<th className="border border-current">Gold Nhận</th>
-							<th className="border border-current">Tình Trạng</th>
-							<th className="border border-current">Thời gian</th>
-							<th className="border border-current">Thao Tác</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <IoGameController /> Server */}
+								</div>
+							</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 16 16"
+										fill="currentColor"
+										className="h-4 w-4 opacity-70">
+										<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+									</svg> */}
+									Nhân Vật
+								</div>
+							</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <Gold className="" /> */}
+									Gold Cược
+								</div>
+							</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <Ligh /> */}
+									Dự Đoán
+								</div>
+							</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <Clock /> */}
+									Kết Quả
+								</div>
+							</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <Gold className="" /> */}
+									Gold Nhận
+								</div>
+							</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <Clock /> */}
+									Tình Trạng
+								</div>
+							</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <Clock /> */}
+									Thời gian
+								</div>
+							</th>
+							<th className="border border-current">
+								<div className="flex flex-row items-center justify-center gap-2">
+									{/* <HiOutlineCursorArrowRays /> */}
+									Thao Tác
+								</div>
+							</th>
 						</tr>
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
