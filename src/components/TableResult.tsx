@@ -14,12 +14,20 @@ import Clock from './icons/clock';
 import { HiOutlineCursorArrowRays } from 'react-icons/hi2';
 import { RiAwardFill } from 'react-icons/ri';
 
+interface FiellCanCel {
+	uid?: string;
+	betId?: string;
+	userBetId?: string;
+	server?: string;
+}
+
 export default function TableResult() {
 	const socket = useSocket();
 	const userGame = useAppSelector((state) => state.userGame);
 	const userBetLog = useAppSelector((state) => state.userBetLog);
 	const user = useAppSelector((state) => state.user);
 	const [showType, setShow] = useState<string>('all');
+	const [fieldCancel, setFieldCancel] = useState<FiellCanCel>({});
 	const dispatch = useAppDispatch();
 	const [msg, setMsg] = useState('');
 	const [row, setRow] = useState(10);
@@ -41,15 +49,11 @@ export default function TableResult() {
 		}
 	};
 
-	const handleCancelUserBet = (
-		uid: any,
-		betId: any,
-		userBetId: any,
-		server: string,
-	) => {
+	const handleCancelUserBet = (payload: FiellCanCel) => {
+		const { betId, uid, userBetId, server } = payload;
 		if (uid !== user?._id) return;
 		if (!uid || !betId || !userBetId) return;
-		if (['1', '2', '3'].includes(server)) {
+		if (['1', '2', '3'].includes(server ?? '')) {
 			socket.emit('bet-user-del-boss', { uid, betId, userBetId });
 		} else {
 			socket.emit('bet-user-del-sv', { uid, betId, userBetId });
@@ -281,40 +285,17 @@ export default function TableResult() {
 												<>
 													<button
 														className="btn btn-error btn-sm"
-														onClick={() => showDialogCancelUserBet(uid)}>
+														onClick={() => {
+															showDialogCancelUserBet(uid);
+															setFieldCancel({
+																betId: betId,
+																uid: uid,
+																server,
+																userBetId: _id,
+															});
+														}}>
 														Hủy
 													</button>
-													<dialog
-														id="error_bet_2"
-														className="modal">
-														<div className="modal-box">
-															<h3 className="font-bold text-lg">
-																Thông Báo Người Chơi
-															</h3>
-															<p className="py-4">
-																Bạn có muốn hủy ván cược này hay không?
-															</p>
-															<div className="modal-action">
-																<form
-																	method="dialog"
-																	className="flex flex-row gap-2">
-																	<button
-																		className="btn"
-																		onClick={() =>
-																			handleCancelUserBet(
-																				uid,
-																				betId,
-																				_id,
-																				server,
-																			)
-																		}>
-																		Có
-																	</button>
-																	<button className="btn">Không</button>
-																</form>
-															</div>
-														</div>
-													</dialog>
 												</>
 											) : (
 												''
@@ -375,6 +356,30 @@ export default function TableResult() {
 						<form method="dialog">
 							{/* if there is a button in form, it will close the modal */}
 							<button className="btn">Đóng</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="error_bet_2"
+				className="modal">
+				<div className="modal-box">
+					<h3 className="font-bold text-lg">Thông Báo Người Chơi</h3>
+					<p className="py-4">Bạn có muốn hủy ván cược này hay không?</p>
+					<div className="modal-action">
+						<form
+							method="dialog"
+							className="flex flex-row gap-2">
+							<button
+								className="btn"
+								onClick={() => handleCancelUserBet(fieldCancel)}>
+								Có
+							</button>
+							<button
+								onClick={() => setFieldCancel({})}
+								className="btn">
+								Không
+							</button>
 						</form>
 					</div>
 				</div>
