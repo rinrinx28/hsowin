@@ -17,7 +17,7 @@ import { IoIosStarHalf } from 'react-icons/io';
 import TableClans from '@/components/TableClans';
 import { MdMenuBook } from 'react-icons/md';
 import { IoBookmarksOutline, IoGameController } from 'react-icons/io5';
-import { FaFacebook } from 'react-icons/fa';
+import { FaFacebook, FaMusic } from 'react-icons/fa';
 import { AiFillLike } from 'react-icons/ai';
 
 const slogans = [
@@ -40,6 +40,9 @@ export default function Home() {
 	const [mem, setMem] = useState(0);
 	const [prize, setPrize] = useState(0);
 	const [text, setText] = useState<any>(null);
+	const [link, setLink] = useState<string | null>(null);
+	const [isShow, setShow] = useState<boolean>(false);
+
 	const socket = useSocket();
 
 	const showTutorial = () => {
@@ -102,6 +105,11 @@ export default function Home() {
 
 			const e_banner_text = evenConfig?.find((e) => e.name === 'e-banner-text');
 			setText(e_banner_text);
+
+			const e_ybt = evenConfig?.find((e) => e.name === 'e-ybt');
+			const id = e_ybt?.option ?? '';
+			let url_ytb = `https://www.youtube.com/embed/${id}`;
+			setLink(url_ytb);
 		}
 	}, [evenConfig]);
 
@@ -276,6 +284,26 @@ export default function Home() {
 					<Minigame />
 					<BetMinigame />
 					<ChatBox />
+				</div>
+			</div>
+			<div className="flex flex-col items-center p-2 w-full justify-center gap-4">
+				<button
+					onClick={() => setShow((e) => !e)}
+					className="btn btn-primary btn-outline rounded-btn">
+					<FaMusic />
+					Nghe Nhạc
+				</button>
+				<div
+					className={`${
+						isShow ? 'flex' : 'hidden'
+					} flex-col gap-2 items-center w-full justify-center`}>
+					<div className="w-full max-w-[500px] max-h-[600]">
+						<iframe
+							className="w-full h-[400px] max-h-[500px]"
+							src={link ?? ''}
+							title="YouTube video player"
+							allow="accelerometer; autoplay; loop; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+					</div>
 				</div>
 			</div>
 			<div className="flex justify-center">
