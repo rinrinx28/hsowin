@@ -7,11 +7,6 @@ import { updateAll } from '@/lib/redux/features/logs/userBetLog';
 import { TranslateKey } from '@/lib/unit/translateKey';
 import { useSocket } from '@/lib/socket';
 import { updateUser } from '@/lib/redux/features/auth/user';
-import { IoGameController } from 'react-icons/io5';
-import Gold from './icons/gold';
-import Ligh from './icons/ligh';
-import Clock from './icons/clock';
-import { HiOutlineCursorArrowRays } from 'react-icons/hi2';
 import { RiAwardFill } from 'react-icons/ri';
 
 interface FiellCanCel {

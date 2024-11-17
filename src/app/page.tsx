@@ -19,6 +19,13 @@ import { MdMenuBook } from 'react-icons/md';
 import { IoBookmarksOutline, IoGameController } from 'react-icons/io5';
 import { FaFacebook, FaMusic } from 'react-icons/fa';
 import { AiFillLike } from 'react-icons/ai';
+import apiClient from '@/lib/apiClient';
+
+interface TopBank {
+	uid: string;
+	username: string;
+	amount: number;
+}
 
 const slogans = [
 	'Mini Game Đỏ Đen Hồi Sinh Ngọc Rồng',
@@ -34,6 +41,7 @@ export default function Home() {
 	const new_logo = ImageLoader('image/new.gif');
 	const userGame = useAppSelector((state) => state.userGame);
 	const [bank, setBank] = useState('');
+	const [topBank, setTopBank] = useState<TopBank[]>([]);
 	const dispatch = useAppDispatch();
 	const [winner, setWinner] = useState(0);
 	const [delay, setDelay] = useState(0);
@@ -112,6 +120,26 @@ export default function Home() {
 			setLink(url_ytb);
 		}
 	}, [evenConfig]);
+
+	useEffect(() => {
+		const getTopBank = async () => {
+			try {
+				const res = await apiClient.get('/user/top-bank');
+				const { data } = res;
+				const { topBank }: { topBank: TopBank[] } = data;
+				setTopBank(topBank);
+			} catch (err: any) {
+				return;
+			}
+		};
+		getTopBank();
+		let loop_info_top_bank = setInterval(() => {
+			getTopBank();
+		}, 15e3);
+		return () => {
+			clearInterval(loop_info_top_bank);
+		};
+	}, []);
 
 	return (
 		<div className="min-w-[300px] flex flex-col gap-5 py-5 px-2 transition-all">
@@ -271,6 +299,31 @@ export default function Home() {
 										key={t}>
 										<IoIosStarHalf className="spin" />
 										<p>{t}</p>
+										<IoIosStarHalf className="spin" />
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				</div>
+			)}
+			{topBank.length > 0 && (
+				<div className="w-full flex items-center justify-center">
+					<div className="w-full max-w-6xl p-2 overflow-hidden text-current text-nowrap">
+						<div className="running flex items-center gap-5 ">
+							{topBank.map((t: TopBank, i: number) => {
+								const golt = new Intl.NumberFormat('vi').format(t.amount);
+								const name = t.username;
+								return (
+									<div
+										className="flex flex-row text-nowrap items-center gap-4"
+										key={t.uid}>
+										<IoIosStarHalf className="spin" />
+										<div className="flex flex-row gap-2 items-center">
+											<p>Top {i + 1}</p>
+											<p>{name}:</p>
+											<p>{golt}</p>
+										</div>
 										<IoIosStarHalf className="spin" />
 									</div>
 								);
