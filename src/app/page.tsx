@@ -288,50 +288,52 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
-			{text && text?.status && (
-				<div className="w-full flex items-center justify-center">
-					<div className="w-full max-w-6xl p-2 overflow-hidden text-current text-nowrap">
-						<div className="running flex items-center gap-5 ">
-							{JSON.parse(text?.option)?.map((t: string) => {
-								return (
-									<div
-										className="flex flex-row text-nowrap items-center gap-4"
-										key={t}>
-										<IoIosStarHalf className="spin" />
-										<p>{t}</p>
-										<IoIosStarHalf className="spin" />
-									</div>
-								);
-							})}
-						</div>
-					</div>
-				</div>
-			)}
-			{topBank.length > 0 && (
-				<div className="w-full flex items-center justify-center">
-					<div className="w-full max-w-6xl p-2 overflow-hidden text-current text-nowrap">
-						<div className="running flex items-center gap-5 ">
-							{topBank.map((t: TopBank, i: number) => {
-								const golt = new Intl.NumberFormat('vi').format(t.amount);
-								const name = t.username;
-								return (
-									<div
-										className="flex flex-row text-nowrap items-center gap-4"
-										key={t.uid}>
-										<IoIosStarHalf className="spin" />
-										<div className="flex flex-row gap-2 items-center">
-											<p>Top {i + 1}</p>
-											<p>{name}:</p>
-											<p>{golt}</p>
+			<div className="flex flex-col gap-2">
+				{text && text?.status && (
+					<div className="w-full flex items-center justify-center">
+						<div className="w-full max-w-6xl p-2 overflow-hidden text-current text-nowrap">
+							<div className="running flex items-center gap-5 ">
+								{JSON.parse(text?.option)?.map((t: string) => {
+									return (
+										<div
+											className="flex flex-row text-nowrap items-center gap-4"
+											key={t}>
+											<IoIosStarHalf className="spin" />
+											<p>{t}</p>
+											<IoIosStarHalf className="spin" />
 										</div>
-										<IoIosStarHalf className="spin" />
-									</div>
-								);
-							})}
+									);
+								})}
+							</div>
 						</div>
 					</div>
-				</div>
-			)}
+				)}
+				{topBank.length > 0 && (
+					<div className="w-full flex items-center justify-center">
+						<div className="w-full max-w-6xl p-2 overflow-hidden text-current text-nowrap">
+							<div className="running flex items-center gap-5 ">
+								{topBank.map((t: TopBank, i: number) => {
+									const golt = new Intl.NumberFormat('vi').format(t.amount);
+									const name = t.username;
+									return (
+										<div
+											className="flex flex-row text-nowrap items-center gap-4"
+											key={t.uid}>
+											<IoIosStarHalf className="spin" />
+											<div className="flex flex-row gap-2 items-center">
+												<p>Top {i + 1}:</p>
+												<p>{name}</p>
+												<p>{golt} Thỏi Vàng</p>
+											</div>
+											<IoIosStarHalf className="spin" />
+										</div>
+									);
+								})}
+							</div>
+						</div>
+					</div>
+				)}
+			</div>
 			<div className="flex justify-center">
 				<div className="max-w-7xl grid lg:grid-cols-2 lg:grid-rows-5 grid-flow-row gap-4">
 					<Minigame />
