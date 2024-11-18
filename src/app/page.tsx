@@ -296,10 +296,10 @@ export default function Home() {
 							<TextMarquee
 								text={JSON.parse(text?.option)
 									?.map((t: string) => {
-										return t;
+										return ` ${t} 💫 `;
 									})
 									.join(' ')}
-								animationDuration={`20s`}
+								animationDuration={`30s`}
 							/>
 						</div>
 					</div>
@@ -312,33 +312,14 @@ export default function Home() {
 									.map((t: TopBank, i: number) => {
 										const golt = new Intl.NumberFormat('vi').format(t.amount);
 										const name = t.username;
-										return `Top ${i + 1}: ${name} ${golt}`;
+										return ` Top ${i + 1}: ${name} ${golt} 💫 `;
 									})
 									.join(' ')}
-								animationDuration={`${
-									[...topBank]
-										.map((t: TopBank, i: number) => {
-											const golt = new Intl.NumberFormat('vi').format(t.amount);
-											const name = t.username;
-											return `Top ${i + 1}: ${name} ${golt}`;
-										})
-										.join(' ').length / 1
-								}s`}
+								animationDuration={`30s`}
 							/>
 						</div>
 					</div>
 				)}
-				<div className="w-full flex items-center justify-center">
-					<div className="w-full max-w-6xl p-2 overflow-hidden text-current text-nowrap transition-all ease-in duration-300">
-						<TextMarquee
-							text="Nội dung text chạy liên tục và nối đuôi nhau mượt mà."
-							animationDuration={`${
-								'Nội dung text chạy liên tục và nối đuôi nhau mượt mà.'.length /
-								3
-							}s`}
-						/>
-					</div>
-				</div>
 			</div>
 			<div className="flex justify-center">
 				<div className="max-w-7xl grid lg:grid-cols-2 lg:grid-rows-5 grid-flow-row gap-4">

@@ -18,8 +18,6 @@ const TextMarquee = ({
 				<span>{text} &nbsp;&nbsp;</span>
 				<span>{text} &nbsp;&nbsp;</span>
 				<span>{text} &nbsp;&nbsp;</span>
-				<span>{text} &nbsp;&nbsp;</span>
-				<span>{text} &nbsp;&nbsp;</span>
 			</div>
 		</div>
 	);
