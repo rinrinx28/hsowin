@@ -39,7 +39,12 @@ export default function TableUser() {
 	}, [eventConfig]);
 
 	return (
-		<div className="lg:flex lg:flex-col grid gap-1">
+		<div className="lg:flex lg:flex-col grid gap-1 relative">
+			<div
+				className="h-[85px] absolute -top-6 left-0 w-full bg-repeat pointer-events-none"
+				style={{
+					backgroundImage: "url('/image/background/border-btn-top.png')",
+				}}></div>
 			<div className="bg-primary font-semibold border-current border rounded-box grid h-20 place-items-center">
 				<div className="flex flex-row items-center justify-center gap-2">
 					<GiRank3 size={34} />

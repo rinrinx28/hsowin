@@ -137,29 +137,22 @@ export default function ChatBox() {
 	}, [messageClan, user, dispatch]);
 
 	return (
-		<div className="lg:col-start-2 lg:row-start-1 row-span-5 bg-base-100 flex flex-col justify-between gap-2 border border-current shadow-xl p-4 rounded-2xl">
-			<div className="flex flex-col gap-2 w-full border-b border-current">
-				<div className="flex flex-row items-center justify-center gap-2">
-					<Chat />
-					<h2 className="text-center font-semibold text-2xl">Trò Chuyện</h2>
+		<div className="lg:col-start-2 lg:row-start-1 row-span-5  flex flex-col justify-between border border-current shadow-xl p-4 rounded-2xl z-10 relative">
+			<img
+				src={'/image/background/border-btn-top.png'}
+				alt="Border frame snow"
+				className="max-w-[100%] absolute pointer-events-none -top-5 -left-0"
+			/>
+			<div className="flex flex-col gap-2 w-full h-full align-middle">
+				<div className="flex flex-col gap-2 w-full border-b border-current">
+					<div className="flex flex-row items-center justify-center gap-2">
+						<Chat />
+						<h2 className="text-center font-semibold text-2xl">Trò Chuyện</h2>
+					</div>
 				</div>
-			</div>
-			<div
-				role="tablist"
-				className="tabs tabs-bordered w-full text-nowrap tabs-lg">
-				<input
-					type="radio"
-					name="my_tabs_1"
-					role="tab"
-					className="tab w-full"
-					aria-label={`🎮 Server ${userGame} 🎮`}
-					defaultChecked
-				/>
-				<div
-					role="tabpanel"
-					className="tab-content w-full p-4 text-wrap">
+				<div className="w-full h-full p-4 text-wrap flex flex-col justify-between">
 					<div
-						className="overflow-auto h-[950px] bg-base-100 custom-an-border rounded-lg px-2"
+						className="overflow-auto h-[950px]  custom-an-border rounded-lg px-2"
 						ref={chatEndRef}>
 						{channel &&
 							channel?.map((msg, i) => {
@@ -277,122 +270,6 @@ export default function ChatBox() {
 									...c,
 									content: e.target.value,
 									server: userGame,
-									token: user.token,
-								}))
-							}
-						/>
-						<button
-							type="submit"
-							className="btn  btn-outline">
-							<Send />
-						</button>
-					</form>
-				</div>
-				<input
-					type="radio"
-					name="my_tabs_1"
-					role="tab"
-					className="tab w-full"
-					aria-label="⚔️ Bang Hội ⚔️"
-				/>
-				<div
-					role="tabpanel"
-					className="tab-content w-full p-4 text-wrap">
-					<div
-						className="overflow-auto h-[950px] bg-base-100 custom-an-border rounded-lg px-2"
-						ref={chatEndRef}>
-						{channelClan &&
-							channelClan?.map((msg, i) => {
-								const { uid, content, username } = msg;
-								const avatarUrl = msg?.meta
-									? JSON.parse(msg.meta)?.avatar
-									: null;
-								const vip = msg?.meta ? JSON.parse(msg?.meta)?.vip : 0;
-								return (
-									<div
-										className={`chat ${
-											uid === user?._id ? 'chat-end' : 'chat-start'
-										}`}
-										key={`${i}-msg-log`}>
-										{uid === '' ? (
-											<div className="chat-image avatar">
-												<div className="avatar online  placeholder">
-													<div
-														className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
-														style={{
-															backgroundImage: `url("/image/avatar/Arcade_Miss_Fortune_profileicon.webp")`,
-														}}></div>
-												</div>
-											</div>
-										) : (
-											<div className="chat-image avatar">
-												<div className="avatar online placeholder">
-													<div
-														className="bg-neutral text-neutral-content w-12 rounded-full bg-cover"
-														style={{
-															backgroundImage: avatarUrl
-																? `url("/image/avatar/${avatarUrl}.webp")`
-																: 'none',
-														}}></div>
-												</div>
-											</div>
-										)}
-										<div className="chat-header">
-											<div
-												className={`flex ${
-													uid === user?._id ? 'flex-row-reverse' : 'flex-row'
-												} gap-2 items-center`}>
-												{uid === user?._id ? 'Bạn' : username ?? 'Hệ Thống'}
-												{vip > 0 && (
-													<p className="fire font-extrabold text-red-500">
-														VIP {vip}
-													</p>
-												)}
-												{userRanks &&
-													userRanks.map((u, index) => {
-														if (uid === u._id) {
-															return (
-																<div
-																	key={`${u._id}-chat-header-rank`}
-																	className="tooltip"
-																	data-tip={`Khứa này top ${index + 1}`}>
-																	<Image
-																		src={`/image/rank/${index + 1}.png`}
-																		width={32}
-																		height={32}
-																		alt={`${index + 1}_user_rank_image`}
-																		priority={true}
-																	/>
-																</div>
-															);
-														}
-													})}
-											</div>
-										</div>
-										<div className="chat-bubble text-sm chat-bubble-primary">
-											{content}
-										</div>
-									</div>
-								);
-							})}
-					</div>
-					<form
-						onSubmit={(e) => {
-							e.preventDefault();
-							handlerChatUser('clan');
-						}}
-						className="flex flex-row w-full py-2 gap-2 items-center">
-						<input
-							id="chat-input-id-clan"
-							type="text"
-							className="grow w-full input input-bordered text-wrap"
-							placeholder="Nhập nội dung trò chuyện"
-							defaultValue={chat?.content}
-							onChange={(e) =>
-								setChatClan((c: ChatBox | any) => ({
-									...c,
-									content: e.target.value,
-									server: JSON.parse(user?.clan ?? '{}').clanId ?? null,
 									token: user.token,
 								}))
 							}

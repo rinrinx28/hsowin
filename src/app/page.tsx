@@ -160,7 +160,7 @@ export default function Home() {
 							/>
 						</div>
 
-						<div className="flex flex-col gap-4">
+						<div className="flex flex-col gap-4 z-10">
 							<div className="flex flex-wrap lg:flex-row gap-4 justify-center">
 								<div className="dropdown ">
 									<div
@@ -172,7 +172,7 @@ export default function Home() {
 									</div>
 									<ul
 										tabIndex={0}
-										className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+										className="dropdown-content menu  rounded-box z-[1] w-52 p-2 shadow">
 										{/* <li>
 											<Link href={'/user?type=NAPBANKING'}>Mua Vàng</Link>
 										</li> */}
@@ -328,7 +328,7 @@ export default function Home() {
 					<ChatBox />
 				</div>
 			</div>
-			<div className="flex flex-col items-center p-2 w-full justify-center gap-4">
+			<div className="flex flex-col items-center p-2 w-full justify-center gap-4 z-10">
 				<button
 					onClick={() => setShow((e) => !e)}
 					className="btn btn-primary btn-outline rounded-btn">

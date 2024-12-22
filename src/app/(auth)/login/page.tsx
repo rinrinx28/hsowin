@@ -72,8 +72,8 @@ function LoginPage() {
 	}, [user, router]);
 
 	return (
-		<div className="min-h-screen flex justify-center items-center">
-			<div className="card bg-base-100 lg:w-1/3 w-full shadow-xl border border-current">
+		<div className="min-h-screen flex justify-center items-center z-10">
+			<div className="card  lg:w-1/3 w-full shadow-xl border border-current">
 				<figure>
 					<Image
 						alt="hsowin_logo"

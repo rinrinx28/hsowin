@@ -130,7 +130,12 @@ export default function TableResult() {
 	}
 
 	return (
-		<div className="lg:flex lg:flex-col grid gap-2 w-full">
+		<div className="relative lg:flex lg:flex-col grid gap-2 w-full">
+			<div
+				className="h-[85px] absolute -top-6 left-0 w-full bg-repeat pointer-events-none"
+				style={{
+					backgroundImage: "url('/image/background/border-btn-top.png')",
+				}}></div>
 			<div className="border-current border rounded-box grid h-20 place-items-center bg-primary font-semibold ">
 				<div className="flex flex-row items-center justify-center gap-2">
 					<RiAwardFill size={34} /> Lịch Sử Kết Quả <RiAwardFill size={34} />

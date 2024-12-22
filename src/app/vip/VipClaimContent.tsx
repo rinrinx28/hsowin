@@ -41,7 +41,7 @@ export default function VipClaimPage() {
 	}, []);
 
 	return (
-		<div className="min-h-screen flex w-full justify-center items-center">
+		<div className="min-h-screen flex w-full justify-center items-center z-20">
 			<div className="max-w-7xl w-full flex flex-col gap-5 items-center select-none">
 				<h1 className="lg:text-4xl text-xl">Điểm Danh VIP Hàng Ngày</h1>
 				{user?.isLogin && user?.vip !== 0 && (
@@ -149,7 +149,7 @@ function TableClaimVip({ setMsg, showModel }: { setMsg: any; showModel: any }) {
 					return (
 						<button
 							key={d?.date}
-							className={`size-40 flex flex-col items-center hover:scale-125 hover:z-50 duration-300 justify-end bg-cover border border-current p-2 rounded-lg`}
+							className={`z-20 size-40 flex flex-col items-center hover:scale-125 hover:z-50 duration-300 justify-end bg-cover border border-current p-2 rounded-lg`}
 							style={{
 								backgroundImage: `url("/image/vip/claim/${
 									d?.isClaim ? 'open.png' : 'claim.png'

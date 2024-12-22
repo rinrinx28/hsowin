@@ -67,7 +67,7 @@ const UserContent = () => {
 	}, [user, router]);
 
 	return (
-		<div className="min-h-screen flex justify-center mt-10 p-8">
+		<div className="min-h-screen flex justify-center mt-10 p-8 z-10">
 			<div
 				className={`lg:max-w-7xl w-full lg:flex justify-between gap-10 ${
 					!user?.isLogin ? 'skeleton' : ''

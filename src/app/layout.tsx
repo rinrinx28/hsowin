@@ -7,6 +7,7 @@ import Providers from '@/lib/redux/Provider';
 import { SocketProvider } from '@/lib/socket';
 import PosUp from '@/components/PosUp';
 import Clans from '@/components/Clans';
+import FallingSnow from '@/components/fallingSnow';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -59,9 +60,10 @@ export default function RootLayout({
 					}}
 				/>
 			</head>
-			<body className={`${inter.className} transition-wh duration-300 ease`}>
+			<body className={`${inter.className} transition-wh duration-300 ease `}>
 				<Providers>
 					<SocketProvider>
+						<FallingSnow />
 						<NavBar />
 						{children}
 						<Footer />

@@ -1047,7 +1047,7 @@ function Clans() {
 								})}
 							{view === 'chat-clan' && (
 								<>
-									<div className="overflow-auto h-[350px] bg-base-100 rounded-lg custom-an-border w-full">
+									<div className="overflow-auto h-[350px]  rounded-lg custom-an-border w-full">
 										{channelClan &&
 											channelClan?.map((msg, i) => {
 												const { uid, content, username } = msg;

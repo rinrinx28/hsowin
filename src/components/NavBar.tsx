@@ -184,7 +184,12 @@ const NavBar = () => {
 						<>
 							<Link
 								href={'/user'}
-								className="btn btn-outline items-center lg:inline-flex hidden">
+								className="btn btn-outline btn-active items-center lg:inline-flex hidden relative">
+								<img
+									src={'/image/background/border-btn-full.png'}
+									alt="Border frame snow"
+									className="w-full absolute pointer-events-none -top-2 -left-0"
+								/>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 16 16"

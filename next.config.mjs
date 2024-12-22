@@ -15,9 +15,6 @@ const nextConfig = {
 	distDir: 'dist',
 	reactStrictMode: false,
 	swcMinify: true,
-	experimental: {
-		webVitalsAttribution: ['CLS', 'LCP'],
-	},
 };
 
 export default nextConfig;

@@ -162,7 +162,7 @@ export default function PageRutVang() {
 	}, [eventConfig]);
 
 	return (
-		<div>
+		<div className="z-10">
 			<div className="min-h-screen flex flex-col justify-center items-center p-2">
 				<div className="max-w-7xl w-full flex flex-col gap-2">
 					<h1 className="uppercase text-3xl pb-2 border-b-2 border-current">
@@ -181,7 +181,7 @@ export default function PageRutVang() {
 							Hệ thống tự động hủy đơn sau 10 phút nếu chưa giao dịch thành công
 						</p>
 					</div>
-					<div className="flex lg:flex-row flex-col gap-5 justify-between">
+					<div className="flex lg:flex-row flex-col gap-5 justify-between z-20">
 						<div className="flex flex-col w-full gap-2 border border-current p-8 rounded-lg">
 							<h2 className="text-center border-b border-current pb-2 flex flex-row gap-2 justify-center items-center">
 								Số dư: {new Intl.NumberFormat('vi').format(user?.gold ?? 0)}{' '}
@@ -215,7 +215,7 @@ export default function PageRutVang() {
 									<input
 										type="text"
 										placeholder="Nhập tên nhân vật"
-										className="input input-bordered w-full max-w-md"
+										className="input input-bordered w-full max-w-md bg-transparent"
 										onChange={(e) =>
 											setInfo((i) => ({ ...i, playerName: e.target.value }))
 										}
@@ -225,7 +225,7 @@ export default function PageRutVang() {
 									<p>Số thỏi vàng cần rút:</p>
 									<input
 										type="text"
-										className="input input-bordered w-full max-w-md"
+										className="input input-bordered w-full max-w-md bg-transparent"
 										onChange={(e) =>
 											setInfo((i) => ({ ...i, amount: e.target.value }))
 										}
@@ -236,11 +236,24 @@ export default function PageRutVang() {
 									lần!
 								</p>
 							</div>
-							<button
-								className="btn"
-								onClick={handleRutVang}>
-								Rút Ngay
-							</button>
+
+							<div className="relative w-full flex">
+								<img
+									src={'/image/background/border-btn-botton.png'}
+									alt="Border frame snow"
+									className="max-w-[100%] h-auto absolute pointer-events-none -bottom-5 -left-5"
+								/>
+								<img
+									src={'/image/background/border-btn-botton.png'}
+									alt="Border frame snow"
+									className="max-w-[100%] h-auto absolute pointer-events-none -top-5 -right-5 rotate-180"
+								/>
+								<button
+									className="btn w-full"
+									onClick={handleRutVang}>
+									Rút Ngay
+								</button>
+							</div>
 
 							<div className="flex flex-col">
 								<p>Hạn mức hôm nay (0h00p sẽ reset): {user?.limitedTrade}</p>

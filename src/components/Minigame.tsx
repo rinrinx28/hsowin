@@ -26,6 +26,7 @@ import {
 import Link from 'next/link';
 import { updateUser } from '@/lib/redux/features/auth/user';
 import { updateAll } from '@/lib/redux/features/logs/userBetLog';
+import Image from 'next/image';
 
 export const Minigame = () => {
 	// const socket = useSocket();
@@ -79,7 +80,12 @@ export const Minigame = () => {
 	}, [mainBet, dispatch]);
 
 	return (
-		<div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 card bg-base-100 shadow-xl border border-current">
+		<div className="lg:col-start-1 lg:row-start-1 lg:row-span-2 card shadow-xl border border-current relative">
+			<img
+				src={'/image/background/border-btn-top.png'}
+				alt="Border frame snow"
+				className="max-w-[100%] absolute pointer-events-none -top-5 -left-0"
+			/>
 			<div className="card-body items-start">
 				<div className="flex flex-col gap-2 w-full border-b border-current">
 					<div className="flex flex-row items-center justify-center gap-2">
@@ -439,7 +445,12 @@ export const BetMinigame = () => {
 	}, [msg]);
 
 	return (
-		<div className="lg:col-start-1 lg:row-start-3 row-span-3 card card-side justify-center items-center shadow-xl border border-current">
+		<div className="lg:col-start-1 lg:row-start-3 row-span-3 card card-side justify-center items-center shadow-xl border border-current z-10 relative">
+			<img
+				src={'/image/background/border-btn-top.png'}
+				alt="Border frame snow"
+				className="max-w-[100%] absolute pointer-events-none -top-5 -left-0"
+			/>
 			<div className="card-body gap-6">
 				<div className="flex flex-col gap-2 w-full border-b border-current">
 					<div className="flex flex-row items-center justify-center gap-2">
@@ -455,7 +466,7 @@ export const BetMinigame = () => {
 				</div>
 				<select
 					defaultValue={'CL'}
-					className={`select select-error w-full text-red-500 font-medium text-md`}
+					className={`select select-error w-full text-red-500 font-medium text-md bg-transparent`}
 					onChange={handleTypeMiniserver}>
 					<option
 						value={'CL'}
@@ -595,7 +606,7 @@ export const BetMinigame = () => {
 					})}
 				</ul>
 
-				<div className="input input-bordered flex items-center gap-2">
+				<div className="input input-bordered flex items-center gap-2 bg-transparent">
 					<button
 						className="btn btn-error btn-sm"
 						onClick={() => dispatch(resetBet())}>
@@ -638,18 +649,29 @@ export const BetMinigame = () => {
 						✕
 					</button>
 				</div>
-
-				<button
-					id="btn-bet"
-					className="btn btn-outline"
-					disabled={isPause}
-					onClick={handlerBetUser}>
-					{isPause ? (
-						<span className="loading loading-infinity loading-md"></span>
-					) : (
-						'Chơi Ngay'
-					)}
-				</button>
+				<div className="relative w-full">
+					<img
+						src={'/image/background/border-btn-botton.png'}
+						alt="Border frame snow"
+						className="max-w-[100%] h-auto absolute pointer-events-none -bottom-5 -left-5"
+					/>
+					<img
+						src={'/image/background/border-btn-botton.png'}
+						alt="Border frame snow"
+						className="max-w-[100%] h-auto absolute pointer-events-none -top-5 -right-5 rotate-180"
+					/>
+					<button
+						id="btn-bet"
+						className="btn btn-outline w-full items-center inline-flex"
+						disabled={isPause}
+						onClick={handlerBetUser}>
+						{isPause ? (
+							<span className="loading loading-infinity loading-md"></span>
+						) : (
+							'Chơi Ngay'
+						)}
+					</button>
+				</div>
 
 				<dialog
 					id="error_login"
