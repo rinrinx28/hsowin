@@ -147,7 +147,7 @@ function LoginPage() {
 								Đăng Nhập
 							</button>
 							<Link
-								href={'/resgiter'}
+								href={'/resigter'}
 								className="btn">
 								Đăng Ký
 							</Link>

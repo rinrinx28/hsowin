@@ -175,7 +175,7 @@ const NavBar = () => {
 								</svg>
 							</Link>
 							<Link
-								href="/resgiter"
+								href="/resigter"
 								className="btn btn-outline  hidden lg:inline-flex">
 								Đăng Ký
 							</Link>

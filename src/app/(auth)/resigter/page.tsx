@@ -51,7 +51,7 @@ function Resigter() {
 					return modal.showModal();
 				}
 			}
-			const res = await apiClient.post('/auth/resgiter', info);
+			const res = await apiClient.post('/auth/resigter', info);
 			if (res.data) {
 				router.push('/login');
 			}
