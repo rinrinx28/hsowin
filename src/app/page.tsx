@@ -172,7 +172,7 @@ export default function Home() {
 									</div>
 									<ul
 										tabIndex={0}
-										className="dropdown-content menu  rounded-box z-[1] w-52 p-2 shadow">
+										className="dropdown-content menu bg-primary rounded-box z-[1] w-52 p-2 shadow">
 										{/* <li>
 											<Link href={'/user?type=NAPBANKING'}>Mua Vàng</Link>
 										</li> */}
