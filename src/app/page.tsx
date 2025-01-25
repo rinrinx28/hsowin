@@ -278,6 +278,13 @@ export default function Home() {
 									<IoGameController /> Map Boss Sv3
 								</button>
 								<button
+									onClick={() => dispatch(updateUserGame('4'))}
+									className={`${
+										userGame === '4' ? 'btn-primary' : 'btn-outline'
+									} btn rounded-btn`}>
+									<IoGameController /> Map Boss Sv4
+								</button>
+								<button
 									onClick={() => dispatch(updateUserGame('24'))}
 									className={`${
 										userGame === '24' ? 'btn-primary' : 'btn-outline'

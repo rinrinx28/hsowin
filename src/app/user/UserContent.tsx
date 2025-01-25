@@ -947,7 +947,7 @@ function RutBanking() {
 						type="text"
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
-						disabled
+						readOnly
 						value={user?._id}
 					/>
 				</label>
@@ -1062,7 +1062,7 @@ function RutBanking() {
 						type="text"
 						className="input input-bordered w-full max-w-md"
 						value={(info?.amount ?? 0) * 0.0062}
-						disabled
+						readOnly
 					/>
 				</label>
 
@@ -1109,7 +1109,7 @@ function RutBanking() {
 function HistoryUserBet() {
 	const user = useAppSelector((state) => state.user);
 	const [watch, setWatch] = useState('24');
-	const [userBet, setUsetBet] = useState([]);
+	const [userBet, setUsetBet] = useState<any[] | null>(null);
 
 	useEffect(() => {
 		const getUserBet = async () => {
@@ -1121,6 +1121,7 @@ function HistoryUserBet() {
 			setUsetBet(res.data.data);
 		};
 		if (user) {
+			console.log(user);
 			getUserBet();
 		}
 	}, [user]);
@@ -1160,9 +1161,9 @@ function HistoryUserBet() {
 					</thead>
 					<tbody className="text-sm text-center text-nowrap">
 						{/* row 1 */}
-						{userBet.length > 0 &&
+						{userBet &&
 							userBet
-								?.filter((u: any) => u.server === watch)
+								.filter((u: any) => u.server === watch)
 								.map((userBet: any) => {
 									let {
 										amount,
@@ -1196,7 +1197,7 @@ function HistoryUserBet() {
 											<td>{new_result ?? result ?? ''}</td>
 											<td>
 												{new_resultBet &&
-												!['1', '2', '3'].includes(userBet?.server)
+												!['1', '2', '3', '4'].includes(userBet?.server)
 													? `${new_resultBet}-${resultBet[1]}`
 													: userBet?.resultBet === '0'
 													? 'Khỉ Đỏ'
@@ -1507,7 +1508,7 @@ function ExchangeGold() {
 						type="text"
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
-						disabled
+						readOnly
 						value={user?._id}
 					/>
 				</label>
@@ -1518,7 +1519,7 @@ function ExchangeGold() {
 						type="text"
 						placeholder="Type here"
 						className="input input-bordered w-full max-w-md"
-						disabled
+						readOnly
 						value={user?.username}
 					/>
 				</label>
@@ -1543,7 +1544,7 @@ function ExchangeGold() {
 					<input
 						type="text"
 						className="input input-bordered w-full max-w-md"
-						disabled
+						readOnly
 						value={new Intl.NumberFormat('vi').format(info?.receive)}
 					/>
 				</label>

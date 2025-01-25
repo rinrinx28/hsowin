@@ -178,6 +178,7 @@ function Resigter() {
 									value={'3'}>
 									Server 3
 								</option>
+								<option value={'4'}>Server 4</option>
 							</select>
 						</label>
 					</div>

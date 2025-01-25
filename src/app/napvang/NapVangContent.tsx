@@ -230,7 +230,7 @@ export default function PageNapVang() {
 										type="text"
 										placeholder="Type here"
 										className="input input-bordered w-full max-w-md"
-										disabled
+										readOnly
 										value={`Server ${user?.server}`}
 									/>
 								</label>
@@ -240,7 +240,7 @@ export default function PageNapVang() {
 										type="text"
 										placeholder="Type here"
 										className="input input-bordered w-full max-w-md"
-										disabled
+										readOnly
 										value={'Thỏi Vàng'}
 									/>
 								</label>

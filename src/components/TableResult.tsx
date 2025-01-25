@@ -48,7 +48,7 @@ export default function TableResult() {
 		const { betId, uid, userBetId, server } = payload;
 		if (uid !== user?._id) return;
 		if (!uid || !betId || !userBetId) return;
-		if (['1', '2', '3'].includes(server ?? '')) {
+		if (['1', '2', '3', '4'].includes(server ?? '')) {
 			socket.emit('bet-user-del-boss', { uid, betId, userBetId });
 		} else {
 			socket.emit('bet-user-del-sv', { uid, betId, userBetId });
@@ -255,7 +255,7 @@ export default function TableResult() {
 										</td>
 										<td className="border border-current">
 											{new_resultBet &&
-											!['1', '2', '3'].includes(userBet?.server)
+											!['1', '2', '3', '4'].includes(userBet?.server)
 												? `${new_resultBet}-${resultBet[1]}`
 												: userBet?.resultBet === '0'
 												? 'Khỉ Đỏ'

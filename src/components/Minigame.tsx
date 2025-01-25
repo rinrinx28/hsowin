@@ -26,7 +26,6 @@ import {
 import Link from 'next/link';
 import { updateUser } from '@/lib/redux/features/auth/user';
 import { updateAll } from '@/lib/redux/features/logs/userBetLog';
-import Image from 'next/image';
 
 export const Minigame = () => {
 	// const socket = useSocket();
@@ -140,7 +139,7 @@ export const Minigame = () => {
 							</p>
 						)
 					)}
-					{['1', '2', '3'].includes(userGame) ? (
+					{['1', '2', '3', '4'].includes(userGame) ? (
 						<>
 							<p>
 								Đen:{' '}
@@ -349,7 +348,7 @@ export const BetMinigame = () => {
 	};
 
 	useEffect(() => {
-		if (['1', '2', '3'].includes(userGame)) {
+		if (['1', '2', '3', '4'].includes(userGame)) {
 			dispatch(changeTypeGame('BOSS'));
 		} else {
 			dispatch(changeTypeGame('CL'));
@@ -471,23 +470,23 @@ export const BetMinigame = () => {
 					<option
 						value={'CL'}
 						selected
-						disabled={['1', '2', '3'].includes(userGame)}>
+						disabled={['1', '2', '3', '4'].includes(userGame)}>
 						Chẳn lẻ - Tài xỉu (10tv được 19tv)
 					</option>
 					<option
 						value={'XIEN'}
-						disabled={['1', '2', '3'].includes(userGame)}>
+						disabled={['1', '2', '3', '4'].includes(userGame)}>
 						{`Xiên (10tv được 32tv)`}
 					</option>
 					<option
 						value={'GUEST'}
-						disabled={['1', '2', '3'].includes(userGame)}>
+						disabled={['1', '2', '3', '4'].includes(userGame)}>
 						Dự đoán kết quả (10tv ăn 700tv)
 					</option>
 					<option
 						value={'BOSS'}
-						disabled={!['1', '2', '3'].includes(userGame)}
-						selected={['1', '2', '3'].includes(userGame)}>
+						disabled={!['1', '2', '3', '4'].includes(userGame)}
+						selected={['1', '2', '3', '4'].includes(userGame)}>
 						Dự Đoán BOSS
 					</option>
 				</select>
