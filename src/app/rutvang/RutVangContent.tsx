@@ -221,6 +221,10 @@ export default function PageRutVang() {
 										}
 									/>
 								</label>
+								<p>
+									<span className="text-red-500 font-bold">Chú ý:</span> Tên
+									nhân vật in hoa, thường, dấu cách (Chuẩn y trong game)
+								</p>
 								<label className="label w-full text-nowrap gap-2">
 									<p>Số thỏi vàng cần rút:</p>
 									<input
